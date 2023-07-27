@@ -8,27 +8,27 @@ export class ClassroomsController {
   constructor(private readonly classroomsService: ClassroomsService) {}
 
   @Post()
-  create(@Body() createClassroomDto: CreateClassroomDto) {
+  async create(@Body() createClassroomDto: CreateClassroomDto) {
     return this.classroomsService.create(createClassroomDto);
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.classroomsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     return this.classroomsService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateClassroomDto: UpdateClassroomDto) {
+  async update(@Param('id') id: string, @Body() updateClassroomDto: UpdateClassroomDto) {
     return this.classroomsService.update(+id, updateClassroomDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     return this.classroomsService.remove(+id);
   }
 }

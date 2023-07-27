@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
-import { DBRead } from '@app/connections';
 
 @Controller('students')
 export class StudentsController {
@@ -15,39 +14,21 @@ export class StudentsController {
 
   @Get()
   async findAll() {
-    const properties = [
-      'nis', 
-      'full_name',
-      'nick_name',
-      'email',
-      'password',
-      'child_order',
-      'date_birth',
-      'place_birth',
-      'gender',
-      'phone',
-      'entry_year',
-      'img',
-      'religion',
-      'siblings',
-      'address'];
-    const parameter = 'WHERE deletedAt IS NULL';
-    return DBRead('students', properties, parameter, 'nis ASC');
-    // return this.studentsService.findAll();
+    return await this.studentsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: any) {
-    return this.studentsService.findOne(+id);
+  @Get(':identity')
+  async findOne(@Param('identity') identity: any) {
+    return await this.studentsService.findOne(+identity);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStudentDto: UpdateStudentDto) {
-    return this.studentsService.update(+id, updateStudentDto);
+  @Patch(':identity')
+  async update(@Param('identity') identity: string, @Body() updateStudentDto: UpdateStudentDto) {
+    return await this.studentsService.update(+identity, updateStudentDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.studentsService.remove(+id);
+  @Delete(':identity')
+  async remove(@Param('identity') identity: string) {
+    return await this.studentsService.remove(+identity);
   }
 }

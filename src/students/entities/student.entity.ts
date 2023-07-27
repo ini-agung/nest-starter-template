@@ -1,71 +1,55 @@
-import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn } from 'typeorm';
+import { ManyToOne, Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn } from 'typeorm';
 
-enum Gender{
-    Male,
-    Female,
-}
-
-enum Religion{
-    Budha,
-    Hindu,
-    Islam,
-    Katolik,
-    Konghucu,
-    Protestan,
-}
 
 @Entity()
-export class Student {
+export class Students {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({type: 'number', length:11, unique: true})
-    nis: number;
+    @Column({type: 'bigint', unique: true})
+    id_user:number;
 
-    @Column({type: 'varchar', length: 100})
-    full_name: string;
+    @Column({type: 'int', unique: true, nullable: true})
+    nis: number | null;
+
+    @Column({type: 'varchar', length: 100, nullable: true})
+    full_name: string | null;
     
-    @Column({type: 'varchar', length: 50})
-    nick_name: string; 
-
-    @Column({type: 'varchar', length: 100})
-    email: string;
-
-    @Column({type: 'varchar', length: 255})
-    password: string
+    @Column({type: 'varchar', length: 50, nullable: true})
+    nick_name: string | null; 
     
-    @Column({type: 'date'})
-    date_birth: Date;
+    @Column({type: 'date', nullable: true})
+    date_birth: Date | null;
     
-    @Column({type: 'varchar', length: 100})
-    place_birth: string;
+    @Column({type: 'varchar', length: 100, nullable: true})
+    place_birth: string | null;
 
-    @Column({type: 'text'})
-    gender: Gender;
+    @Column({type: 'char', length:10})
+    gender: String | null;
 
-    @Column({type: 'text'})
-    religion: Religion;
+    @Column({type: 'char', length: 15})
+    religion: String | null;
 
     @Column({type: 'varchar', length: 15})
-    phone: string;
+    phone: string | null;
     
-    @Column({type: 'number'})
-    siblings: number;
+    @Column({type: 'int', nullable: true })
+    siblings: number | null;
     
-    @Column({type:'number'})
-    child_order: number;
+    @Column({type:'int', nullable: true})
+    child_order: number | null;
     
-    @Column({type:'date'})
-    entry_year: Date;
+    @Column({type:'date', nullable: true})
+    entry_year: Date | null;
 
     @Column({type:'varchar', length: 150, default: 'default.jpg'})
-    img_mother: string;
+    img_mother: string | null;
 
     @Column({type:'varchar', length: 150, default: 'default.jpg'})
-    img_father: string;
+    img_father: string | null;
 
-    @Column({type:'varchar', length: 150})
-    address: string;
+    @Column({type:'varchar', length: 150, nullable: true})
+    address: string | null;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;

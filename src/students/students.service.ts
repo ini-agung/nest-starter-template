@@ -10,20 +10,17 @@ export class StudentsService {
     const query = `
     INSERT INTO students (
       nis, full_name, nick_name,
-      email, password, child_order,
+       child_order,
       date_birth, place_birth, gender,
       phone, entry_year, img, religion,
       siblings, address)
-    VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     `;
     try {
-      const password = await hashPassword(createStudentDto.password);
       const result = await this.connection.query(query,[
           createStudentDto.nis,
           createStudentDto.full_name,
           createStudentDto.nick_name,
-          createStudentDto.email,
-          password,
           createStudentDto.child_order,
           createStudentDto.date_birth,
           createStudentDto.place_birth,
@@ -100,10 +97,62 @@ export class StudentsService {
   }
 
   async update(id: number, updateStudentDto: UpdateStudentDto) {
-    return `This action updates a #${id} student`;
+    const query = `
+    UPDATE students
+    SET nis = ?, full_name = ?, nick_name = ?,
+    email = ?, password = ?, child_order = ?,
+    date_birth = ?, place_birth = ?, gender = ?,
+      phone = ?, entry_year = ?, img = ?, religion = ?,
+      siblings = ?, address =?
+    `;
+    try {
+      const password = await hashPassword(updateStudentDto.password);
+      const result = await this.connection.query(query,[
+          updateStudentDto.nis,
+          updateStudentDto.full_name,
+          updateStudentDto.nick_name,
+          updateStudentDto.email,
+          password,
+          updateStudentDto.child_order,
+          updateStudentDto.date_birth,
+          updateStudentDto.place_birth,
+          updateStudentDto.gender,
+          updateStudentDto.phone,
+          updateStudentDto.entry_year,
+          updateStudentDto.img,
+          updateStudentDto.religion,
+          updateStudentDto.siblings,
+          updateStudentDto.address,
+        ]);
+      return result;
+    } catch (error) {
+      const data = {
+        status: false,
+        statusCode: HttpStatus.CONFLICT,
+        message: error.sqlMessage,
+        data:{}
+      };
+      throw new ConflictException(data, {cause: new Error()});
+    }
   }
 
-  async remove(id: number) {
-    return `This action removes a #${id} student`;
-  }
+  async remove(identity: number) {
+    const query = `
+    UPDATE students
+    SET deletedAt = now()
+    WHERE id = ?
+    `;
+    try {
+      const result = await this.connection.query(query, [identity]);
+      return result;
+    } catch (error) {
+      const data = {
+        status: false,
+        statusCode: HttpStatus.CONFLICT,
+        message: error.sqlMessage,
+        data:{}
+      };
+      throw new ConflictException(data, {cause: new Error()});
+    }
+}
 }

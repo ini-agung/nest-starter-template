@@ -10,12 +10,12 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     const query = `
     INSERT INTO users
-    (username, fullname, email, password, img)
-    VALUES( ?, ?, ?, ?, ?);
+    (username, email, password, role)
+    VALUES( ?, ?, ?, ?);
     `;
     try {
       const password = await hashPassword(createUserDto.password);
-      const result = await this.connection.query(query, [createUserDto.username, createUserDto.fullname, createUserDto.email, password, createUserDto.img]);    
+      const result = await this.connection.query(query, [createUserDto.username, createUserDto.email, password, createUserDto.role]);    
       return result;
     } catch (error) {
       const data = {
@@ -30,7 +30,7 @@ export class UsersService {
 
   async findAll() {
     const query = `
-    SELECT id, username, fullname, email, img
+    SELECT id, username, email
     from users
     where deletedAt IS NULL
     ORDER BY username ASC;
@@ -73,11 +73,11 @@ export class UsersService {
   async update(id: number, updateUserDto: UpdateUserDto) {
     const query = `
     UPDATE users
-    SET fullname = ?, img = ?, password = ?,
+    SET password = ?,
     WHERE id = ?;
     `;
     try {
-      const user = await this.connection.query(query, [updateUserDto.fullname, updateUserDto.img, updateUserDto.password, id]);
+      const user = await this.connection.query(query, [updateUserDto.password, id]);
       return user;
     } catch (error) {
       const data = {

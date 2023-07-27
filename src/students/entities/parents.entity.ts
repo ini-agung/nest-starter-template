@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn } from 'typeorm';
+import { OneToMany, Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn } from 'typeorm';
+import { Students } from './student.entity';
 
 enum Religion{
     Budha,
@@ -14,6 +15,12 @@ export class Parents {
     @PrimaryGeneratedColumn()
     id: number;
     
+    @Column({type: 'bigint', unique:true})
+    id_user: number;
+
+    @OneToMany(type => Students, student => student.id)
+    student: Students[];
+
     @Column({type: 'varchar', length:150})
     father: string;    
     

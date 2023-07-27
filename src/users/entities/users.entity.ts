@@ -3,11 +3,11 @@ import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn } from 'typeor
 
 @Entity()
 export class Users {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({type: 'bigint'})
   id: number;
   
-  @Column({type: 'varchar', length: 100})
-  fullname: string;
+  @Column({type:'varchar', length: 20, default: 'Student'})
+  role: string;
 
   @Length(6, 255)
   @Column({ unique: true })
