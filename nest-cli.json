@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true
+  },
+  "projects": {
+    "response": {
+      "type": "library",
+      "root": "libs/response",
+      "entryFile": "index",
+      "sourceRoot": "libs/response/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/response/tsconfig.lib.json"
+      }
+    },
+    "connections": {
+      "type": "library",
+      "root": "libs/connections",
+      "entryFile": "index",
+      "sourceRoot": "libs/connections/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/connections/tsconfig.lib.json"
+      }
+    },
+    "auth": {
+      "type": "library",
+      "root": "libs/auth",
+      "entryFile": "index",
+      "sourceRoot": "libs/auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/auth/tsconfig.lib.json"
+      }
+    },
+    "jwt": {
+      "type": "library",
+      "root": "libs/jwt",
+      "entryFile": "index",
+      "sourceRoot": "libs/jwt/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/jwt/tsconfig.lib.json"
+      }
+    },
+    "jwt-auth": {
+      "type": "library",
+      "root": "libs/jwt-auth",
+      "entryFile": "index",
+      "sourceRoot": "libs/jwt-auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/jwt-auth/tsconfig.lib.json"
+      }
+    },
+    "jwt-libs": {
+      "type": "library",
+      "root": "libs/jwt-libs",
+      "entryFile": "index",
+      "sourceRoot": "libs/jwt-libs/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/jwt-libs/tsconfig.lib.json"
+      }
+    }
+  }
+}
