@@ -1,4 +1,4 @@
-import { Injectable , BadRequestException, ConflictException, HttpStatus} from '@nestjs/common';
+import { Injectable , BadRequestException, ConflictException, HttpStatus, NotFoundException} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Connection } from 'typeorm';
@@ -24,18 +24,29 @@ export class UsersService {
         message: error.sqlMessage,
         data:{}
       };
-      throw new ConflictException(data, {cause: new Error()})
+      throw new ConflictException(data, {cause: new Error()});
     }
   }
 
   async findAll() {
     const query = `
-    SELECT id, username, fullname, email, password, img
+    SELECT id, username, fullname, email, img
     from users
-    where deletedAt IS NULL;
+    where deletedAt IS NULL
+    ORDER BY username ASC;
     `;
-    const users = await this.connection.query(query);
-    return users;
+    try {
+      const users = await this.connection.query(query);
+      return users;
+    } catch (error) {
+      const data = {
+        status: false,
+        statusCode: HttpStatus.NOT_FOUND,
+        message: error.sqlMessage,
+        data:{}
+      };
+      throw new NotFoundException(data, {cause: new Error()});
+    }
   }
 
   async findOne(identity: string) {
@@ -45,15 +56,57 @@ export class UsersService {
     where (username = ? OR email = ?)
     AND deletedAt IS NULL;
     `;
-    const user = await this.connection.query(query, [identity, identity]);
-    return user;
+    try {
+      const user = await this.connection.query(query, [identity, identity]);
+      return user;  
+    } catch (error) {
+      const data = {
+        status: false,
+        statusCode: HttpStatus.NOT_FOUND,
+        message: error.sqlMessage,
+        data:{}
+      };
+      throw new NotFoundException(data, {cause: new Error()});
+    }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const query = `
+    UPDATE users
+    SET fullname = ?, img = ?, password = ?,
+    WHERE id = ?;
+    `;
+    try {
+      const user = await this.connection.query(query, [updateUserDto.fullname, updateUserDto.img, updateUserDto.password, id]);
+      return user;
+    } catch (error) {
+      const data = {
+        status: false,
+        statusCode: HttpStatus.CONFLICT,
+        message: error.sqlMessage,
+        data:{}
+      };
+      throw new ConflictException(data, {cause: new Error()});
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const query = `
+    UPDATE users
+    SET deletedAt = now()
+    WHERE id = ?;
+    `;
+    try {
+      const user = await this.connection.query(query, [id]);
+      return user;
+    } catch (error) {
+      const data = {
+        status: false,
+        statusCode: HttpStatus.CONFLICT,
+        message: error.sqlMessage,
+        data:{}
+      };
+      throw new ConflictException(data, {cause: new Error()});
+    }
   }
 }

@@ -7,9 +7,12 @@ import { AuthModule } from './auth/auth.module';
 import { JwtLibsModule } from '@app/jwt-libs';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtLibsGuard } from '@app/jwt-libs/jwt-libs.guard';
+import { StudentsModule } from './students/students.module';
+import { TeachersModule } from './teachers/teachers.module';
+import { ClassroomsModule } from './classrooms/classrooms.module';
 
 @Module({
-  imports: [ConnectionsModule, UsersModule, AuthModule, JwtLibsModule, AuthModule],
+  imports: [ConnectionsModule, UsersModule, AuthModule, JwtLibsModule, AuthModule, StudentsModule, TeachersModule, ClassroomsModule],
   controllers: [AppController],
   providers: [AppService,
       {

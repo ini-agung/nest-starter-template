@@ -1,4 +1,4 @@
-import {Res, Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {Res, Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -9,36 +9,67 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto, @Res() response) {
+  async create(@Body() createUserDto: CreateUserDto, @Res() response) {
+    const newUser = await this.usersService.create(createUserDto);
+    console.log(newUser);
     const data = {
-      "adas":123
-  }
-    responseJson(data, 200, response);
-    // return this.usersService.create(createUserDto);
+      status: true,
+      statusCode: HttpStatus.ACCEPTED,
+      message: 'Success Create New Users',
+      data:{}
+  };
+    responseJson(data, data.statusCode, response);
   }
 
   @Get()
-  findAll(@Res() response) {
+  async findAll(@Res() response) {
     const data = {
-      "adas":123
-  }
+      status: true,
+      statusCode: HttpStatus.OK,
+      message: 'Success Get Users',
+      data:{}
+    }; 
+    const users = await this.usersService.findAll();
+    data.data = users;
     responseJson(data, 200, response);
-    // return this.usersService.create(createUserDto);
-    // return this.usersService.findAll();
   }
 
   @Get(':identity')
-  findOne(@Param('identity') identity: string) {
-    return this.usersService.findOne(identity);
+  async findOne(@Param('identity') identity: string, @Res() response) {
+    const data = {
+      status: true,
+      statusCode: HttpStatus.OK,
+      message: 'Success Get Users',
+      data:{}
+    }; 
+    const users = await this.usersService.findOne(identity);
+    data.data = users;
+    responseJson(data, 200, response);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Res() response) {
+    const data = {
+      status: true,
+      statusCode: HttpStatus.OK,
+      message: 'Success Get Users',
+      data:{}
+    };
+    const users = await this.usersService.update(+id, updateUserDto);
+    data.data = users;
+    responseJson(data, 200, response);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  async remove(@Param('id') id: string, @Res() response) {
+    const data = {
+      status: true,
+      statusCode: HttpStatus.OK,
+      message: 'Success Delete Users',
+      data:{}
+    };
+    const users = await this.usersService.remove(+id);
+    data.data = users;
+    responseJson(data, 200, response);
   }
 }

@@ -11,7 +11,8 @@ import { Users } from 'src/users/entities/users.entity';
       username: 'root',
       password: '',
       database: 'db_spada',
-      entities: [Users], // Add your entity classes here.
+      entities: [], // Add your entity classes here.
+      autoLoadEntities: true,
       synchronize: true, // Set to true for development only.
     }),
   ],
