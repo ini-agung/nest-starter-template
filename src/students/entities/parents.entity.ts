@@ -1,25 +1,17 @@
-import { OneToMany, Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn } from 'typeorm';
+import { OneToMany, Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, JoinColumn } from 'typeorm';
 import { Students } from './student.entity';
-
-enum Religion{
-    Budha,
-    Hindu,
-    Islam,
-    Katolik,
-    Konghucu,
-    Protestan,
-}
 
 @Entity()
 export class Parents {
     @PrimaryGeneratedColumn()
     id: number;
     
-    @Column({type: 'bigint', unique:true})
-    id_user: number;
+    @OneToMany(()=>Students, (students) => students.id)
+    @JoinColumn({name: 'student_id'})
+    student: Students[]
 
-    @OneToMany(type => Students, student => student.id)
-    student: Students[];
+    @Column({type: 'bigint', unique:true})
+    user_id: number;
 
     @Column({type: 'varchar', length:150})
     father: string;    
@@ -39,13 +31,13 @@ export class Parents {
     @Column({type:'varchar', length: 150, default: 'default.jpg'})
     img_father: string;
     
-    @Column({type: 'text'})
-    religion_father: Religion; 
+    @Column({type: 'varchar', length: 15})
+    religion_father: string; 
 
-    @Column({type: 'text'})
-    religion_mother: Religion; 
+    @Column({type: 'varchar', length: 15})
+    religion_mother: string; 
 
-    @Column({type: 'varchar', length: 150})
+    @Column({type: 'varchar', length: 200})
     address: string;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

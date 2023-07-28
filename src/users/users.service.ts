@@ -10,12 +10,20 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     const query = `
     INSERT INTO users
-    (username, email, password, role)
-    VALUES( ?, ?, ?, ?);
+    (username, email, password)
+    VALUES( ?, ?, ?);
     `;
     try {
       const password = await hashPassword(createUserDto.password);
-      const result = await this.connection.query(query, [createUserDto.username, createUserDto.email, password, createUserDto.role]);    
+      const result = await this.connection.query(query, [createUserDto.username, createUserDto.email, password]);    
+      console.log(result);
+      const querySwitch = `
+      INSERT INTO students
+      (id_user)
+      VALUES (?)
+      `;
+      await this.connection.query(querySwitch, [result.insertId]);    
+      
       return result;
     } catch (error) {
       const data = {

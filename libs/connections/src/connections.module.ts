@@ -6,6 +6,7 @@ import { Students } from 'src/students/entities/student.entity';
 import { Parents } from 'src/students/entities/parents.entity';
 import { ParentsStudent } from 'src/students/entities/parents-students.entity';
 import { Teachers } from 'src/teachers/entities/teachers.entity';
+import { Roles } from 'src/users/entities/roles.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { Teachers } from 'src/teachers/entities/teachers.entity';
       username: 'root',
       password: '',
       database: 'db_spada',
-      entities: [Users, Students, Parents, Teachers], // Add your entity classes here.
+      entities: [Users, Students, Parents, Teachers, Roles], // Add your entity classes here.
       autoLoadEntities: true,
       synchronize: true, // Set to true for development only.
     }),

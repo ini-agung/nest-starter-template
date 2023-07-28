@@ -1,13 +1,18 @@
 import { Length } from '@nestjs/class-validator';
-import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, OneToOne, JoinColumn, Relation } from 'typeorm';
+import { Roles, RoleList } from './roles.entity';
 
 @Entity()
 export class Users {
   @PrimaryGeneratedColumn({type: 'bigint'})
   id: number;
   
-  @Column({type:'varchar', length: 20, default: 'Student'})
-  role: string;
+  @OneToOne(() => Roles, (Roles)=>Roles.id)
+  @JoinColumn({name: 'role_id', referencedColumnName: 'id'})
+  role: Roles;
+
+  @Column({default: RoleList.Students})
+  role_id: number;
 
   @Length(6, 255)
   @Column({ unique: true })
@@ -28,3 +33,4 @@ export class Users {
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
   deletedAt: Date | null;
 }
+

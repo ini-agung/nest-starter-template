@@ -13,10 +13,6 @@ export class CreateUserDto {
 
     @IsNotEmpty()
     @IsString()
-    role: string;
-
-    @IsNotEmpty()
-    @IsString()
     @MinLength(8)
     @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, { message: 'Password too weak, combine uppercase, lowercase and digits' })
     password: string;
