@@ -4,14 +4,14 @@ import { Roles, RoleList } from './roles.entity';
 
 @Entity()
 export class Users {
-  @PrimaryGeneratedColumn({type: 'bigint'})
+  @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
-  
-  @OneToOne(() => Roles, (Roles)=>Roles.id)
-  @JoinColumn({name: 'role_id', referencedColumnName: 'id'})
+
+  @OneToOne(() => Roles, (Roles) => Roles.id)
+  @JoinColumn({ name: 'role_id', referencedColumnName: 'id' })
   role: Roles;
 
-  @Column({default: RoleList.Students})
+  @Column({ default: RoleList.Students })
   role_id: number;
 
   @Length(6, 255)
@@ -21,10 +21,10 @@ export class Users {
   @Column({ unique: true })
   email: string;
 
-  @Column({type: 'varchar', length: 255})
+  @Column({ type: 'varchar', length: 255 })
   password: string;
 
-  @Column({type:'varchar', length: 150, default: 'default.jpg'})
+  @Column({ type: 'varchar', length: 150, default: 'default.jpg' })
   img: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
