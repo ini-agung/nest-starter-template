@@ -12,9 +12,10 @@ import { TeachersModule } from './teachers/teachers.module';
 import { ClassroomsModule } from './classrooms/classrooms.module';
 import { SeederModule } from '@app/seeder';
 import { SchedulesModule } from './schedules/schedules.module';
+import { EnrolmentModule } from './enrolment/enrolment.module';
 
 @Module({
-  imports: [ConnectionsModule, UsersModule, AuthModule, JwtLibsModule, AuthModule, StudentsModule, TeachersModule, ClassroomsModule, SeederModule, SchedulesModule],
+  imports: [ConnectionsModule, UsersModule, AuthModule, JwtLibsModule, AuthModule, StudentsModule, TeachersModule, ClassroomsModule, SeederModule, SchedulesModule, EnrolmentModule],
   controllers: [AppController],
   providers: [AppService,
     {
