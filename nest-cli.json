@@ -60,6 +60,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/jwt-libs/tsconfig.lib.json"
       }
+    },
+    "seeder": {
+      "type": "library",
+      "root": "libs/seeder",
+      "entryFile": "index",
+      "sourceRoot": "libs/seeder/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/seeder/tsconfig.lib.json"
+      }
     }
   }
 }

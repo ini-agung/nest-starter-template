@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
+import { Class, Classrooms, Subjects } from 'src/classrooms/entities/classrooms.entity';
+import { Schedules } from 'src/schedules/entities/schedules.entity';
 import { Gender } from 'src/students/entities/gender.entity';
 import { Parents } from 'src/students/entities/parents.entity';
 import { Religion } from 'src/students/entities/religion.entity';
@@ -8,15 +10,11 @@ import { Degree } from 'src/teachers/entities/degree.entity';
 import { Teachers } from 'src/teachers/entities/teachers.entity';
 import { Roles } from 'src/users/entities/roles.entity';
 import { Users } from 'src/users/entities/users.entity';
-
-import { Connection } from 'typeorm';
 export async function DBRead(table: string, properties: string[], parameter: string, orderBy: string) {
     const selectClause = properties.map(property => `\`${property}\``).join(', ');
     const query = `SELECT ${selectClause} FROM ${table} ${parameter} ORDER BY ${orderBy};`;
     return this.ConnectionsService.execute();
 }
-
-
 
 @Injectable()
 export class ConnectionsService implements TypeOrmOptionsFactory {
@@ -28,7 +26,7 @@ export class ConnectionsService implements TypeOrmOptionsFactory {
             username: 'root',
             password: 'toor',
             database: 'db_spada',
-            entities: [Users, Students, Parents, Teachers, Roles, Degree, Religion, Gender],
+            entities: [Users, Students, Parents, Teachers, Roles, Degree, Religion, Gender, Class, Classrooms, Subjects, Schedules],
             autoLoadEntities: true,
             synchronize: true,
         };

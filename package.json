@@ -97,7 +97,8 @@
       "^@app/auth(|/.*)$": "<rootDir>/libs/auth/src/$1",
       "^@app/jwt(|/.*)$": "<rootDir>/libs/jwt/src/$1",
       "^@app/jwt-auth(|/.*)$": "<rootDir>/libs/jwt-auth/src/$1",
-      "^@app/jwt-libs(|/.*)$": "<rootDir>/libs/jwt-libs/src/$1"
+      "^@app/jwt-libs(|/.*)$": "<rootDir>/libs/jwt-libs/src/$1",
+      "^@app/seeder(|/.*)$": "<rootDir>/libs/seeder/src/$1"
     }
   }
 }

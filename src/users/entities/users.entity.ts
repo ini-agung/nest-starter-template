@@ -1,17 +1,17 @@
 import { Length } from '@nestjs/class-validator';
-import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, OneToOne, JoinColumn, Relation } from 'typeorm';
-import { Roles, RoleList } from './roles.entity';
+import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, OneToOne, JoinColumn, Relation, ManyToOne } from 'typeorm';
+import { Roles } from './roles.entity';
 
 @Entity()
 export class Users {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @OneToOne(() => Roles, (Roles) => Roles.id)
-  @JoinColumn({ name: 'role_id', referencedColumnName: 'id' })
+  @ManyToOne(() => Roles, role => role.id)
+  @JoinColumn({ name: 'role_id' })
   role: Roles;
 
-  @Column({ default: RoleList.Students })
+  @Column()
   role_id: number;
 
   @Length(6, 255)

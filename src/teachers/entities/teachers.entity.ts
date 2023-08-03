@@ -13,6 +13,13 @@ export class Teachers {
     @Column({ type: 'int', unique: true })
     nik: number;
 
+    @OneToOne(() => Users, (Users) => Users.id)
+    @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+    user!: Users;
+
+    @Column()
+    user_id: number;
+
     // Define the many-to-one relationship with the Degree entity
     @ManyToOne(() => Degree, degree => degree.teachers)
     @JoinColumn({ name: 'degree_id' })
