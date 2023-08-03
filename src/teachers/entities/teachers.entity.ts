@@ -1,8 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, OneToOne, JoinColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, OneToOne, JoinColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 import { Degree } from './degree.entity';
 import { Users } from 'src/users/entities/users.entity';
 import { Religion } from 'src/students/entities/religion.entity';
 import { Gender } from 'src/students/entities/gender.entity';
+import { Enrolment } from 'src/enrolment/entities/enrolment.entity';
 
 
 @Entity()
@@ -36,6 +37,11 @@ export class Teachers {
 
     @Column({ type: 'date' })
     date_birth: Date;
+
+    // Many-to-many relationship with Enrolment
+    @ManyToMany(() => Enrolment, (enrolment) => enrolment.teachers)
+    @JoinTable()
+    enrolments: Enrolment[];
 
     @Column({ type: 'varchar', length: 100 })
     place_birth: string;
