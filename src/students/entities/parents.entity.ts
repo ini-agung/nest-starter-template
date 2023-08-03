@@ -1,43 +1,53 @@
-import { OneToMany, Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, JoinColumn } from 'typeorm';
+import { OneToMany, Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, JoinColumn, ManyToOne } from 'typeorm';
 import { Students } from './student.entity';
+import { Religion } from './religion.entity';
 
 @Entity()
 export class Parents {
     @PrimaryGeneratedColumn()
     id: number;
-    
-    @OneToMany(()=>Students, (students) => students.id)
-    @JoinColumn({name: 'student_id'})
+
+    @OneToMany(() => Students, (students) => students.id)
+    @JoinColumn({ name: 'student_id' })
     student: Students[]
 
-    @Column({type: 'bigint', unique:true})
+    @Column({ type: 'bigint', unique: true })
     user_id: number;
 
-    @Column({type: 'varchar', length:150})
-    father: string;    
-    
-    @Column({type: 'varchar', length:150})
+    @Column({ type: 'varchar', length: 100 })
+    father: string;
+
+    @Column({ type: 'varchar', length: 100 })
     mother: string;
-    
-    @Column({type: 'varchar', length: 15})
+
+    @Column({ type: 'varchar', length: 15 })
     phone_father: string
 
-    @Column({type: 'varchar', length: 15})
+    @Column({ type: 'varchar', length: 15 })
     phone_mother: string
-    
-    @Column({type:'varchar', length: 150, default: 'default.jpg'})
+
+    @Column({ type: 'varchar', length: 50, default: 'img-female.jpg' })
     img_mother: string;
-    
-    @Column({type:'varchar', length: 150, default: 'default.jpg'})
+
+    @Column({ type: 'varchar', length: 50, default: 'img-male.jpg' })
     img_father: string;
-    
-    @Column({type: 'varchar', length: 15})
-    religion_father: string; 
 
-    @Column({type: 'varchar', length: 15})
-    religion_mother: string; 
+    @ManyToOne(() => Religion, religion => religion.students)
+    @JoinColumn({ name: 'religion_father' })
+    rf: Religion;
 
-    @Column({type: 'varchar', length: 200})
+    @Column()
+    religion_father: number;
+
+    @ManyToOne(() => Religion, religion => religion.students)
+    @JoinColumn({ name: 'religion_mother' })
+    rm: Religion;
+
+    @Column()
+    religion_mother: number;
+
+
+    @Column({ type: 'varchar', length: 255 })
     address: string;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

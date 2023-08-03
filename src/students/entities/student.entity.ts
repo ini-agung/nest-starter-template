@@ -39,7 +39,6 @@ export class Students {
     @Column({ type: 'varchar', length: 100 })
     place_birth!: string;
 
-    // Define the many-to-one relationship with the Degree entity
     @ManyToOne(() => Gender, gender => gender.students)
     @JoinColumn({ name: 'gender_id' })
     gender: Gender;
@@ -47,7 +46,6 @@ export class Students {
     @Column()
     gender_id: number;
 
-    // Define the many-to-one relationship with the Degree entity
     @ManyToOne(() => Religion, religion => religion.students)
     @JoinColumn({ name: 'religion_id' })
     religion: Religion;
