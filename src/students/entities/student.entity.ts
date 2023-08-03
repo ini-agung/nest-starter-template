@@ -3,12 +3,11 @@ import { Parents } from './parents.entity';
 import { Users } from 'src/users/entities/users.entity';
 import { Religion } from './religion.entity';
 import { Gender } from './gender.entity';
-import { Enrolment } from 'src/enrolment/entities/enrolment.entity';
 
 
 @Entity()
 export class Students {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({ type: 'bigint' })
     id!: number;
 
     @ManyToOne(() => Parents, (Parents) => Parents.id)
@@ -28,11 +27,6 @@ export class Students {
     @Column({ type: 'int', unique: true })
     nis!: number;
 
-    // Many-to-many relationship with Enrolment
-    @ManyToMany(() => Enrolment, (enrolment) => enrolment.students)
-    @JoinTable()
-    enrolments: Enrolment[];
-
     @Column({ type: 'varchar', length: 100 })
     full_name!: string;
 
@@ -42,7 +36,7 @@ export class Students {
     @Column({ type: 'date' })
     date_birth!: Date;
 
-    @Column({ type: 'varchar', length: 100 })
+    @Column({ type: 'varchar', length: 255 })
     place_birth!: string;
 
     @ManyToOne(() => Gender, gender => gender.students)

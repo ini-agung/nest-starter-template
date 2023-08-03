@@ -4,7 +4,10 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "t
 @Entity()
 export class Schedules {
     @PrimaryGeneratedColumn()
-    schedule_id: number;
+    id: number;
+
+    @Column({ type: 'varchar', length: 10, unique: true })
+    schedule_code: string;
 
     @Column({ type: 'varchar', length: 15 })
     day_of_week: string;
@@ -16,9 +19,7 @@ export class Schedules {
     time_finish: string;
 
     @ManyToOne(() => Class, classes => classes.id)
-    @JoinColumn({ name: 'classes_id' })
-    classes: Class;
-
+    @JoinColumn({ name: 'class_id' })
     @Column()
     class_id: number;
 }

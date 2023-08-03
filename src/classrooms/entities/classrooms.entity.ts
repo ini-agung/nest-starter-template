@@ -1,4 +1,3 @@
-import { Enrolment } from "src/enrolment/entities/enrolment.entity";
 import { Teachers } from "src/teachers/entities/teachers.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -9,11 +8,6 @@ export class Classrooms {
 
     @Column({ unique: true })
     classroom: string;
-
-    // Many-to-many relationship with Enrolment
-    @ManyToMany(() => Enrolment, (enrolment) => enrolment.classroom)
-    @JoinTable()
-    enrolments: Enrolment[];
 }
 
 
@@ -24,10 +18,6 @@ export class Subjects {
 
     @Column({ type: 'varchar', length: 50 })
     subject: string;
-    // Many-to-many relationship with Enrolment
-    @ManyToMany(() => Enrolment, (enrolment) => enrolment.subjects)
-    @JoinTable()
-    enrolments: Enrolment[];
 
     @Column({ type: 'varchar', length: 255 })
     description: string;
@@ -47,11 +37,6 @@ export class Class {
 
     @Column()
     classroom_id: number;
-
-    // Many-to-many relationship with Enrolment
-    @ManyToMany(() => Enrolment, (enrolment) => enrolment.classes)
-    @JoinTable()
-    enrolments: Enrolment[];
 
     @ManyToOne(() => Teachers, teacher => teacher.id)
     @JoinColumn({ name: 'teacher_id' })

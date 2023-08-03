@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { Class, Classrooms, Subjects } from 'src/classrooms/entities/classrooms.entity';
-import { Enrolment } from 'src/enrolment/entities/enrolment.entity';
+import { Enrolments } from 'src/enrolment/entities/enrolments.entity';
 import { Schedules } from 'src/schedules/entities/schedules.entity';
 import { Gender } from 'src/students/entities/gender.entity';
 import { Parents } from 'src/students/entities/parents.entity';
@@ -27,7 +27,7 @@ export class ConnectionsService implements TypeOrmOptionsFactory {
             username: 'root',
             password: 'toor',
             database: 'db_spada',
-            entities: [Users, Students, Parents, Teachers, Roles, Degree, Religion, Gender, Class, Classrooms, Subjects, Schedules, Enrolment],
+            entities: [Users, Students, Parents, Teachers, Roles, Degree, Religion, Gender, Class, Classrooms, Subjects, Schedules, Enrolments],
             autoLoadEntities: true,
             synchronize: true,
         };

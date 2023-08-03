@@ -3,7 +3,6 @@ import { Degree } from './degree.entity';
 import { Users } from 'src/users/entities/users.entity';
 import { Religion } from 'src/students/entities/religion.entity';
 import { Gender } from 'src/students/entities/gender.entity';
-import { Enrolment } from 'src/enrolment/entities/enrolment.entity';
 
 
 @Entity()
@@ -38,16 +37,11 @@ export class Teachers {
     @Column({ type: 'date' })
     date_birth: Date;
 
-    // Many-to-many relationship with Enrolment
-    @ManyToMany(() => Enrolment, (enrolment) => enrolment.teachers)
-    @JoinTable()
-    enrolments: Enrolment[];
-
     @Column({ type: 'varchar', length: 100 })
     place_birth: string;
 
     // Define the many-to-one relationship with the Degree entity
-    @ManyToOne(() => Gender, gender => gender.teachers)
+    @ManyToOne(() => Gender, gender => gender.id)
     @JoinColumn({ name: 'gender_id' })
     gender: Gender;
 
@@ -55,7 +49,7 @@ export class Teachers {
     gender_id: number;
 
     // Define the many-to-one relationship with the Degree entity
-    @ManyToOne(() => Religion, religion => religion.teachers)
+    @ManyToOne(() => Religion, religion => religion.id)
     @JoinColumn({ name: 'religion_id' })
     religion: Religion;
 

@@ -11,6 +11,7 @@ import { Class, Classrooms, Subjects } from 'src/classrooms/entities/classrooms.
 import { Schedules } from 'src/schedules/entities/schedules.entity';
 import { Teachers } from 'src/teachers/entities/teachers.entity';
 import { Students } from 'src/students/entities/student.entity';
+import { Enrolments } from 'src/enrolment/entities/enrolments.entity';
 
 @Injectable()
 export class SeederService {
@@ -430,43 +431,73 @@ export class SeederService {
         })
         const schedules = [
             // Monday
-            { day_of_week: 'Monday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 1, },
-            { day_of_week: 'Monday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 2, },
-            { day_of_week: 'Monday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 3, },
+            { schedule_code: 'A001', day_of_week: 'Monday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 1, },
+            { schedule_code: 'A002', day_of_week: 'Monday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 2, },
+            { schedule_code: 'A003', day_of_week: 'Monday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 3, },
             // Tuesday
-            { day_of_week: 'Tuesday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 4, },
-            { day_of_week: 'Tuesday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 5, },
-            { day_of_week: 'Tuesday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 6, },
+            { schedule_code: 'A004', day_of_week: 'Tuesday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 4, },
+            { schedule_code: 'A005', day_of_week: 'Tuesday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 5, },
+            { schedule_code: 'A006', day_of_week: 'Tuesday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 6, },
             // Wednesday
-            { day_of_week: 'Wednesday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 7, },
-            { day_of_week: 'Wednesday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 8, },
-            { day_of_week: 'Wednesday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 9, },
+            { schedule_code: 'A007', day_of_week: 'Wednesday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 7, },
+            { schedule_code: 'A008', day_of_week: 'Wednesday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 8, },
+            { schedule_code: 'A009', day_of_week: 'Wednesday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 9, },
             // Thursday
-            { day_of_week: 'Thursday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 10, },
-            { day_of_week: 'Thursday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 11, },
-            { day_of_week: 'Thursday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 12, },
+            { schedule_code: 'A010', day_of_week: 'Thursday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 10, },
+            { schedule_code: 'A011', day_of_week: 'Thursday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 11, },
+            { schedule_code: 'A012', day_of_week: 'Thursday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 12, },
             // Friday
-            { day_of_week: 'Friday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 13, },
-            { day_of_week: 'Friday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 14, },
-            { day_of_week: 'Friday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 15, },
+            { schedule_code: 'A013', day_of_week: 'Friday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 13, },
+            { schedule_code: 'A014', day_of_week: 'Friday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 14, },
+            { schedule_code: 'A015', day_of_week: 'Friday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 15, },
             // Saturday
-            { day_of_week: 'Saturday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 16, },
-            { day_of_week: 'Saturday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 17, },
-            { day_of_week: 'Saturday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 18, },
+            { schedule_code: 'A016', day_of_week: 'Saturday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 16, },
+            { schedule_code: 'A017', day_of_week: 'Saturday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 17, },
+            { schedule_code: 'A018', day_of_week: 'Saturday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 18, },
         ];
         console.log("=== SCHEDULE ===");
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Users table
             for (const data of schedules) {
-                const schedule = new Schedules();
-                schedule.class_id = data.class_id;
-                schedule.day_of_week = data.day_of_week;
-                schedule.time_start = data.time_start;
-                schedule.time_finish = data.time_finish;
-                await manager.save(schedule);
+                const existingSchedule = await manager.findOne(Schedules, { where: { schedule_code: data.schedule_code } });
+                if (!existingSchedule) {
+                    const schedule = new Schedules();
+                    schedule.schedule_code = data.schedule_code;
+                    schedule.day_of_week = data.day_of_week;
+                    schedule.time_start = data.time_start;
+                    schedule.time_finish = data.time_finish;
+                    schedule.class_id = data.class_id;
+                    await manager.save(schedule);
+                } else {
+                    console.log(`SCHEDULE with value ${data.schedule_code} already exists. Skipping...`);
+                }
             };
         });
 
+        const enrolments = [
+            { enrol_code: "1-1", student_id: 1, class_id: 1, enrolment_date: new Date('2023-08-01 10:00:00'), enrolment_status: true },
+            { enrol_code: "2-1", student_id: 2, class_id: 1, enrolment_date: new Date('2023-08-01 10:00:00'), enrolment_status: true },
+            { enrol_code: "1-2", student_id: 1, class_id: 2, enrolment_date: new Date('2023-08-01 10:00:00'), enrolment_status: true },
+            { enrol_code: "2-2", student_id: 2, class_id: 2, enrolment_date: new Date('2023-08-01 10:00:00'), enrolment_status: true },
+        ];
+        console.log("=== Enrolment ===");
+        await this.connection.transaction(async (manager) => {
+            // Check duplicates for Users table
+            for (const data of enrolments) {
+                const existingEnrolment = await manager.findOne(Enrolments, { where: { enrol_code: data.enrol_code } });
+                if (!existingEnrolment) {
+                    const schedule = new Enrolments();
+                    schedule.enrol_code = data.enrol_code;
+                    schedule.student_id = data.student_id;
+                    schedule.class_id = data.class_id;
+                    schedule.enrolment_date = data.enrolment_date;
+                    schedule.enrolment_status = data.enrolment_status;
+                    await manager.save(schedule);
+                } else {
+                    console.log(`Enrolment with value ${data.enrol_code} already exists. Skipping...`);
+                }
+            };
+        });
 
 
         console.log("=== Finish ===");
