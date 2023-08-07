@@ -22,7 +22,7 @@ export class ConnectionsService implements TypeOrmOptionsFactory {
             host: 'localhost',
             port: 3306,
             username: 'root',
-            password: '',
+            password: 'toor',
             database: 'db_spada',
             entities: [Users, Students, Parents, Teachers, Roles, Degrees, Religions, Genders, Class, Classrooms, Subjects, Schedules, Enrolments],
             autoLoadEntities: true,
