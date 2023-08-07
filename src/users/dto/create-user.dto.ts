@@ -1,7 +1,10 @@
 
-import { IsNotEmpty, IsString, IsEmail, MinLength, Matches } from "@nestjs/class-validator";
-
+import { IsNotEmpty, IsString, IsEmail, MinLength, Matches, IsNumber, IsOptional } from "@nestjs/class-validator";
 export class CreateUserDto {
+    @IsNumber()
+    @IsOptional()
+    role_id: number = 1;
+
     @IsNotEmpty()
     @IsString()
     username: string;
@@ -16,4 +19,7 @@ export class CreateUserDto {
     @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, { message: 'Password too weak, combine uppercase, lowercase and digits' })
     password: string;
 
+    @IsString()
+    @IsOptional()
+    img: string = "default.jpg";
 }
