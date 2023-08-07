@@ -1,14 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ParentsService } from './parents.service';
-import { CreateParentDto } from './dto/create-parent.dto';
-import { UpdateParentDto } from './dto/update-parent.dto';
-
+import { CreateParentsDto } from './dto/create-parents.dto';
+import { UpdateParentsDto } from './dto/update-parents.dto';
 @Controller('parents')
 export class ParentsController {
-  constructor(private readonly parentsService: ParentsService) {}
+  constructor(private readonly parentsService: ParentsService) { }
 
   @Post()
-  create(@Body() createParentDto: CreateParentDto) {
+  create(@Body() createParentDto: CreateParentsDto) {
     return this.parentsService.create(createParentDto);
   }
 
@@ -23,7 +22,7 @@ export class ParentsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateParentDto: UpdateParentDto) {
+  update(@Param('id') id: string, @Body() updateParentDto: UpdateParentsDto) {
     return this.parentsService.update(+id, updateParentDto);
   }
 

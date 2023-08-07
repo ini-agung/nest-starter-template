@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsEmail, MinLength, Matches, IsDate, IsNumber, isNumber, minLength, MaxLength } from "@nestjs/class-validator";
+import { IsNotEmpty, IsString, MinLength, IsNumber, MaxLength } from "@nestjs/class-validator";
 export class CreateParentsDto {
     @IsNotEmpty()
     @IsNumber()

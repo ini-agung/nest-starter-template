@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateParentDto } from './dto/create-parent.dto';
-import { UpdateParentDto } from './dto/update-parent.dto';
-
+import { CreateParentsDto } from './dto/create-parents.dto';
+import { UpdateParentsDto } from './dto/update-parents.dto';
 @Injectable()
 export class ParentsService {
-  create(createParentDto: CreateParentDto) {
+  create(createParentDto: CreateParentsDto) {
     return 'This action adds a new parent';
   }
 
@@ -16,7 +15,7 @@ export class ParentsService {
     return `This action returns a #${id} parent`;
   }
 
-  update(id: number, updateParentDto: UpdateParentDto) {
+  update(id: number, updateParentDto: UpdateParentsDto) {
     return `This action updates a #${id} parent`;
   }
 
