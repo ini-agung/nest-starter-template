@@ -7,7 +7,7 @@ import { Genders } from 'src/users/entities/genders.entity';
 
 @Entity()
 export class Teachers {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({ type: 'bigint' })
     id: number;
 
     @Column({ type: 'int', unique: true })

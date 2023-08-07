@@ -16,7 +16,12 @@ import { EnrolmentModule } from './enrolment/enrolment.module';
 import { ParentsModule } from './parents/parents.module';
 
 @Module({
-  imports: [ConnectionsModule, UsersModule, AuthModule, JwtLibsModule, AuthModule, StudentsModule, TeachersModule, ClassroomsModule, SeederModule, SchedulesModule, EnrolmentModule, ParentsModule],
+  imports: [ConnectionsModule, UsersModule,
+    AuthModule, JwtLibsModule, AuthModule,
+    StudentsModule, TeachersModule,
+    ClassroomsModule, SeederModule,
+    SchedulesModule, EnrolmentModule,
+    ParentsModule, TeachersModule],
   controllers: [AppController],
   providers: [AppService,
     {
