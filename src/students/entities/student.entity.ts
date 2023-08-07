@@ -1,8 +1,8 @@
 import { ManyToOne, Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, OneToOne, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
-import { Parents } from './parents.entity';
+import { Parents } from '../../parents/entities/parents.entity';
 import { Users } from 'src/users/entities/users.entity';
-import { Religions } from './religions.entity';
-import { Genders } from './genders.entity';
+import { Religions } from '../../users/entities/religions.entity';
+import { Genders } from '../../users/entities/genders.entity';
 
 
 @Entity()

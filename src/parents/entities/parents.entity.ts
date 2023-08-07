@@ -1,6 +1,6 @@
 import { OneToMany, Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, JoinColumn, ManyToOne } from 'typeorm';
-import { Students } from './student.entity';
-import { Religions } from './religions.entity';
+import { Students } from '../../students/entities/student.entity';
+import { Religions } from '../../users/entities/religions.entity';
 
 @Entity()
 export class Parents {

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { hashPassword } from '@app/jwt-libs';
 import { Users } from 'src/users/entities/users.entity';
-import { Genders } from 'src/students/entities/genders.entity';
-import { Religions } from 'src/students/entities/religions.entity';
+import { Genders } from 'src/users/entities/genders.entity';
+import { Religions } from 'src/users/entities/religions.entity';
 import { Degrees } from 'src/teachers/entities/degrees.entity';
 import { Roles } from 'src/users/entities/roles.entity';
-import { Parents } from 'src/students/entities/parents.entity';
+import { Parents } from 'src/parents/entities/parents.entity';
 import { Connection } from 'typeorm';
 import { Class, Classrooms, Subjects } from 'src/classrooms/entities/classrooms.entity';
 import { Schedules } from 'src/schedules/entities/schedules.entity';

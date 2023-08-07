@@ -1,11 +1,11 @@
 import { Connection } from 'typeorm';
 import { Users } from 'src/users/entities/users.entity';
 import { hashPassword } from '@app/jwt-libs';
-import { Genders } from 'src/students/entities/genders.entity';
-import { Religions } from 'src/students/entities/religions.entity';
+import { Genders } from 'src/users/entities/genders.entity';
+import { Religions } from 'src/users/entities/religions.entity';
 import { Degrees } from 'src/teachers/entities/degrees.entity';
 import { Roles } from 'src/users/entities/roles.entity';
-import { Parents } from 'src/students/entities/parents.entity';
+import { Parents } from 'src/parents/entities/parents.entity';
 
 export const seed = async (connection: Connection) => {
     const password = await hashPassword("@Secret123!")
