@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { hashPassword } from '@app/jwt-libs';
 import { Users } from 'src/users/entities/users.entity';
-import { Gender } from 'src/students/entities/gender.entity';
-import { Religion } from 'src/students/entities/religion.entity';
-import { Degree } from 'src/teachers/entities/degree.entity';
+import { Genders } from 'src/students/entities/genders.entity';
+import { Religions } from 'src/students/entities/religions.entity';
+import { Degrees } from 'src/teachers/entities/degrees.entity';
 import { Roles } from 'src/users/entities/roles.entity';
 import { Parents } from 'src/students/entities/parents.entity';
 import { Connection } from 'typeorm';
@@ -27,9 +27,9 @@ export class SeederService {
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Gender table
             for (const data of genders) {
-                const existingGender = await manager.findOne(Gender, { where: { gender: data.gender } });
+                const existingGender = await manager.findOne(Genders, { where: { gender: data.gender } });
                 if (!existingGender) {
-                    const gender = new Gender();
+                    const gender = new Genders();
                     gender.gender = data.gender;
                     await manager.save(gender);
                 } else {
@@ -128,9 +128,9 @@ export class SeederService {
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Religion table
             for (const data of religions) {
-                const existingReligion = await manager.findOne(Religion, { where: { religion: data.religion } });
+                const existingReligion = await manager.findOne(Religions, { where: { religion: data.religion } });
                 if (!existingReligion) {
-                    const religion = new Religion();
+                    const religion = new Religions();
                     religion.religion = data.religion;
                     await manager.save(religion);
                 } else {
@@ -153,9 +153,9 @@ export class SeederService {
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Degree table
             for (const data of degrees) {
-                const existingDegree = await manager.findOne(Degree, { where: { degree: data.degree } });
+                const existingDegree = await manager.findOne(Degrees, { where: { degree: data.degree } });
                 if (!existingDegree) {
-                    const degree = new Degree();
+                    const degree = new Degrees();
                     degree.degree = data.degree;
                     await manager.save(degree);
                 } else {

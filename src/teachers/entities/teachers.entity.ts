@@ -1,8 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, OneToOne, JoinColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
-import { Degree } from './degree.entity';
+import { Degrees } from './degrees.entity';
 import { Users } from 'src/users/entities/users.entity';
-import { Religion } from 'src/students/entities/religion.entity';
-import { Gender } from 'src/students/entities/gender.entity';
+import { Religions } from 'src/students/entities/religions.entity';
+import { Genders } from 'src/students/entities/genders.entity';
 
 
 @Entity()
@@ -21,9 +21,9 @@ export class Teachers {
     user_id: number;
 
     // Define the many-to-one relationship with the Degree entity
-    @ManyToOne(() => Degree, degree => degree.teachers)
+    @ManyToOne(() => Degrees, degree => degree.teachers)
     @JoinColumn({ name: 'degree_id' })
-    degree: Degree;
+    degree: Degrees;
 
     @Column()
     degree_id: number;
@@ -41,17 +41,17 @@ export class Teachers {
     place_birth: string;
 
     // Define the many-to-one relationship with the Degree entity
-    @ManyToOne(() => Gender, gender => gender.id)
+    @ManyToOne(() => Genders, gender => gender.id)
     @JoinColumn({ name: 'gender_id' })
-    gender: Gender;
+    gender: Genders;
 
     @Column()
     gender_id: number;
 
     // Define the many-to-one relationship with the Degree entity
-    @ManyToOne(() => Religion, religion => religion.id)
+    @ManyToOne(() => Religions, religion => religion.id)
     @JoinColumn({ name: 'religion_id' })
-    religion: Religion;
+    religion: Religions;
 
     @Column()
     religion_id: number;

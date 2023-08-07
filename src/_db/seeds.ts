@@ -1,9 +1,9 @@
 import { Connection } from 'typeorm';
 import { Users } from 'src/users/entities/users.entity';
 import { hashPassword } from '@app/jwt-libs';
-import { Gender } from 'src/students/entities/gender.entity';
-import { Religion } from 'src/students/entities/religion.entity';
-import { Degree } from 'src/teachers/entities/degree.entity';
+import { Genders } from 'src/students/entities/genders.entity';
+import { Religions } from 'src/students/entities/religions.entity';
+import { Degrees } from 'src/teachers/entities/degrees.entity';
 import { Roles } from 'src/users/entities/roles.entity';
 import { Parents } from 'src/students/entities/parents.entity';
 
@@ -61,7 +61,7 @@ export const seed = async (connection: Connection) => {
 
     await connection.transaction(async (manager) => {
         for (const data of religions) {
-            const religion = new Religion();
+            const religion = new Religions();
             religion.religion = data.religion;
             await manager.save(religion);
         }
@@ -79,7 +79,7 @@ export const seed = async (connection: Connection) => {
 
     await connection.transaction(async (manager) => {
         for (const data of degrees) {
-            const degree = new Degree();
+            const degree = new Degrees();
             degree.degree = data.degree;
             await manager.save(degree);
         }

@@ -3,18 +3,18 @@ import { Students } from './student.entity';
 import { Teachers } from 'src/teachers/entities/teachers.entity';
 
 @Entity()
-export class Gender {
-    @PrimaryGeneratedColumn({ type: 'int' })
+export class Religions {
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Column({ type: 'varchar', length: 20, unique: true })
-    gender!: string;
+    religion!: string;
 
     // Define the one-to-many relationship with the Teacher entity
-    @OneToMany(() => Teachers, teacher => teacher.gender_id)
+    @OneToMany(() => Teachers, teacher => teacher.religion)
     teachers: Teachers[];
 
     // Define the one-to-many relationship with the Teacher entity
-    @OneToMany(() => Students, students => students.gender)
+    @OneToMany(() => Students, students => students.religion)
     students: Students[];
 }

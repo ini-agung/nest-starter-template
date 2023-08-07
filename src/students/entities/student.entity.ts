@@ -1,8 +1,8 @@
 import { ManyToOne, Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, OneToOne, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
 import { Parents } from './parents.entity';
 import { Users } from 'src/users/entities/users.entity';
-import { Religion } from './religion.entity';
-import { Gender } from './gender.entity';
+import { Religions } from './religions.entity';
+import { Genders } from './genders.entity';
 
 
 @Entity()
@@ -39,16 +39,16 @@ export class Students {
     @Column({ type: 'varchar', length: 255 })
     place_birth!: string;
 
-    @ManyToOne(() => Gender, gender => gender.students)
+    @ManyToOne(() => Genders, gender => gender.students)
     @JoinColumn({ name: 'gender_id' })
-    gender: Gender;
+    gender: Genders;
 
     @Column()
     gender_id: number;
 
-    @ManyToOne(() => Religion, religion => religion.students)
+    @ManyToOne(() => Religions, religion => religion.students)
     @JoinColumn({ name: 'religion_id' })
-    religion: Religion;
+    religion: Religions;
 
     @Column()
     religion_id: number;

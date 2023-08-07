@@ -1,6 +1,6 @@
 import { OneToMany, Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, JoinColumn, ManyToOne } from 'typeorm';
 import { Students } from './student.entity';
-import { Religion } from './religion.entity';
+import { Religions } from './religions.entity';
 
 @Entity()
 export class Parents {
@@ -32,16 +32,16 @@ export class Parents {
     @Column({ type: 'varchar', length: 50, default: 'img-male.jpg' })
     img_father: string;
 
-    @ManyToOne(() => Religion, religion => religion.students)
+    @ManyToOne(() => Religions, religion => religion.students)
     @JoinColumn({ name: 'religion_father' })
-    rf: Religion;
+    rf: Religions;
 
     @Column()
     religion_father: number;
 
-    @ManyToOne(() => Religion, religion => religion.students)
+    @ManyToOne(() => Religions, religion => religion.students)
     @JoinColumn({ name: 'religion_mother' })
-    rm: Religion;
+    rm: Religions;
 
     @Column()
     religion_mother: number;
