@@ -1,7 +1,7 @@
 import { ConflictException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
-import { Connection, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Teachers } from './entities/teachers.entity';
 
@@ -11,11 +11,11 @@ export class TeachersService {
     @InjectRepository(Teachers)
     private teachersRepository: Repository<Teachers>,) { }
   private readonly logger = new Logger(TeachersService.name);
+
   async create(createTeacherDto: CreateTeacherDto) {
     try {
       const teacher = this.teachersRepository.create(createTeacherDto);
-      await this.teachersRepository.save(teacher);
-      this.logger.log('Success create teacher');
+      return await this.teachersRepository.save(teacher);
     } catch (error) {
       this.logger.error(`Error saving ${error.message}`);
       const data = {

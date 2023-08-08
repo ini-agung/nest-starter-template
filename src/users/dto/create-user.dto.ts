@@ -1,9 +1,9 @@
 
 import { IsNotEmpty, IsString, IsEmail, MinLength, Matches, IsNumber, IsOptional } from "@nestjs/class-validator";
 export class CreateUserDto {
+    @IsNotEmpty()
     @IsNumber()
-    @IsOptional()
-    role_id: number = 1;
+    role_id: number;
 
     @IsNotEmpty()
     @IsString()

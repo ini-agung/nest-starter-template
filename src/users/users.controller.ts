@@ -1,4 +1,4 @@
-import {Res, Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus } from '@nestjs/common';
+import { Res, Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -6,18 +6,18 @@ import { responseJson } from '@app/response';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto, @Res() response) {
     const newUser = await this.usersService.create(createUserDto);
-    console.log(newUser);
     const data = {
       status: true,
       statusCode: HttpStatus.ACCEPTED,
       message: 'Success Create New Users',
-      data:{}
-  };
+      data: {}
+    };
+    data.data = newUser;
     responseJson(data, data.statusCode, response);
   }
 
@@ -27,11 +27,11 @@ export class UsersController {
       status: true,
       statusCode: HttpStatus.OK,
       message: 'Success Get Users',
-      data:{}
-    }; 
+      data: {}
+    };
     const users = await this.usersService.findAll();
     data.data = users;
-    responseJson(data, 200, response);
+    responseJson(data, data.statusCode, response);
   }
 
   @Get(':identity')
@@ -40,11 +40,11 @@ export class UsersController {
       status: true,
       statusCode: HttpStatus.OK,
       message: 'Success Get Users',
-      data:{}
-    }; 
+      data: {}
+    };
     const users = await this.usersService.findOne(identity);
     data.data = users;
-    responseJson(data, 200, response);
+    responseJson(data, data.statusCode, response);
   }
 
   @Patch(':id')
@@ -52,12 +52,12 @@ export class UsersController {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
-      message: 'Success Get Users',
-      data:{}
+      message: 'Success Update Users',
+      data: {}
     };
     const users = await this.usersService.update(+id, updateUserDto);
     data.data = users;
-    responseJson(data, 200, response);
+    responseJson(data, data.statusCode, response);
   }
 
   @Delete(':id')
@@ -66,10 +66,10 @@ export class UsersController {
       status: true,
       statusCode: HttpStatus.OK,
       message: 'Success Delete Users',
-      data:{}
+      data: {}
     };
     const users = await this.usersService.remove(+id);
     data.data = users;
-    responseJson(data, 200, response);
+    responseJson(data, data.statusCode, response);
   }
 }

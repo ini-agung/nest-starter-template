@@ -18,8 +18,7 @@ import { ParentsModule } from './parents/parents.module';
 @Module({
   imports: [ConnectionsModule, UsersModule,
     AuthModule, JwtLibsModule, AuthModule,
-    StudentsModule, TeachersModule,
-    ClassroomsModule, SeederModule,
+    StudentsModule, ClassroomsModule, SeederModule,
     SchedulesModule, EnrolmentModule,
     ParentsModule, TeachersModule],
   controllers: [AppController],

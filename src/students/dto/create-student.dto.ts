@@ -2,64 +2,63 @@ import { IsNotEmpty, IsString, IsEmail, MinLength, Matches, IsDate, IsNumber, is
 export class CreateStudentDto {
     @IsNotEmpty()
     @IsNumber()
+    parent_id: number;
+
+    @IsNotEmpty()
+    @IsNumber()
+    user_id: number;
+
+    @IsNotEmpty()
+    @IsNumber()
     nis: number;
 
     @IsNotEmpty()
     @IsString()
     full_name: string;
-    
+
     @IsNotEmpty()
     @IsString()
-    nick_name: string; 
-    
-    @IsNotEmpty()
-    @IsEmail()
-    email: string;
-    
-    @IsNotEmpty()
-    @IsString()
-    @MinLength(8)
-    @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, { message: 'Password too weak, combine uppercase, lowercase and digits' })
-    password: string;
-    
+    nick_name: string;
+
     @IsNotEmpty()
     @IsDate()
     date_birth: Date;
-    
+
     @IsNotEmpty()
     @IsString()
     place_birth: string;
-    
+
+
     @IsNotEmpty()
-    @IsString()
-    gender: string;
-    
+    @IsNumber()
+    gender_id: string;
+
     @IsNotEmpty()
-    @IsString()
-    religion: string;
-    
+    @IsNumber()
+    religion_id: string;
+
     @IsNotEmpty()
     @IsString()
     @MinLength(12)
     @MaxLength(15)
     phone: string;
-    
+
     @IsNotEmpty()
     @IsNumber()
     siblings: number;
-    
+
     @IsNotEmpty()
     @IsNumber()
     child_order: number;
-    
+
     @IsNotEmpty()
     @IsDate()
     entry_year: Date;
-    
+
     @IsNotEmpty()
     @IsString()
     img: string;
-    
+
     @IsNotEmpty()
     @IsString()
     address: string;

@@ -5,6 +5,7 @@ import { SeederService } from '@app/seeder';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await app.listen(3000);
+  /*
   try {
     const seederService = app.get(SeederService);
     await seederService.seed();
@@ -13,5 +14,6 @@ async function bootstrap() {
     console.error('Error occurred while seeding:', error);
     await app.close();
   }
+  //*/
 }
 bootstrap();

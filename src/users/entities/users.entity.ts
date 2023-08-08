@@ -11,7 +11,7 @@ export class Users {
   @JoinColumn({ name: 'role_id' })
   role: Roles;
 
-  @Column()
+  @Column({ default: 1 })
   role_id: number;
 
   @Length(6, 255)
@@ -30,7 +30,7 @@ export class Users {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @DeleteDateColumn({ type: 'timestamp', nullable: true })
+  @DeleteDateColumn({ type: 'timestamp', nullable: true, default: null })
   deletedAt: Date | null;
 }
 

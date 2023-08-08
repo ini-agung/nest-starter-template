@@ -39,6 +39,7 @@ export class Students {
     @Column({ type: 'varchar', length: 255 })
     place_birth!: string;
 
+
     @ManyToOne(() => Genders, gender => gender.students)
     @JoinColumn({ name: 'gender_id' })
     gender: Genders;
@@ -67,6 +68,9 @@ export class Students {
 
     @Column({ type: 'varchar', length: 150 })
     address!: string;
+
+    @Column({ type: 'varchar', length: 150, default: 'avatar.jpg' })
+    img!: string;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;

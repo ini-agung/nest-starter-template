@@ -1,29 +1,22 @@
 import { Injectable, BadRequestException, ConflictException, HttpStatus, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Connection } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { hashPassword } from '@app/jwt-libs';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly connection: Connection) { }
+  constructor(
+    private readonly connection: Connection) { }
   async create(createUserDto: CreateUserDto) {
     const query = `
-    INSERT INTO users
-    (username, email, password)
-    VALUES( ?, ?, ?);
+    INSERT INTO users (role_id, username, email, password)
+    VALUES (?, ?, ?, ?);
     `;
     try {
       const password = await hashPassword(createUserDto.password);
-      const result = await this.connection.query(query, [createUserDto.username, createUserDto.email, password]);
+      const result = await this.connection.query(query, [createUserDto.role_id, createUserDto.username, createUserDto.email, password]);
       console.log(result);
-      const querySwitch = `
-      INSERT INTO students
-      (id_user)
-      VALUES (?)
-      `;
-      await this.connection.query(querySwitch, [result.insertId]);
-
       return result;
     } catch (error) {
       const data = {
@@ -59,7 +52,7 @@ export class UsersService {
 
   async findOne(identity: string) {
     const query = `
-    SELECT id, username, fullname, email, password
+    SELECT id, username, email, password
     from users
     where (username = ? OR email = ?)
     AND deletedAt IS NULL;

@@ -18,7 +18,6 @@ export class SeederService {
     constructor(private readonly connection: Connection) { }
 
     async seed() {
-        const password = await hashPassword('@Secret123!');
         const genders = [
             { gender: 'Laki-laki' },
             { gender: 'Perempuan' },
@@ -188,16 +187,16 @@ export class SeederService {
         });
 
         const users = [
-            { role_id: 1, username: 'agung', email: 'agung@gmail.com', password: password, img: 'image.jpg' },
-            { role_id: 2, username: 'pangestu', email: 'pangestu@gmail.com', password: password, img: 'image.jpg' },
-            { role_id: 3, username: 'branz', email: 'branz@gmail.com', password: password, img: 'image.jpg' },
-            { role_id: 4, username: 'meggy', email: 'meggy@gmail.com', password: password, img: 'image.jpg' },
-            { role_id: 5, username: 'budi', email: 'budi@gmail.com', password: password, img: 'image.jpg' },
-            { role_id: 1, username: 'yulian', email: 'yulian@gmail.com', password: password, img: 'image.jpg' },
-            { role_id: 2, username: 'sisri', email: 'sisri@gmail.com', password: password, img: 'image.jpg' },
-            { role_id: 3, username: 'supri', email: 'supri@gmail.com', password: password, img: 'image.jpg' },
-            { role_id: 4, username: 'kuproi', email: 'kuproi@gmail.com', password: password, img: 'image.jpg' },
-            { role_id: 5, username: 'jamet', email: 'jamet@gmail.com', password: password, img: 'image.jpg' },
+            { role_id: 1, username: 'agung', email: 'agung@gmail.com', img: 'image.jpg' },
+            { role_id: 2, username: 'pangestu', email: 'pangestu@gmail.com', img: 'image.jpg' },
+            { role_id: 3, username: 'branz', email: 'branz@gmail.com', img: 'image.jpg' },
+            { role_id: 4, username: 'meggy', email: 'meggy@gmail.com', img: 'image.jpg' },
+            { role_id: 5, username: 'budi', email: 'budi@gmail.com', img: 'image.jpg' },
+            { role_id: 1, username: 'yulian', email: 'yulian@gmail.com', img: 'image.jpg' },
+            { role_id: 2, username: 'sisri', email: 'sisri@gmail.com', img: 'image.jpg' },
+            { role_id: 3, username: 'supri', email: 'supri@gmail.com', img: 'image.jpg' },
+            { role_id: 4, username: 'kuproi', email: 'kuproi@gmail.com', img: 'image.jpg' },
+            { role_id: 5, username: 'jamet', email: 'jamet@gmail.com', img: 'image.jpg' },
         ];
 
         console.log("=== USERS ===");
@@ -207,12 +206,13 @@ export class SeederService {
                 const existingUser = await manager.findOne(Users, {
                     where: [{ username: data.username }, { email: data.email }],
                 });
+                const password = await hashPassword('@Secret123!');
                 if (!existingUser) {
                     const user = new Users();
                     user.role_id = data.role_id;
                     user.username = data.username;
                     user.email = data.email;
-                    user.password = data.password;
+                    user.password = password;
                     user.img = data.img;
                     await manager.save(user);
                 } else {

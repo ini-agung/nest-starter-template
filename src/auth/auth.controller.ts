@@ -11,72 +11,68 @@ import { Public } from '@app/jwt-libs/public.decorator';
 export class AuthController {
     constructor(private readonly authService: AuthService,
         private readonly userService: UsersService,
-        private readonly jwtLibService: JwtLibsService){}
+        private readonly jwtLibService: JwtLibsService) { }
     @Public()
     @Post('signin')
-    async signin(@Body(new ValidationPipe()) signinDto: SigninDto, @Res() response){
+    async signin(@Body(new ValidationPipe()) signinDto: SigninDto, @Res() response) {
         const user = await this.userService.findOne(signinDto.identity);
-        if(user.length > 0) {
+        if (user.length > 0) {
             const compare = await comparePasswords(signinDto.password, user[0].password)
-            if(compare){
-                const payload = {id: user[0].id, username:user[0].username, fullname: user[0].fullname, email: user[0].email};
+            if (compare) {
+                const payload = { id: user[0].id, username: user[0].username, fullname: user[0].fullname, email: user[0].email };
                 const token = await this.jwtLibService.generateToken(payload);
                 const decode = await this.jwtLibService.decodeJwt(token.access_token);
                 const data = {
                     status: true,
                     statusCode: HttpStatus.OK,
                     message: 'Success Login',
-                    data:{}
+                    data: {}
                 };
                 delete user[0].password;
                 data.data = Object.assign(data.data,
-                    {access_token: token.access_token, refresh_token: token.refresh_token, expIn: decode.exp});
+                    { access_token: token.access_token, refresh_token: token.refresh_token, expIn: decode.exp });
                 responseJson(data, data.statusCode, response);
-            }else{
+            } else {
                 const data = {
                     status: true,
                     statusCode: 200,
                     message: 'Wrong Password',
-                    data:{}
-                  };
-                  responseJson(data, data.statusCode, response);
+                    data: {}
+                };
+                responseJson(data, data.statusCode, response);
             }
-        }else{
+        } else {
             const data = {
                 status: false,
                 statusCode: 200,
                 message: 'users not found',
-                data:{}
+                data: {}
             };
-              responseJson(data, data.statusCode, response);
+            responseJson(data, data.statusCode, response);
         }
     }
-    
+
     @Public()
     @Post('signup')
-    async signup(@Body(new ValidationPipe) signUpDto: SignupDto, @Res() response){
+    async signup(@Body(new ValidationPipe) signUpDto: SignupDto, @Res() response) {
         const signUpNewUser = await this.userService.create(signUpDto);
-        if(signUpNewUser.affectedRows > 0){
+        if (signUpNewUser.affectedRows > 0) {
             const data = {
                 status: true,
                 statusCode: HttpStatus.ACCEPTED,
                 message: 'Success create new user',
-                data:{}
-              };
-              responseJson(data, data.statusCode, response);
-        }else{
+                data: {}
+            };
+            responseJson(data, data.statusCode, response);
+        } else {
             const data = {
                 status: true,
                 statusCode: HttpStatus.BAD_REQUEST,
                 message: 'Failed to created user',
-                data:{}
-              };
-              responseJson(data, data.statusCode, response);
+                data: {}
+            };
+            responseJson(data, data.statusCode, response);
         }
     }
 
-    @Get()
-    get(){
-        return 'hello';
-    }
 }
