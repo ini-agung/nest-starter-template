@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Connection, Repository } from 'typeorm';
 import { hashPassword } from '@app/jwt-libs';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -29,12 +30,14 @@ export class UsersService {
     }
   }
 
-  async findAll() {
+  async findAll(): Promise<User[]> {
     const query = `
-    SELECT id, username, email
+    SELECT users.id, username, email,
+    role
     from users
-    where deletedAt IS NULL
-    ORDER BY username ASC;
+    join roles on users.role_id = roles.id
+    where users.deletedAt IS NULL
+    ORDER BY users.username ASC;
     `;
     try {
       const users = await this.connection.query(query);
@@ -49,6 +52,7 @@ export class UsersService {
       throw new NotFoundException(data, { cause: new Error() });
     }
   }
+
 
   async findOne(identity: string) {
     const query = `

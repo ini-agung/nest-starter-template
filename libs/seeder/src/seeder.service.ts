@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { hashPassword } from '@app/jwt-libs';
-import { Users } from 'src/users/entities/users.entity';
-import { Genders } from 'src/users/entities/genders.entity';
-import { Religions } from 'src/users/entities/religions.entity';
-import { Degrees } from 'src/teachers/entities/degrees.entity';
-import { Roles } from 'src/users/entities/roles.entity';
-import { Parents } from 'src/parents/entities/parents.entity';
+import { User } from 'src/users/entities/user.entity';
+import { Gender } from 'src/users/entities/gender.entity';
+import { Religion } from 'src/users/entities/religion.entity';
+import { Degree } from 'src/teachers/entities/degree.entity';
+import { Role } from 'src/users/entities/role.entity';
+import { Parent } from 'src/parents/entities/parent.entity';
 import { Connection } from 'typeorm';
-import { Class, Classrooms, Subjects } from 'src/classrooms/entities/classrooms.entity';
-import { Schedules } from 'src/schedules/entities/schedules.entity';
-import { Teachers } from 'src/teachers/entities/teachers.entity';
-import { Students } from 'src/students/entities/student.entity';
-import { Enrolments } from 'src/enrolment/entities/enrolments.entity';
+import { Class, Classroom, Subject } from 'src/classrooms/entities/classroom.entity';
+import { Schedule } from 'src/schedules/entities/schedule.entity';
+import { Teacher } from 'src/teachers/entities/teacher.entity';
+import { Student } from 'src/students/entities/student.entity';
+import { Enrolment } from 'src/enrolment/entities/enrolment.entity';
 
 @Injectable()
 export class SeederService {
@@ -26,9 +26,9 @@ export class SeederService {
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Gender table
             for (const data of genders) {
-                const existingGender = await manager.findOne(Genders, { where: { gender: data.gender } });
+                const existingGender = await manager.findOne(Gender, { where: { gender: data.gender } });
                 if (!existingGender) {
-                    const gender = new Genders();
+                    const gender = new Gender();
                     gender.gender = data.gender;
                     await manager.save(gender);
                 } else {
@@ -64,9 +64,9 @@ export class SeederService {
         await this.connection.transaction(async (manager) => {
             //Check duplicates for Classroom table
             for (const data of classrooms) {
-                const existingClassrom = await manager.findOne(Classrooms, { where: { classroom: data.clasroom } });
+                const existingClassrom = await manager.findOne(Classroom, { where: { classroom: data.clasroom } });
                 if (!existingClassrom) {
-                    const classroom = new Classrooms();
+                    const classroom = new Classroom();
                     classroom.classroom = data.clasroom;
                     await manager.save(classroom)
                 } else {
@@ -102,9 +102,9 @@ export class SeederService {
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Religion table
             for (const data of subjects) {
-                const existingReligion = await manager.findOne(Subjects, { where: { subject: data.subject } });
+                const existingReligion = await manager.findOne(Subject, { where: { subject: data.subject } });
                 if (!existingReligion) {
-                    const subject = new Subjects();
+                    const subject = new Subject();
                     subject.subject = data.subject;
                     subject.description = data.description;
                     await manager.save(subject);
@@ -127,9 +127,9 @@ export class SeederService {
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Religion table
             for (const data of religions) {
-                const existingReligion = await manager.findOne(Religions, { where: { religion: data.religion } });
+                const existingReligion = await manager.findOne(Religion, { where: { religion: data.religion } });
                 if (!existingReligion) {
-                    const religion = new Religions();
+                    const religion = new Religion();
                     religion.religion = data.religion;
                     await manager.save(religion);
                 } else {
@@ -152,9 +152,9 @@ export class SeederService {
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Degree table
             for (const data of degrees) {
-                const existingDegree = await manager.findOne(Degrees, { where: { degree: data.degree } });
+                const existingDegree = await manager.findOne(Degree, { where: { degree: data.degree } });
                 if (!existingDegree) {
-                    const degree = new Degrees();
+                    const degree = new Degree();
                     degree.degree = data.degree;
                     await manager.save(degree);
                 } else {
@@ -175,9 +175,9 @@ export class SeederService {
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Roles table
             for (const data of roles) {
-                const existingRole = await manager.findOne(Roles, { where: { role: data.role } });
+                const existingRole = await manager.findOne(Role, { where: { role: data.role } });
                 if (!existingRole) {
-                    const role = new Roles();
+                    const role = new Role();
                     role.role = data.role;
                     await manager.save(role);
                 } else {
@@ -187,33 +187,32 @@ export class SeederService {
         });
 
         const users = [
-            { role_id: 1, username: 'agung', email: 'agung@gmail.com', img: 'image.jpg' },
-            { role_id: 2, username: 'pangestu', email: 'pangestu@gmail.com', img: 'image.jpg' },
-            { role_id: 3, username: 'branz', email: 'branz@gmail.com', img: 'image.jpg' },
-            { role_id: 4, username: 'meggy', email: 'meggy@gmail.com', img: 'image.jpg' },
-            { role_id: 5, username: 'budi', email: 'budi@gmail.com', img: 'image.jpg' },
-            { role_id: 1, username: 'yulian', email: 'yulian@gmail.com', img: 'image.jpg' },
-            { role_id: 2, username: 'sisri', email: 'sisri@gmail.com', img: 'image.jpg' },
-            { role_id: 3, username: 'supri', email: 'supri@gmail.com', img: 'image.jpg' },
-            { role_id: 4, username: 'kuproi', email: 'kuproi@gmail.com', img: 'image.jpg' },
-            { role_id: 5, username: 'jamet', email: 'jamet@gmail.com', img: 'image.jpg' },
+            { role_id: 1, username: 'agung', email: 'agung@gmail.com' },
+            { role_id: 2, username: 'pangestu', email: 'pangestu@gmail.com' },
+            { role_id: 3, username: 'branz', email: 'branz@gmail.com' },
+            { role_id: 4, username: 'meggy', email: 'meggy@gmail.com' },
+            { role_id: 5, username: 'budi', email: 'budi@gmail.com' },
+            { role_id: 1, username: 'yulian', email: 'yulian@gmail.com' },
+            { role_id: 2, username: 'sisri', email: 'sisri@gmail.com' },
+            { role_id: 3, username: 'supri', email: 'supri@gmail.com' },
+            { role_id: 4, username: 'kuproi', email: 'kuproi@gmail.com' },
+            { role_id: 5, username: 'jamet', email: 'jamet@gmail.com' },
         ];
 
         console.log("=== USERS ===");
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Users table
             for (const data of users) {
-                const existingUser = await manager.findOne(Users, {
+                const existingUser = await manager.findOne(User, {
                     where: [{ username: data.username }, { email: data.email }],
                 });
                 const password = await hashPassword('@Secret123!');
                 if (!existingUser) {
-                    const user = new Users();
+                    const user = new User();
                     user.role_id = data.role_id;
                     user.username = data.username;
                     user.email = data.email;
                     user.password = password;
-                    user.img = data.img;
                     await manager.save(user);
                 } else {
                     console.log(`User with username ${data.username} or email ${data.email} already exists. Skipping...`);
@@ -252,9 +251,9 @@ export class SeederService {
         await this.connection.transaction(async (manager) => {
             // // Check duplicates for Parents table
             for (const data of parents) {
-                const existingParent = await manager.findOne(Parents, { where: { user_id: data.user_id } });
+                const existingParent = await manager.findOne(Parent, { where: { user_id: data.user_id } });
                 if (!existingParent) {
-                    const parent = new Parents();
+                    const parent = new Parent();
                     parent.user_id = data.user_id;
                     parent.father = data.father;
                     parent.mother = data.mother;
@@ -307,9 +306,9 @@ export class SeederService {
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Religion table
             for (const data of teachers) {
-                const existingTeacher = await manager.findOne(Teachers, { where: { nik: data.nik } });
+                const existingTeacher = await manager.findOne(Teacher, { where: { nik: data.nik } });
                 if (!existingTeacher) {
-                    const teacher = new Teachers();
+                    const teacher = new Teacher();
                     teacher.nik = data.nik;
                     teacher.user_id = data.user_id;
                     teacher.degree_id = data.degree_id;
@@ -366,9 +365,9 @@ export class SeederService {
 
         await this.connection.transaction(async (manager) => {
             for (const data of students) {
-                const existingStudent = await manager.findOne(Students, { where: { nis: data.nis } });
+                const existingStudent = await manager.findOne(Student, { where: { nis: data.nis } });
                 if (!existingStudent) {
-                    const student = new Students();
+                    const student = new Student();
                     student.parent_id = data.parent_id;
                     student.user_id = data.user_id;
                     student.nis = data.nis;
@@ -459,9 +458,9 @@ export class SeederService {
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Users table
             for (const data of schedules) {
-                const existingSchedule = await manager.findOne(Schedules, { where: { schedule_code: data.schedule_code } });
+                const existingSchedule = await manager.findOne(Schedule, { where: { schedule_code: data.schedule_code } });
                 if (!existingSchedule) {
-                    const schedule = new Schedules();
+                    const schedule = new Schedule();
                     schedule.schedule_code = data.schedule_code;
                     schedule.day_of_week = data.day_of_week;
                     schedule.time_start = data.time_start;
@@ -484,9 +483,9 @@ export class SeederService {
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Users table
             for (const data of enrolments) {
-                const existingEnrolment = await manager.findOne(Enrolments, { where: { enrol_code: data.enrol_code } });
+                const existingEnrolment = await manager.findOne(Enrolment, { where: { enrol_code: data.enrol_code } });
                 if (!existingEnrolment) {
-                    const schedule = new Enrolments();
+                    const schedule = new Enrolment();
                     schedule.enrol_code = data.enrol_code;
                     schedule.student_id = data.student_id;
                     schedule.class_id = data.class_id;

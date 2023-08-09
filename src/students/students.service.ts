@@ -3,12 +3,14 @@ import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Students } from './entities/student.entity';
+import { Student } from './entities/student.entity';
 @Injectable()
 export class StudentsService {
   constructor(
-    @InjectRepository(Students)
-    private studentRepository: Repository<Students>,) { }
+    @InjectRepository(Student)
+    private studentRepository: Repository<Student>,
+
+  ) { }
   private readonly logger = new Logger(StudentsService.name);
 
   async create(createStudentDto: CreateStudentDto) {
@@ -28,11 +30,46 @@ export class StudentsService {
     }
   }
 
-  async findAll(): Promise<Students[]> {
+  async findAll(): Promise<{}> {
     try {
-      return await this.studentRepository.find();
+      const students = await this.studentRepository
+        .createQueryBuilder('student')
+        .select([
+          'student.id', 'student.parent_id', 'student.nis', 'student.full_name', 'student.img',
+          'student.nick_name', 'student.date_birth', 'student.place_birth', 'student.phone',
+          'student.siblings', 'student.child_order', 'student.entry_year', 'student.address',
+        ]) // Specify the columns you want
+        .leftJoinAndSelect('student.user', 'user')
+        .leftJoinAndSelect('student.parent', 'parent')
+        .leftJoinAndSelect('student.gender', 'gender')
+        .leftJoinAndSelect('student.religion', 'religion')
+        .where('student.deletedAt IS NULL')
+        .getMany();
+      this.logger.log(students);
+      const flattenedStudents = students.map(student => ({
+        student_id: student?.id,
+        user_id: student?.user?.id,
+        nis: student?.nis,
+        student_name: student?.full_name,
+        nick_name: student?.nick_name,
+        username: student?.user?.username,
+        date_birth: student?.date_birth,
+        place_birth: student?.place_birth,
+        entry_year: student?.entry_year,
+        address: student?.address,
+        img: student?.img,
+        siblings: student?.siblings,
+        child_order: student?.child_order,
+        phone: student?.phone,
+        religion: student.religion?.religion,
+        father: student.parent?.father,
+        mother: student.parent?.mother,
+        img_mother: student.parent?.img_mother,
+        img_father: student.parent?.img_father,
+      }));
+      return flattenedStudents;
     } catch (error) {
-      this.logger.error(`Error find parents : ${error.message}`);
+      this.logger.error(`Error find students : ${error.message}`);
       const data = {
         status: false,
         statusCode: HttpStatus.CONFLICT,
@@ -44,7 +81,7 @@ export class StudentsService {
     }
   }
 
-  async findOne(id: number): Promise<Students> {
+  async findOne(id: number): Promise<Student> {
     try {
       return await this.studentRepository.findOneBy({ id });
     } catch (error) {

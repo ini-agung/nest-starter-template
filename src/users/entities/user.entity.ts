@@ -1,15 +1,15 @@
 import { Length } from '@nestjs/class-validator';
-import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, OneToOne, JoinColumn, Relation, ManyToOne } from 'typeorm';
-import { Roles } from './roles.entity';
+import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, OneToOne, JoinColumn, Relation, ManyToOne, Index } from 'typeorm';
+import { Role } from './role.entity';
 
-@Entity()
-export class Users {
+@Entity({ name: 'users' })
+export class User {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @ManyToOne(() => Roles, role => role.id)
+  @ManyToOne(() => Role, role => role.id)
   @JoinColumn({ name: 'role_id' })
-  role: Roles;
+  role: Role;
 
   @Column({ default: 1 })
   role_id: number;
@@ -23,9 +23,6 @@ export class Users {
 
   @Column({ type: 'varchar', length: 255 })
   password: string;
-
-  @Column({ type: 'varchar', length: 150, default: 'default.jpg' })
-  img: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

@@ -1,8 +1,8 @@
-import { Teachers } from "src/teachers/entities/teachers.entity";
+import { Teacher } from "src/teachers/entities/teacher.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
-export class Classrooms {
+@Entity({ name: 'classrooms' })
+export class Classroom {
     @PrimaryGeneratedColumn({ type: 'int' })
     id: number;
 
@@ -11,8 +11,8 @@ export class Classrooms {
 }
 
 
-@Entity()
-export class Subjects {
+@Entity({ name: 'subjects' })
+export class Subject {
     @PrimaryGeneratedColumn({ type: 'int' })
     id: number;
 
@@ -23,7 +23,7 @@ export class Subjects {
     description: string;
 }
 
-@Entity()
+@Entity({ name: 'class' })
 export class Class {
     @PrimaryGeneratedColumn({ type: 'int' })
     id: number;
@@ -31,23 +31,23 @@ export class Class {
     @Column({ type: 'varchar', length: 20 })
     class: string;
 
-    @ManyToOne(() => Classrooms, classroom => classroom.id)
+    @ManyToOne(() => Classroom, classroom => classroom.id)
     @JoinColumn({ name: 'classroom_id' })
-    classroom: Classrooms;
+    classroom: Classroom;
 
     @Column()
     classroom_id: number;
 
-    @ManyToOne(() => Teachers, teacher => teacher.id)
+    @ManyToOne(() => Teacher, teacher => teacher.id)
     @JoinColumn({ name: 'teacher_id' })
-    teacher: Teachers;
+    teacher: Teacher;
 
     @Column()
     teacher_id: number;
 
-    @ManyToOne(() => Subjects, subject => subject.id)
+    @ManyToOne(() => Subject, subject => subject.id)
     @JoinColumn({ name: 'subject_id' })
-    subject: Subjects;
+    subject: Subject;
 
     @Column()
     subject_id: number;

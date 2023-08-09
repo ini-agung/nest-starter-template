@@ -1,8 +1,8 @@
-import { Class } from "src/classrooms/entities/classrooms.entity";
+import { Class } from "src/classrooms/entities/classroom.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
-export class Schedules {
+@Entity({ name: 'schedules' })
+export class Schedule {
     @PrimaryGeneratedColumn()
     id: number;
 

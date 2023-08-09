@@ -1,8 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { Teachers } from './teachers.entity';
+import { Teacher } from './teacher.entity';
 
-@Entity()
-export class Degrees {
+@Entity({ name: 'degrees' })
+export class Degree {
     @PrimaryGeneratedColumn({ type: 'int' })
     id: number;
 
@@ -10,6 +10,6 @@ export class Degrees {
     degree!: string;
 
     // Define the one-to-many relationship with the Teacher entity
-    @OneToMany(() => Teachers, teacher => teacher.degree)
-    teachers: Teachers[];
+    @OneToMany(() => Teacher, teacher => teacher.degree)
+    teachers: Teacher[];
 }

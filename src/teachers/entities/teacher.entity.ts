@@ -1,29 +1,29 @@
 import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, OneToOne, JoinColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
-import { Degrees } from './degrees.entity';
-import { Users } from 'src/users/entities/users.entity';
-import { Religions } from 'src/users/entities/religions.entity';
-import { Genders } from 'src/users/entities/genders.entity';
+import { Degree } from './degree.entity';
+import { User } from 'src/users/entities/user.entity';
+import { Religion } from 'src/users/entities/religion.entity';
+import { Gender } from 'src/users/entities/gender.entity';
 
 
-@Entity()
-export class Teachers {
+@Entity({ name: 'teachers' })
+export class Teacher {
     @PrimaryGeneratedColumn({ type: 'bigint' })
     id: number;
 
     @Column({ type: 'int', unique: true })
     nik: number;
 
-    @OneToOne(() => Users, (Users) => Users.id)
+    @OneToOne(() => User, (user) => user.id)
     @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
-    user!: Users;
+    user!: User;
 
     @Column()
     user_id: number;
 
     // Define the many-to-one relationship with the Degree entity
-    @ManyToOne(() => Degrees, degree => degree.teachers)
+    @ManyToOne(() => Degree, degree => degree.teachers)
     @JoinColumn({ name: 'degree_id' })
-    degree: Degrees;
+    degree: Degree;
 
     @Column()
     degree_id: number;
@@ -41,17 +41,17 @@ export class Teachers {
     place_birth: string;
 
     // Define the many-to-one relationship with the Degree entity
-    @ManyToOne(() => Genders, gender => gender.id)
+    @ManyToOne(() => Gender, gender => gender.id)
     @JoinColumn({ name: 'gender_id' })
-    gender: Genders;
+    gender: Gender;
 
     @Column()
     gender_id: number;
 
     // Define the many-to-one relationship with the Degree entity
-    @ManyToOne(() => Religions, religion => religion.id)
+    @ManyToOne(() => Religion, religion => religion.id)
     @JoinColumn({ name: 'religion_id' })
-    religion: Religions;
+    religion: Religion;
 
     @Column()
     religion_id: number;

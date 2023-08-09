@@ -1,9 +1,9 @@
 import { OneToMany, Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, JoinColumn } from 'typeorm';
-import { Students } from '../../students/entities/student.entity';
-import { Teachers } from 'src/teachers/entities/teachers.entity';
+import { Student } from '../../students/entities/student.entity';
+import { Teacher } from 'src/teachers/entities/teacher.entity';
 
-@Entity()
-export class Genders {
+@Entity({ name: 'genders' })
+export class Gender {
     @PrimaryGeneratedColumn({ type: 'int' })
     id: number;
 
@@ -11,10 +11,10 @@ export class Genders {
     gender!: string;
 
     // Define the one-to-many relationship with the Teacher entity
-    @OneToMany(() => Teachers, teacher => teacher.gender_id)
-    teachers: Teachers[];
+    @OneToMany(() => Teacher, teacher => teacher.gender_id)
+    teachers: Teacher[];
 
     // Define the one-to-many relationship with the Teacher entity
-    @OneToMany(() => Students, students => students.gender)
-    students: Students[];
+    @OneToMany(() => Student, students => students.gender)
+    students: Student[];
 }

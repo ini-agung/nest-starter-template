@@ -2,13 +2,13 @@ import { ConflictException, HttpStatus, Injectable, Logger } from '@nestjs/commo
 import { CreateParentsDto } from './dto/create-parents.dto';
 import { UpdateParentsDto } from './dto/update-parents.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Parents } from './entities/parents.entity';
+import { Parent } from './entities/parent.entity';
 import { Repository } from 'typeorm';
 @Injectable()
 export class ParentsService {
   constructor(
-    @InjectRepository(Parents)
-    private parentsRepository: Repository<Parents>,) { }
+    @InjectRepository(Parent)
+    private parentsRepository: Repository<Parent>,) { }
   private readonly logger = new Logger(ParentsService.name);
 
   async create(createParentDto: CreateParentsDto) {
@@ -28,7 +28,7 @@ export class ParentsService {
     }
   }
 
-  async findAll(): Promise<Parents[]> {
+  async findAll(): Promise<Parent[]> {
     try {
       return await this.parentsRepository.find();
     } catch (error) {
@@ -44,7 +44,7 @@ export class ParentsService {
     }
   }
 
-  async findOne(id: number): Promise<Parents> {
+  async findOne(id: number): Promise<Parent> {
     try {
       return await this.parentsRepository.findOneBy({ id });
     } catch (error) {

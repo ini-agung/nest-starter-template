@@ -1,25 +1,25 @@
 import { ManyToOne, Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, OneToOne, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
-import { Parents } from '../../parents/entities/parents.entity';
-import { Users } from 'src/users/entities/users.entity';
-import { Religions } from '../../users/entities/religions.entity';
-import { Genders } from '../../users/entities/genders.entity';
+import { Parent } from '../../parents/entities/parent.entity';
+import { User } from 'src/users/entities/user.entity';
+import { Religion } from '../../users/entities/religion.entity';
+import { Gender } from '../../users/entities/gender.entity';
 
 
-@Entity()
-export class Students {
+@Entity({ name: 'students' })
+export class Student {
     @PrimaryGeneratedColumn({ type: 'bigint' })
     id!: number;
 
-    @ManyToOne(() => Parents, (Parents) => Parents.id)
+    @ManyToOne(() => Parent, (Parent) => Parent.id)
     @JoinColumn({ name: 'parent_id', referencedColumnName: 'id', })
-    parent!: Parents;
+    parent!: Parent;
 
     @Column()
     parent_id: number;
 
-    @OneToOne(() => Users, (Users) => Users.id)
+    @OneToOne(() => User, (user) => user.id)
     @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
-    user!: Users;
+    user!: User;
 
     @Column()
     user_id: number;
@@ -40,16 +40,16 @@ export class Students {
     place_birth!: string;
 
 
-    @ManyToOne(() => Genders, gender => gender.students)
+    @ManyToOne(() => Gender, gender => gender.students)
     @JoinColumn({ name: 'gender_id' })
-    gender: Genders;
+    gender: Gender;
 
     @Column()
     gender_id: number;
 
-    @ManyToOne(() => Religions, religion => religion.students)
+    @ManyToOne(() => Religion, religion => religion.students)
     @JoinColumn({ name: 'religion_id' })
-    religion: Religions;
+    religion: Religion;
 
     @Column()
     religion_id: number;

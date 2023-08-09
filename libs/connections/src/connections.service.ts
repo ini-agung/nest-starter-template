@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
-import { Class, Classrooms, Subjects } from 'src/classrooms/entities/classrooms.entity';
-import { Enrolments } from 'src/enrolment/entities/enrolments.entity';
-import { Schedules } from 'src/schedules/entities/schedules.entity';
-import { Genders } from 'src/users/entities/genders.entity';
-import { Parents } from 'src/parents/entities/parents.entity';
-import { Religions } from 'src/users/entities/religions.entity';
-import { Students } from 'src/students/entities/student.entity';
-import { Degrees } from 'src/teachers/entities/degrees.entity';
-import { Teachers } from 'src/teachers/entities/teachers.entity';
-import { Roles } from 'src/users/entities/roles.entity';
-import { Users } from 'src/users/entities/users.entity';
+import { Class, Classroom, Subject } from 'src/classrooms/entities/classroom.entity';
+import { Enrolment } from 'src/enrolment/entities/enrolment.entity';
+import { Schedule } from 'src/schedules/entities/schedule.entity';
+import { Gender } from 'src/users/entities/gender.entity';
+import { Parent } from 'src/parents/entities/parent.entity';
+import { Religion } from 'src/users/entities/religion.entity';
+import { Student } from 'src/students/entities/student.entity';
+import { Degree } from 'src/teachers/entities/degree.entity';
+import { Teacher } from 'src/teachers/entities/teacher.entity';
+import { Role } from 'src/users/entities/role.entity';
+import { User } from 'src/users/entities/user.entity';
 export async function DBRead(table: string, properties: string[], parameter: string, orderBy: string) {
 }
 
@@ -24,7 +24,7 @@ export class ConnectionsService implements TypeOrmOptionsFactory {
             username: 'root',
             password: 'toor',
             database: 'db_spada',
-            entities: [Users, Students, Parents, Teachers, Roles, Degrees, Religions, Genders, Class, Classrooms, Subjects, Schedules, Enrolments],
+            entities: [User, Student, Parent, Teacher, Role, Degree, Religion, Gender, Class, Classroom, Subject, Schedule, Enrolment],
             autoLoadEntities: true,
             synchronize: true,
         };

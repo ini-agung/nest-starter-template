@@ -1,19 +1,18 @@
-import { Class, Classrooms, Subjects } from "src/classrooms/entities/classrooms.entity";
-import { Students } from "src/students/entities/student.entity";
-import { Teachers } from "src/teachers/entities/teachers.entity";
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Class } from "src/classrooms/entities/classroom.entity";
+import { Student } from "src/students/entities/student.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
-export class Enrolments {
+@Entity({ name: 'enrolments' })
+export class Enrolment {
     @PrimaryGeneratedColumn({ type: 'bigint' })
     id: number;
 
     @Column({ type: 'varchar', length: 50, unique: true })
     enrol_code: string
 
-    @ManyToOne(() => Students, student => student.id)
+    @ManyToOne(() => Student, student => student.id)
     @JoinColumn({ name: 'student_id' })
-    student: Students;
+    student: Student;
 
     @Column()
     student_id: number;

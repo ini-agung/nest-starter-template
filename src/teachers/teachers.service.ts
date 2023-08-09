@@ -3,13 +3,15 @@ import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Teachers } from './entities/teachers.entity';
+import { Teacher } from './entities/teacher.entity';
+import { Degree } from './entities/degree.entity';
 
 @Injectable()
 export class TeachersService {
   constructor(
-    @InjectRepository(Teachers)
-    private teachersRepository: Repository<Teachers>,) { }
+    @InjectRepository(Teacher)
+    private teachersRepository: Repository<Teacher>,
+  ) { }
   private readonly logger = new Logger(TeachersService.name);
 
   async create(createTeacherDto: CreateTeacherDto) {
@@ -29,9 +31,45 @@ export class TeachersService {
     }
   }
 
-  async findAll(): Promise<Teachers[]> {
+  async findAll() {
     try {
-      return await this.teachersRepository.find();
+      const teachers = await this.teachersRepository
+        .createQueryBuilder('teacher')
+        .select([
+          'teacher.id',
+          'teacher.nik',
+          'teacher.full_name',
+          'teacher.nick_name',
+          'teacher.phone',
+          'teacher.date_birth',
+          'teacher.place_birth',
+          'teacher.entry_year',
+        ])
+        .leftJoinAndSelect('teacher.degree', 'degree')
+        .leftJoinAndSelect('teacher.user', 'users')
+        .leftJoinAndSelect('teacher.religion', 'religions')
+        .leftJoinAndSelect('teacher.gender', 'genders')
+        .where('teacher.deletedAt IS NULL')
+        .where('users.deletedAt IS NULL')
+        .getMany();
+      this.logger.log(teachers);
+      const flattenedTeachers = teachers.map(teacher => ({
+        user_id: teacher?.user?.id,
+        teacher_id: teacher?.id,
+        nik: teacher?.nik,
+        username: teacher?.user?.username,
+        email: teacher?.user?.email,
+        full_name: teacher?.full_name,
+        nick_name: teacher?.nick_name,
+        date_birth: teacher?.date_birth,
+        place_birth: teacher?.place_birth,
+        religion: teacher?.religion?.religion,
+        entry_year: teacher?.entry_year,
+        gender: teacher?.gender?.gender,
+        phone: teacher?.phone,
+        degree: teacher?.degree?.degree, // Access the 'degree' property directly
+      }));
+      return flattenedTeachers;
     } catch (error) {
       this.logger.error(`Error find all ${error.message}`);
       const data = {
@@ -45,7 +83,7 @@ export class TeachersService {
     }
   }
 
-  async findOne(id: number): Promise<Teachers> {
+  async findOne(id: number): Promise<Teacher> {
     try {
       return await this.teachersRepository.findOneBy({ id });
     } catch (error) {
@@ -67,7 +105,7 @@ export class TeachersService {
       if (!teacher) {
         const data = {
           status: false,
-          statusCode: HttpStatus.CONFLICT,
+          statusCode: HttpStatus.NOT_FOUND,
           message: `Teacher with id ${id} is doesnt exists`,
           data: {}
         };
@@ -94,7 +132,7 @@ export class TeachersService {
       if (!teacher) {
         const data = {
           status: false,
-          statusCode: HttpStatus.CONFLICT,
+          statusCode: HttpStatus.NOT_FOUND,
           message: `Teacher with id ${id} is doesnt exists`,
           data: {}
         };

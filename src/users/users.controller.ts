@@ -21,6 +21,7 @@ export class UsersController {
     responseJson(data, data.statusCode, response);
   }
 
+
   @Get()
   async findAll(@Res() response) {
     const data = {

@@ -1,15 +1,15 @@
 import { OneToMany, Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, JoinColumn, ManyToOne } from 'typeorm';
-import { Students } from '../../students/entities/student.entity';
-import { Religions } from '../../users/entities/religions.entity';
+import { Student } from '../../students/entities/student.entity';
+import { Religion } from '../../users/entities/religion.entity';
 
-@Entity()
-export class Parents {
+@Entity({ name: 'parents' })
+export class Parent {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToMany(() => Students, (students) => students.id)
+    @OneToMany(() => Student, (students) => students.id)
     @JoinColumn({ name: 'student_id' })
-    student: Students[]
+    student: Student[]
 
     @Column({ type: 'bigint', unique: true })
     user_id: number;
@@ -32,16 +32,16 @@ export class Parents {
     @Column({ type: 'varchar', length: 50, default: 'img-male.jpg' })
     img_father: string;
 
-    @ManyToOne(() => Religions, religion => religion.students)
+    @ManyToOne(() => Religion, religion => religion.father)
     @JoinColumn({ name: 'religion_father' })
-    rf: Religions;
+    rf: Religion;
 
     @Column()
     religion_father: number;
 
-    @ManyToOne(() => Religions, religion => religion.students)
+    @ManyToOne(() => Religion, religion => religion.mother)
     @JoinColumn({ name: 'religion_mother' })
-    rm: Religions;
+    rm: Religion;
 
     @Column()
     religion_mother: number;

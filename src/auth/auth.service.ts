@@ -1,5 +1,5 @@
-import { Injectable , Res} from '@nestjs/common';
-import {Connection} from 'typeorm';
+import { Injectable, Res } from '@nestjs/common';
+import { Connection } from 'typeorm';
 import { SigninDto } from './dto/signin.dto';
 import { SignupDto } from './dto/signup.dto';
 import { UsersService } from 'src/users/users.service';
@@ -7,24 +7,24 @@ import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly connection: Connection, private readonly userService: UsersService) {}
+  constructor(private readonly connection: Connection, private readonly userService: UsersService) { }
 
-    async validateUser(signinDto: SigninDto): Promise<any> {
+  async validateUser(signinDto: SigninDto): Promise<any> {
     const data = {
       status: false,
       statusCode: 400,
       message: 'user not found',
-      data:{}
+      data: {}
     };
 
-    const query =``;
+    const query = ``;
 
     const user = await this.connection.query(query, [signinDto.identity, signinDto.identity, signinDto.password]);
     return user;
-    
+
   }
 
-  async signUp(signupDto: SignupDto){
+  async signUp(signupDto: SignupDto) {
     const query = `
       SELECT *
       FROM users
