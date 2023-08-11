@@ -8,14 +8,12 @@ import { Student } from './entities/student.entity';
 export class StudentsService {
   constructor(
     @InjectRepository(Student)
-    private studentRepository: Repository<Student>,
-
-  ) { }
+    private studentRepository: Repository<Student>,) { }
   private readonly logger = new Logger(StudentsService.name);
 
   async create(createStudentDto: CreateStudentDto) {
     try {
-      const student = this.studentRepository.create();
+      const student = this.studentRepository.create(createStudentDto);
       return await this.studentRepository.save(student);
     } catch (error) {
       this.logger.error(`Error saving ${error.message}`);
@@ -42,7 +40,9 @@ export class StudentsService {
         .leftJoinAndSelect('student.user', 'user')
         .leftJoinAndSelect('student.parent', 'parent')
         .leftJoinAndSelect('student.gender', 'gender')
-        .leftJoinAndSelect('student.religion', 'religion')
+        .leftJoinAndSelect('student.religion', 'religion as a')
+        .leftJoinAndSelect('parent.rf', 'religion as b') // Join parent_religion for father
+        .leftJoinAndSelect('parent.rm', 'religion as c') // Join parent_religion for mother
         .where('student.deletedAt IS NULL')
         .getMany();
       this.logger.log(students);
@@ -62,10 +62,18 @@ export class StudentsService {
         child_order: student?.child_order,
         phone: student?.phone,
         religion: student.religion?.religion,
-        father: student.parent?.father,
-        mother: student.parent?.mother,
-        img_mother: student.parent?.img_mother,
-        img_father: student.parent?.img_father,
+        father: {
+          name: student.parent?.father,
+          img: student.parent?.img_father,
+          religion: student.parent?.rf.religion,
+          phone: student.parent?.phone_father,
+        },
+        mother: {
+          name: student.parent?.mother,
+          img: student.parent?.img_mother,
+          religion: student.parent?.rm.religion,
+          phone: student.parent?.phone_mother,
+        }
       }));
       return flattenedStudents;
     } catch (error) {

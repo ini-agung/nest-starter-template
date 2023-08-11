@@ -9,7 +9,7 @@ export const JWTConstants = {
 }
 
 export async function hashPassword(password: string): Promise<string> {
-  const saltOrRounds = 45; // Adjust this value based on your needs
+  const saltOrRounds = 12; // Adjust this value based on your needs
   return await bcrypt.hash(password, saltOrRounds);
 }
 

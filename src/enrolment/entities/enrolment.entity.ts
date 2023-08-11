@@ -10,7 +10,8 @@ export class Enrolment {
     @Column({ type: 'varchar', length: 50, unique: true })
     enrol_code: string
 
-    @ManyToOne(() => Student, student => student.id)
+
+    @ManyToOne(() => Student, student => student.enrolments)
     @JoinColumn({ name: 'student_id' })
     student: Student;
 

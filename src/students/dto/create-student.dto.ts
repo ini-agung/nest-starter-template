@@ -31,11 +31,11 @@ export class CreateStudentDto {
 
     @IsNotEmpty()
     @IsNumber()
-    gender_id: string;
+    gender_id: number;
 
     @IsNotEmpty()
     @IsNumber()
-    religion_id: string;
+    religion_id: number;
 
     @IsNotEmpty()
     @IsString()

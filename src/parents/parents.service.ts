@@ -28,9 +28,43 @@ export class ParentsService {
     }
   }
 
-  async findAll(): Promise<Parent[]> {
+  async findAll(): Promise<{}> {
     try {
-      return await this.parentsRepository.find();
+      const fathers = await this.parentsRepository
+        .createQueryBuilder('parent')
+        .select([
+          'parent.id', 'parent.user_id', 'parent.father', 'parent.mother', 'parent.phone_father',
+          'parent.phone_mother', 'parent.img_mother', 'parent.img_father', 'parent.address',
+        ])
+        .leftJoinAndSelect('parent.rf', 'religion as religion_father')
+        .leftJoinAndSelect('parent.rm', 'religion as religion_mother')
+        // .leftJoinAndMapMany('parent.students', 'students', 'students', 'students.parent_id = parent_id')  // Join students using parent_id
+        .leftJoinAndMapMany(
+          'parent.students',
+          'students',
+          'students',
+          'students.parent_id = parent_id AND students.parent_id = parent.id'  // Join students using parent_id and match parent_id with parent.id
+        )
+        .where('parent.deletedAt IS NULL')
+        .getMany();
+      this.logger.log(fathers);
+      const flattenedFathers = fathers.map(parent => ({
+        parent_id: parent.id,
+        user_id: parent.user_id,
+        father: {
+          name: parent.father,
+          phone: parent.phone_father,
+          img: parent.img_father,
+          religion: parent.rf.religion,
+        },
+        mother: {
+          name: parent.mother,
+          phone: parent.phone_mother,
+          img: parent.img_mother,
+          religion: parent.rm.religion,
+        },
+      }));
+      return fathers;
     } catch (error) {
       this.logger.error(`Error find parents : ${error.message}`);
       const data = {

@@ -1,9 +1,9 @@
-import { IsDate, IsNotEmpty, IsNumber, IsString } from "@nestjs/class-validator";
+import { IsBoolean, IsDate, IsNotEmpty, IsNumber, IsString } from "@nestjs/class-validator";
 
 export class CreateEnrolmentDto {
     @IsNotEmpty()
     @IsString()
-    enrol_code: number;
+    enrol_code: string;
 
     @IsNotEmpty()
     @IsNumber()
@@ -18,6 +18,6 @@ export class CreateEnrolmentDto {
     enrolment_date: Date;
 
     @IsNotEmpty()
-    @IsNumber()
-    enrolment_status: number;
+    @IsBoolean()
+    enrolment_status: boolean;
 }

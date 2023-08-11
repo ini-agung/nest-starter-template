@@ -1,34 +1,43 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res } from '@nestjs/common';
 import { EnrolmentService } from './enrolment.service';
 import { CreateEnrolmentDto } from './dto/create-enrolment.dto';
 import { UpdateEnrolmentDto } from './dto/update-enrolment.dto';
+import { responseJson } from '@app/response';
 
 @Controller('enrolment')
 export class EnrolmentController {
-  constructor(private readonly enrolmentService: EnrolmentService) {}
+  constructor(private readonly enrolmentService: EnrolmentService) { }
 
   @Post()
-  create(@Body() createEnrolmentDto: CreateEnrolmentDto) {
-    return this.enrolmentService.create(createEnrolmentDto);
+  async create(@Body() createEnrolmentDto: CreateEnrolmentDto) {
+    return await this.enrolmentService.create(createEnrolmentDto);
   }
 
   @Get()
-  findAll() {
-    return this.enrolmentService.findAll();
+  async findAll(@Res() response) {
+    const data = {
+      status: true,
+      statusCode: HttpStatus.OK,
+      message: 'Success Get Parents',
+      data: {}
+    };
+    const parents = await this.enrolmentService.findAll();
+    data.data = parents;
+    responseJson(data, data.statusCode, response);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     return this.enrolmentService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEnrolmentDto: UpdateEnrolmentDto) {
+  asyncupdate(@Param('id') id: string, @Body() updateEnrolmentDto: UpdateEnrolmentDto) {
     return this.enrolmentService.update(+id, updateEnrolmentDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     return this.enrolmentService.remove(+id);
   }
 }

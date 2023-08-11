@@ -206,8 +206,8 @@ export class SeederService {
                 const existingUser = await manager.findOne(User, {
                     where: [{ username: data.username }, { email: data.email }],
                 });
-                const password = await hashPassword('@Secret123!');
                 if (!existingUser) {
+                    const password = await hashPassword('@Secret123!');
                     const user = new User();
                     user.role_id = data.role_id;
                     user.username = data.username;
