@@ -81,56 +81,7 @@ export class EnrolmentService {
           };
         })
       );
-
       return result;
-
-
-      // const enrolments = await this.enrolmentRepository
-      //   .createQueryBuilder('enrolment')
-      //   .select('DISTINCT enrolment.class_id', 'class_id')
-      //   .addSelect('student_id')
-      //   .getRawMany();
-
-      // console.log(enrolments);
-      // const enrolmentWithClassDetails = await Promise.all(enrolments.map(async (item) => {
-      //   const enrolmentCounts = await this.enrolmentRepository
-      //     .createQueryBuilder('enrolment')
-      //     .select([
-      //       'COUNT(enrolment.id) AS enrolment_count',
-      //     ])
-      //     .groupBy('enrolment.class_id')
-      //     .getRawMany();
-      //   const classDetails = await this.classRepository.findOneBy({ id: item.class_id });
-      //   const studentDetails = await this.studentRepository.findBy({ id: item.student_id });
-      //   return {
-      //     ...item,
-      //     totalStudent: enrolmentCounts,
-      //     class: classDetails,
-      //     students: studentDetails,
-      //   };
-      // }));
-
-      // return enrolmentWithClassDetails;
-
-      // const enrolments = await this.enrolmentRepository
-      //   .createQueryBuilder('enrolment')
-      //   .select([
-      //     'classes.id AS class_id',
-      //     'COUNT(enrolment.id) AS enrolment_count',
-      //   ])
-      //   .innerJoin('enrolment.classes', 'classes')
-      //   .groupBy('classes.id')
-      //   .getRawMany();
-      // this.logger.log(enrolments);
-      // const flattenedEnrolments = enrolments.map(enrolment => ({
-      //   enrolment_id: enrolment.id,
-      //   enrolment_code: enrolment.enrol_code,
-      //   class_id: enrolment.class_id,
-      //   enrolment_date: enrolment.enrolment_date,
-
-      // }));
-      // return enrolments;
-
     } catch (error) {
       this.logger.error(`Error find parents : ${error.message}`);
       const data = {

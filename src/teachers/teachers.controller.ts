@@ -51,7 +51,7 @@ export class TeachersController {
   async update(@Param('id') id: string, @Body() updateTeacherDto: UpdateTeacherDto, @Res() response) {
     const data = {
       status: true,
-      statusCode: HttpStatus.OK,
+      statusCode: HttpStatus.ACCEPTED,
       message: 'Success Update Teacher',
       data: {}
     };
@@ -64,7 +64,7 @@ export class TeachersController {
   async remove(@Param('id') id: string, @Res() response) {
     const data = {
       status: true,
-      statusCode: HttpStatus.OK,
+      statusCode: HttpStatus.NO_CONTENT,
       message: 'Success Delete Teacher',
       data: {}
     };

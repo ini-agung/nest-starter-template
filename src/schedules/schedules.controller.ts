@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus } from '@nestjs/common';
 import { SchedulesService } from './schedules.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
+import { responseJson } from '@app/response';
 
 @Controller('schedules')
 export class SchedulesController {
@@ -13,8 +14,16 @@ export class SchedulesController {
   }
 
   @Get()
-  findAll() {
-    return this.schedulesService.findAll();
+  async findAll(@Res() response) {
+    const data = {
+      status: true,
+      statusCode: HttpStatus.OK,
+      message: 'Success Get Schedules',
+      data: {}
+    };
+    const parents = await this.schedulesService.findAll();
+    data.data = parents;
+    responseJson(data, data.statusCode, response);
   }
 
   @Get(':id')

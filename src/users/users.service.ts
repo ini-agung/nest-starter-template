@@ -4,11 +4,15 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Connection, Repository } from 'typeorm';
 import { hashPassword } from '@app/jwt-libs';
 import { User } from './entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UsersService {
   constructor(
-    private readonly connection: Connection) { }
+    // @InjectRepository(User)
+    // private teachersRepository: Repository<User>,
+    private readonly connection: Connection
+  ) { }
   async create(createUserDto: CreateUserDto) {
     const query = `
     INSERT INTO users (role_id, username, email, password)

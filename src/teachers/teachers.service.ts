@@ -85,7 +85,28 @@ export class TeachersService {
 
   async findOne(id: number): Promise<Teacher> {
     try {
-      return await this.teachersRepository.findOneBy({ id });
+      const teachers = await this.teachersRepository
+        .createQueryBuilder('teacher')
+        .select([
+          'teacher.id',
+          'teacher.nik',
+          'teacher.full_name',
+          'teacher.nick_name',
+          'teacher.phone',
+          'teacher.date_birth',
+          'teacher.place_birth',
+          'teacher.entry_year',
+        ])
+        .leftJoinAndSelect('teacher.degree', 'degree')
+        .leftJoinAndSelect('teacher.user', 'users')
+        .leftJoinAndSelect('teacher.religion', 'religions')
+        .leftJoinAndSelect('teacher.gender', 'genders')
+        .where('teacher.deletedAt IS NULL')
+        .where('users.deletedAt IS NULL')
+        .where('teacher.id = :id', { id })
+        .getOne();
+      this.logger.log(teachers);
+      return teachers;
     } catch (error) {
       this.logger.error(`Error find teacher :  ${error.message}`);
       const data = {
@@ -138,7 +159,9 @@ export class TeachersService {
         };
         throw new ConflictException(data, { cause: new Error() });
       }
-      return await this.teachersRepository.delete(id);
+      // Instead of a hard delete, mark the teacher as deleted (soft delete)
+      teacher.deletedAt = new Date();; // Assuming there's a property called "deleted" on the teacher entity
+      return await this.teachersRepository.save(teacher); // Save to persist the soft delete
     } catch (error) {
       this.logger.error(`Error find teacher :   ${error.message}`);
       const data = {
