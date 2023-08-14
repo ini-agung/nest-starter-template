@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Teacher } from './entities/teacher.entity';
 import { Degree } from './entities/degree.entity';
+import { Pagination } from '@app/helper';
 
 @Injectable()
 export class TeachersService {
@@ -31,7 +32,7 @@ export class TeachersService {
     }
   }
 
-  async findAll() {
+  async findAll(page: number = 1, limit: number = 10): Promise<Pagination<any>> {
     try {
       const teachers = await this.teachersRepository
         .createQueryBuilder('teacher')
@@ -69,7 +70,17 @@ export class TeachersService {
         phone: teacher?.phone,
         degree: teacher?.degree?.degree, // Access the 'degree' property directly
       }));
-      return flattenedTeachers;
+      const total = flattenedTeachers.length;
+      const startIdx = (page - 1) * limit;
+      const endIdx = startIdx + limit;
+      const data = flattenedTeachers.slice(startIdx, endIdx);
+
+      return {
+        data,
+        total,
+        currentPage: page,
+        perPage: limit,
+      };
     } catch (error) {
       this.logger.error(`Error find all ${error.message}`);
       const data = {

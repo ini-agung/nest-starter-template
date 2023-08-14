@@ -913,10 +913,10 @@ export class SeederService {
         });
 
         const enrolments = [
-            { enrol_code: "1-1", student_id: 1, class_id: 1, enrolment_date: new Date('2023-08-01 10:00:00'), enrolment_status: true },
-            { enrol_code: "2-1", student_id: 2, class_id: 1, enrolment_date: new Date('2023-08-01 10:00:00'), enrolment_status: true },
-            { enrol_code: "1-2", student_id: 1, class_id: 2, enrolment_date: new Date('2023-08-01 10:00:00'), enrolment_status: true },
-            { enrol_code: "2-2", student_id: 2, class_id: 2, enrolment_date: new Date('2023-08-01 10:00:00'), enrolment_status: true },
+            { enrol_code: "1-1", student_id: 1, schedule_id: 1, enrolment_date: new Date('2023-08-01 10:00:00'), enrolment_status: true },
+            { enrol_code: "2-1", student_id: 2, schedule_id: 1, enrolment_date: new Date('2023-08-01 10:00:00'), enrolment_status: true },
+            { enrol_code: "1-2", student_id: 1, schedule_id: 2, enrolment_date: new Date('2023-08-01 10:00:00'), enrolment_status: true },
+            { enrol_code: "2-2", student_id: 2, schedule_id: 2, enrolment_date: new Date('2023-08-01 10:00:00'), enrolment_status: true },
         ];
         console.log("=== Enrolment ===");
         await this.connection.transaction(async (manager) => {
@@ -927,7 +927,7 @@ export class SeederService {
                     const schedule = new Enrolment();
                     schedule.enrol_code = data.enrol_code;
                     schedule.student_id = data.student_id;
-                    schedule.class_id = data.class_id;
+                    schedule.schedule_id = data.schedule_id;
                     schedule.enrolment_date = data.enrolment_date;
                     schedule.enrolment_status = data.enrolment_status;
                     await manager.save(schedule);

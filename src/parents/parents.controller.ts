@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res, Query } from '@nestjs/common';
 import { ParentsService } from './parents.service';
 import { CreateParentsDto } from './dto/create-parents.dto';
 import { UpdateParentsDto } from './dto/update-parents.dto';
@@ -21,14 +21,21 @@ export class ParentsController {
   }
 
   @Get()
-  async findAll(@Res() response) {
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Res() response) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
       message: 'Success Get Parents',
       data: {}
     };
-    const parents = await this.parentsService.findAll();
+    // Enforce a minimum value of 1 for the page parameter
+    page = (page < 1) ? 1 : page;
+    // Limit the limit parameter to a maximum value of 10
+    limit = (limit > 10) ? 10 : limit;
+    const parents = await this.parentsService.findAll(page, limit);
     data.data = parents;
     responseJson(data, data.statusCode, response);
   }

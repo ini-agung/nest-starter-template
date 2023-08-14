@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res, Query } from '@nestjs/common';
 import { TeachersService } from './teachers.service';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
@@ -22,14 +22,21 @@ export class TeachersController {
   }
 
   @Get()
-  async findAll(@Res() response) {
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Res() response) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
       message: 'Success Get Teachers',
       data: {}
     };
-    const teachers = await this.teachersService.findAll();
+    // Enforce a minimum value of 1 for the page parameter
+    page = (page < 1) ? 1 : page;
+    // Limit the limit parameter to a maximum value of 10
+    limit = (limit > 10) ? 10 : limit;
+    const teachers = await this.teachersService.findAll(page, limit);
     data.data = teachers;
     responseJson(data, data.statusCode, response);
   }

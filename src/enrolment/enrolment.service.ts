@@ -6,7 +6,8 @@ import { Enrolment } from './entities/enrolment.entity';
 import { Repository } from 'typeorm';
 import { Class } from 'src/classrooms/entities/classroom.entity';
 import { Student } from 'src/students/entities/student.entity';
-import { User } from 'src/users/entities/user.entity';
+import { Schedule } from 'src/schedules/entities/schedule.entity';
+import { Pagination } from '@app/helper';
 
 @Injectable()
 export class EnrolmentService {
@@ -17,6 +18,9 @@ export class EnrolmentService {
     private classRepository: Repository<Class>,
     @InjectRepository(Student)
     private studentRepository: Repository<Student>,
+    @InjectRepository(Schedule)
+    private scheduleRepository: Repository<Student>,
+
 
   ) { }
   private readonly logger = new Logger(EnrolmentService.name);
@@ -37,53 +41,66 @@ export class EnrolmentService {
       throw new ConflictException(data, { cause: new Error() });
     }
   }
+  async fetchEnrolmentsByScheduleId(scheduleId: number): Promise<Enrolment[]> {
+    // Use this method to fetch enrolments by schedule_id
+    const enrolments = await this.enrolmentRepository
+      .createQueryBuilder('enrolment')
+      .select(['enrolment.id', 'enrolment.enrol_code', 'enrolment.enrolment_date', 'enrolment.student_id'])
+      .leftJoinAndSelect('enrolment.student', 'student')
+      .where('enrolment.schedule_id = :scheduleId', { scheduleId })
+      .getRawMany();
+    return enrolments;
+  }
 
-  async findAll() {
-    // return await this.enrolmentRepository.find();
+  async fetchSchedule(schedule_id: number): Promise<any> {
+    const schedule = await this.scheduleRepository
+      .createQueryBuilder('schedule')
+      .select(['schedule.schedule_code'])
+      .where('schedule.id = :schedule_id', { schedule_id })
+      .getRawOne();
+    return schedule;
+  }
+
+  async findAll(page: number = 1, limit: number = 10): Promise<Pagination<any>> {
     try {
+      const result: {
+        schedule_id: number;
+        total_students: number;
+        enrolments: Enrolment[];
+        schedule: string;
+      }[] = [];
 
       const enrolmentCounts = await this.enrolmentRepository
         .createQueryBuilder('enrolment')
-        .select('enrolment.class_id', 'class_id')
-        .addSelect('COUNT(enrolment.student_id)', 'count')
-        .groupBy('enrolment.class_id')
+        .select('enrolment.schedule_id', 'schedule_id')
+        .addSelect('COUNT(enrolment.id)', 'total_students')
+        .groupBy('enrolment.schedule_id')
         .getRawMany();
+      for (const item of enrolmentCounts) {
+        const { schedule_id } = item;
+        const enrolments = await this.fetchEnrolmentsByScheduleId(schedule_id);
+        const schedule = await this.fetchSchedule(schedule_id);
+        result.push({
+          schedule,
+          schedule_id,
+          total_students: item.total_students,
+          enrolments,
+        });
+      }
 
-      const result = await Promise.all(
-        enrolmentCounts.map(async (item) => {
-          // const classes = await this.classRepository.findBy({ id: item.class_id });
+      const total = result.length;
+      const startIdx = (page - 1) * limit;
+      const endIdx = startIdx + limit;
+      const data = result.slice(startIdx, endIdx);
 
-          const students = await this.enrolmentRepository
-            .createQueryBuilder('enrolment')
-            .select('enrolment.student_id', 'student_id')
-            .addSelect('student.nis', 'nis')
-            .addSelect('student.full_name', 'full_name')
-            .addSelect('user.email', 'email')
-            .addSelect('classes.id', 'class_id')
-            .addSelect('classes.class', 'className')
-            .addSelect('classes.max_students', 'max_students')
-            .addSelect('classrooms.classroom', 'classroom')
-            .addSelect('teacher.id', 'teacher_id')
-            .addSelect('teacher.nik', 'nik')
-            .addSelect('teacher.full_name', 'teacher')
-            .leftJoin('students', 'student', 'student.id = enrolment.student_id')
-            .leftJoin('student.user', 'user') // Join with the "users" table
-            .leftJoin('enrolment.classes', 'classes')
-            .leftJoin('classes.classroom', 'classrooms')
-            .leftJoin('classes.teacher', 'teacher')
-            .where('enrolment.class_id = :classId', { classId: item.class_id })
-            .getRawMany();
-
-          return {
-            class_id: item.class_id,
-            count: item.count,
-            students: students,
-          };
-        })
-      );
-      return result;
+      return {
+        data,
+        total,
+        currentPage: page,
+        perPage: limit,
+      };
     } catch (error) {
-      this.logger.error(`Error find parents : ${error.message}`);
+      this.logger.error(`Error find Enrolments : ${error.message}`);
       const data = {
         status: false,
         statusCode: HttpStatus.CONFLICT,

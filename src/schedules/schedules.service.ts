@@ -29,7 +29,14 @@ export class SchedulesService {
         .addSelect('time_start', 'time_start')
         .addSelect('time_finish', 'time_finish')
         .addSelect('class.class', 'class')
+        .addSelect('class.id', 'class_id')
+        .addSelect('class.max_students', 'max_students')
+        .addSelect('class.teacher_id', 'teacher_id')
+        .addSelect('teacher.nik', 'nik')
+        .addSelect('teacher.full_name', 'full_name')
         .leftJoin('schedules.class_id', 'class')
+        .leftJoin('class.classroom', 'classroom')
+        .leftJoin('class.teacher', 'teacher')
         .getRawMany();
       return schedulesCounts;
     } catch (error) {

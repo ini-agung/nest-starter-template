@@ -59,6 +59,12 @@
       ],
       "@app/seeder/*": [
         "libs/seeder/src/*"
+      ],
+      "@app/helper": [
+        "libs/helper/src"
+      ],
+      "@app/helper/*": [
+        "libs/helper/src/*"
       ]
     }
   }

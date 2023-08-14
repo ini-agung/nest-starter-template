@@ -4,6 +4,8 @@ import { UpdateStudentDto } from './dto/update-student.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Student } from './entities/student.entity';
+import { Pagination } from '@app/helper';
+
 @Injectable()
 export class StudentsService {
   constructor(
@@ -28,7 +30,7 @@ export class StudentsService {
     }
   }
 
-  async findAll(): Promise<{}> {
+  async findAll(page: number = 1, limit: number = 10): Promise<Pagination<any>> {
     try {
       const students = await this.studentRepository
         .createQueryBuilder('student')
@@ -75,7 +77,17 @@ export class StudentsService {
           phone: student.parent?.phone_mother,
         }
       }));
-      return flattenedStudents;
+      const total = flattenedStudents.length;
+      const startIdx = (page - 1) * limit;
+      const endIdx = startIdx + limit;
+      const data = flattenedStudents.slice(startIdx, endIdx);
+
+      return {
+        data,
+        total,
+        currentPage: page,
+        perPage: limit,
+      };
     } catch (error) {
       this.logger.error(`Error find students : ${error.message}`);
       const data = {
@@ -88,6 +100,7 @@ export class StudentsService {
       throw new ConflictException(data, { cause: new Error() });
     }
   }
+
 
   async findOne(id: number): Promise<Student> {
     try {

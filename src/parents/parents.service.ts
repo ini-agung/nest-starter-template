@@ -4,6 +4,7 @@ import { UpdateParentsDto } from './dto/update-parents.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Parent } from './entities/parent.entity';
 import { Repository } from 'typeorm';
+import { Pagination } from '@app/helper';
 @Injectable()
 export class ParentsService {
   constructor(
@@ -28,9 +29,9 @@ export class ParentsService {
     }
   }
 
-  async findAll(): Promise<{}> {
+  async findAll(page: number = 1, limit: number = 10): Promise<Pagination<any>> {
     try {
-      const fathers = await this.parentsRepository
+      const parents = await this.parentsRepository
         .createQueryBuilder('parent')
         .select([
           'parent.id', 'parent.user_id', 'parent.father', 'parent.mother', 'parent.phone_father',
@@ -47,8 +48,8 @@ export class ParentsService {
         )
         .where('parent.deletedAt IS NULL')
         .getMany();
-      this.logger.log(fathers);
-      const flattenedFathers = fathers.map(parent => ({
+      this.logger.log(parents);
+      const flattenedParents = parents.map(parent => ({
         parent_id: parent.id,
         user_id: parent.user_id,
         father: {
@@ -64,7 +65,17 @@ export class ParentsService {
           religion: parent.rm.religion,
         },
       }));
-      return fathers;
+      const total = flattenedParents.length;
+      const startIdx = (page - 1) * limit;
+      const endIdx = startIdx + limit;
+      const data = flattenedParents.slice(startIdx, endIdx);
+
+      return {
+        data,
+        total,
+        currentPage: page,
+        perPage: limit,
+      };
     } catch (error) {
       this.logger.error(`Error find parents : ${error.message}`);
       const data = {

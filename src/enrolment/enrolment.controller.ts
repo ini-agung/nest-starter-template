@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res, Query } from '@nestjs/common';
 import { EnrolmentService } from './enrolment.service';
 import { CreateEnrolmentDto } from './dto/create-enrolment.dto';
 import { UpdateEnrolmentDto } from './dto/update-enrolment.dto';
@@ -14,11 +14,14 @@ export class EnrolmentController {
   }
 
   @Get()
-  async findAll(@Res() response) {
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Res() response) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
-      message: 'Success Get Parents',
+      message: 'Success Get Enrolments',
       data: {}
     };
     const parents = await this.enrolmentService.findAll();

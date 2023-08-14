@@ -24,6 +24,8 @@
     "@app/jwt-libs/(.*)": "<rootDir>/../libs/jwt-libs/src/$1",
     "@app/jwt-libs": "<rootDir>/../libs/jwt-libs/src",
     "@app/seeder/(.*)": "<rootDir>/../libs/seeder/src/$1",
-    "@app/seeder": "<rootDir>/../libs/seeder/src"
+    "@app/seeder": "<rootDir>/../libs/seeder/src",
+    "@app/helper/(.*)": "<rootDir>/../libs/helper/src/$1",
+    "@app/helper": "<rootDir>/../libs/helper/src"
   }
 }

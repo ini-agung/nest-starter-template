@@ -1,4 +1,5 @@
 import { Class } from "src/classrooms/entities/classroom.entity";
+import { Schedule } from "src/schedules/entities/schedule.entity";
 import { Student } from "src/students/entities/student.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -18,12 +19,12 @@ export class Enrolment {
     @Column()
     student_id: number;
 
-    @ManyToOne(() => Class, classes => classes.id)
-    @JoinColumn({ name: 'class_id' })
-    classes: Class;
+    @ManyToOne(() => Schedule, schedule => schedule.id)
+    @JoinColumn({ name: 'schedule_id' })
+    schedule: Class;
 
     @Column()
-    class_id: number;
+    schedule_id: number;
 
     @Column({ type: 'timestamp' })
     enrolment_date: Date;
