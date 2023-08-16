@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Query } from '@nestjs/common';
 import { SchedulesService } from './schedules.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
@@ -14,21 +14,42 @@ export class SchedulesController {
   }
 
   @Get()
-  async findAll(@Res() response) {
+  async findAll(
+    @Query('day') day: string,
+    @Query('start_time') time_start: string,
+    @Query('finish_time') time_finish: string,
+    @Res() response) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
       message: 'Success Get Schedules',
       data: {}
     };
-    const parents = await this.schedulesService.findAll();
-    data.data = parents;
+    let schedules = [];
+    if (day || time_start || time_finish) {
+      schedules = await this.schedulesService.findOne(day, time_start, time_finish);
+    } else {
+      schedules = await this.schedulesService.findAll();
+    }
+    data.data = schedules;
     responseJson(data, data.statusCode, response);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.schedulesService.findOne(+id);
+  async findOne(
+    @Query('day') day: string,
+    @Query('start_time') startTime: string,
+    @Query('finish_time') finishTime: string,
+    @Res() response) {
+    const data = {
+      status: true,
+      statusCode: HttpStatus.OK,
+      message: 'Success Get Schedules',
+      data: {}
+    };
+    const schedules = await this.schedulesService.findOne(day, startTime, finishTime);
+    data.data = schedules;
+    responseJson(data, data.statusCode, response);
   }
 
   @Patch(':id')

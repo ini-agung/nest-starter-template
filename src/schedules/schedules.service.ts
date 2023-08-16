@@ -23,7 +23,7 @@ export class SchedulesService {
       // const schedulesCounts = await this.schedulesRepository.find();
       const schedulesCounts = await this.schedulesRepository
         .createQueryBuilder('schedules')
-        .select('schedules.id', 'id')
+        .select('schedules.id', 'schedule_id')
         .addSelect('schedule_code', 'schedule_code')
         .addSelect('day_of_week', 'day_of_week')
         .addSelect('time_start', 'time_start')
@@ -37,6 +37,7 @@ export class SchedulesService {
         .leftJoin('schedules.class_id', 'class')
         .leftJoin('class.classroom', 'classroom')
         .leftJoin('class.teacher', 'teacher')
+        .orderBy('schedules.id', 'ASC')
         .getRawMany();
       return schedulesCounts;
     } catch (error) {
@@ -52,8 +53,30 @@ export class SchedulesService {
     }
   }
 
-  async findOne(id: number) {
-    return `This action returns a #${id} schedule`;
+  async findOne(
+    day: string,
+    time_start: string,
+    time_finish: string,) {
+    this.logger.log([day, time_start, time_finish]);
+    const queryBuilder = this.schedulesRepository.createQueryBuilder('schedules')
+      .select(['schedules.id', 'schedules.schedule_code', 'schedules.day_of_week', 'schedules.time_start', 'schedules.time_finish'])
+      .addSelect('class.class', 'class')
+      .addSelect('class.id', 'class_id')
+      .addSelect('class.max_students', 'max_students')
+      .addSelect('class.teacher_id', 'teacher_id')
+      .leftJoin('schedules.class_id', 'class')
+
+    if (day) {
+      queryBuilder.where('schedules.day_of_week = :day', { day });
+    }
+    if (time_start) {
+      queryBuilder.andWhere('schedules.time_start = :time_start', { time_start });
+    }
+    if (time_finish) {
+      queryBuilder.andWhere('schedules.time_finish = :time_finish', { time_finish });
+    }
+    const schedulesCounts = await queryBuilder.getRawMany();
+    return schedulesCounts;
   }
 
   async update(id: number, updateScheduleDto: UpdateScheduleDto) {
