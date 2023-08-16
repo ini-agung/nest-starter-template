@@ -27,6 +27,10 @@ export class JwtLibsService {
     return { access_token, refresh_token };
   }
 
+  async generateRefresh(payload: object) {
+    return await this.jwtService.signAsync(payload);
+  }
+
   async decodeJwt(token: string): Promise<any> {
     try {
       return this.jwtService.verify(token);

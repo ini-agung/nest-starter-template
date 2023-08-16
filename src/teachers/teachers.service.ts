@@ -80,6 +80,8 @@ export class TeachersService {
         total,
         currentPage: page,
         perPage: limit,
+        prevPage: page > 1 ? `/parents?page=${(parseInt(page.toString()) - 1)}` : undefined,
+        nextPage: endIdx < total ? `/parents?page=${(parseInt(page.toString()) + 1)}` : undefined,
       };
     } catch (error) {
       this.logger.error(`Error find all ${error.message}`);

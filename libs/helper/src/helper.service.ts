@@ -11,8 +11,9 @@ export interface Pagination<T> {
     total: number;
     currentPage: number;
     perPage: number;
+    prevPage: string;
+    nextPage: string;
 }
-
 
 export function encryptData(data: string): string {
 

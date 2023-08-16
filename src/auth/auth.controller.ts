@@ -19,8 +19,10 @@ export class AuthController {
         if (user.length > 0) {
             const compare = await comparePasswords(signinDto.password, user[0].password)
             if (compare) {
-                const payload = { id: user[0].id, username: user[0].username, fullname: user[0].fullname, email: user[0].email };
+                const payload = { id: user[0].id, username: user[0].username, email: user[0].email, createdAt: user[0].createdAt, role: user[0].role, current_datetime: user[0].current_datetime };
+                const payload_refresh = { id: user[0].id, username: user[0].username, email: user[0].email, createdAt: user[0].createdAt, role: user[0].role, current_datetime: user[0].current_datetime, refreshToken: true };
                 const token = await this.jwtLibService.generateToken(payload);
+                const refresh_token = await this.jwtLibService.generateRefresh(payload_refresh);
                 const decode = await this.jwtLibService.decodeJwt(token.access_token);
                 const data = {
                     status: true,
@@ -30,7 +32,7 @@ export class AuthController {
                 };
                 delete user[0].password;
                 data.data = Object.assign(data.data,
-                    { access_token: token.access_token, refresh_token: token.refresh_token, expIn: decode.exp });
+                    { access_token: token.access_token, refresh_token: refresh_token, expIn: decode.exp });
                 responseJson(data, data.statusCode, response);
             } else {
                 const data = {

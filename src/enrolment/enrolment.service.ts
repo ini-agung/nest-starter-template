@@ -98,6 +98,8 @@ export class EnrolmentService {
         total,
         currentPage: page,
         perPage: limit,
+        prevPage: page > 1 ? `/enrolments?page=${(parseInt(page.toString()) - 1)}` : undefined,
+        nextPage: endIdx < total ? `/enrolments?page=${(parseInt(page.toString()) + 1)}` : undefined,
       };
     } catch (error) {
       this.logger.error(`Error find Enrolments : ${error.message}`);

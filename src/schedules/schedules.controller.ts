@@ -18,6 +18,9 @@ export class SchedulesController {
     @Query('day') day: string,
     @Query('start_time') time_start: string,
     @Query('finish_time') time_finish: string,
+    @Query('class') clas: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
     @Res() response) {
     const data = {
       status: true,
@@ -25,29 +28,16 @@ export class SchedulesController {
       message: 'Success Get Schedules',
       data: {}
     };
-    let schedules = [];
+    // Enforce a minimum value of 1 for the page parameter
+    page = (page < 1) ? 1 : page;
+    // Limit the limit parameter to a maximum value of 10
+    limit = (limit > 10) ? 10 : limit;
+    let schedules;
     if (day || time_start || time_finish) {
-      schedules = await this.schedulesService.findOne(day, time_start, time_finish);
+      schedules = await this.schedulesService.findOne(day, time_start, time_finish, clas, page, limit);
     } else {
-      schedules = await this.schedulesService.findAll();
+      schedules = await this.schedulesService.findAll(page, limit);
     }
-    data.data = schedules;
-    responseJson(data, data.statusCode, response);
-  }
-
-  @Get(':id')
-  async findOne(
-    @Query('day') day: string,
-    @Query('start_time') startTime: string,
-    @Query('finish_time') finishTime: string,
-    @Res() response) {
-    const data = {
-      status: true,
-      statusCode: HttpStatus.OK,
-      message: 'Success Get Schedules',
-      data: {}
-    };
-    const schedules = await this.schedulesService.findOne(day, startTime, finishTime);
     data.data = schedules;
     responseJson(data, data.statusCode, response);
   }

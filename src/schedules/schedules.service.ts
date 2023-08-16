@@ -4,6 +4,7 @@ import { UpdateScheduleDto } from './dto/update-schedule.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Schedule } from './entities/schedule.entity';
 import { Repository } from 'typeorm';
+import { Pagination } from '@app/helper';
 
 @Injectable()
 export class SchedulesService {
@@ -13,11 +14,12 @@ export class SchedulesService {
 
   ) { }
   private readonly logger = new Logger(SchedulesService.name);
+
   create(createScheduleDto: CreateScheduleDto) {
     return 'This action adds a new schedule';
   }
 
-  async findAll() {
+  async findAll(page: number = 1, limit: number = 10): Promise<Pagination<any>> {
     // return await this.schedulesRepository.find();
     try {
       // const schedulesCounts = await this.schedulesRepository.find();
@@ -39,7 +41,18 @@ export class SchedulesService {
         .leftJoin('class.teacher', 'teacher')
         .orderBy('schedules.id', 'ASC')
         .getRawMany();
-      return schedulesCounts;
+      const total = schedulesCounts.length;
+      const startIdx = (page - 1) * limit;
+      const endIdx = startIdx + limit;
+      const data = schedulesCounts.slice(startIdx, endIdx);
+      return {
+        data,
+        total,
+        currentPage: page,
+        perPage: limit,
+        prevPage: page > 1 ? `/schedules?page=${(parseInt(page.toString()) - 1)}` : undefined,
+        nextPage: endIdx < total ? `/schedules?page=${(parseInt(page.toString()) + 1)}` : undefined,
+      };
     } catch (error) {
       this.logger.error(`Error find parents : ${error.message}`);
       const data = {
@@ -56,7 +69,10 @@ export class SchedulesService {
   async findOne(
     day: string,
     time_start: string,
-    time_finish: string,) {
+    time_finish: string,
+    clas: string,
+    page: number = 1,
+    limit: number = 10) {
     this.logger.log([day, time_start, time_finish]);
     const queryBuilder = this.schedulesRepository.createQueryBuilder('schedules')
       .select(['schedules.id', 'schedules.schedule_code', 'schedules.day_of_week', 'schedules.time_start', 'schedules.time_finish'])
@@ -74,6 +90,10 @@ export class SchedulesService {
     }
     if (time_finish) {
       queryBuilder.andWhere('schedules.time_finish = :time_finish', { time_finish });
+    }
+
+    if (clas) {
+      queryBuilder.andWhere('(schedules.schedule_code LIKE :clas OR class.class LIKE :clas)', { clas: `%${clas}%` });
     }
     const schedulesCounts = await queryBuilder.getRawMany();
     return schedulesCounts;

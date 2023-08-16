@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, ConflictException, HttpStatus, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException, ConflictException, HttpStatus, NotFoundException, Logger } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Connection, Repository } from 'typeorm';
@@ -9,9 +9,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class UsersService {
   constructor(
+
+    private readonly connection: Connection,
     // @InjectRepository(User)
     // private teachersRepository: Repository<User>,
-    private readonly connection: Connection
   ) { }
   async create(createUserDto: CreateUserDto) {
     const query = `
@@ -60,10 +61,20 @@ export class UsersService {
 
   async findOne(identity: string) {
     const query = `
-    SELECT id, username, email, password
-    from users
-    where (username = ? OR email = ?)
-    AND deletedAt IS NULL;
+    SELECT
+      users.id as users_id, users.username, users.email, users.password, users.createdAt,
+      roles.id, roles.role,
+      NOW() as current_datetime
+    from
+      db_spada.users
+    LEFT JOIN
+      db_spada.roles
+    ON
+      users.role_id = roles.id
+    WHERE
+      (users.username = ? OR users.email = ?)
+    AND
+      users.deletedAt IS NULL;
     `;
     try {
       const user = await this.connection.query(query, [identity, identity]);

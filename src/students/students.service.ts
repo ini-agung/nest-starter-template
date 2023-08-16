@@ -87,6 +87,8 @@ export class StudentsService {
         total,
         currentPage: page,
         perPage: limit,
+        prevPage: page > 1 ? `/students?page=${(parseInt(page.toString()) - 1)}` : undefined,
+        nextPage: endIdx < total ? `/students?page=${(parseInt(page.toString()) + 1)}` : undefined,
       };
     } catch (error) {
       this.logger.error(`Error find students : ${error.message}`);
