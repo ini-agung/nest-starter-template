@@ -21,6 +21,7 @@ export class SeederService {
         const genders = [
             { gender: 'Laki-laki' },
             { gender: 'Perempuan' },
+            { gender: 'Lainnya' },
         ];
         console.log("=== GENDER ===");
         await this.connection.transaction(async (manager) => {
@@ -889,9 +890,106 @@ export class SeederService {
             { schedule_code: 'A014', day_of_week: 'Friday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 14, },
             { schedule_code: 'A015', day_of_week: 'Friday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 15, },
             // Saturday
-            { schedule_code: 'A016', day_of_week: 'Saturday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 1, },
-            { schedule_code: 'A017', day_of_week: 'Saturday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 2, },
-            { schedule_code: 'A018', day_of_week: 'Saturday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 3, },
+            { schedule_code: 'A016', day_of_week: 'Saturday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 16, },
+            { schedule_code: 'A017', day_of_week: 'Saturday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 17, },
+            { schedule_code: 'A018', day_of_week: 'Saturday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 18, },
+
+
+            { schedule_code: 'B001', day_of_week: 'Monday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 19, },
+            { schedule_code: 'B002', day_of_week: 'Monday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 20, },
+            { schedule_code: 'B003', day_of_week: 'Monday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 21, },
+            // Tuesday
+            { schedule_code: 'B004', day_of_week: 'Tuesday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 22, },
+            { schedule_code: 'B005', day_of_week: 'Tuesday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 23, },
+            { schedule_code: 'B006', day_of_week: 'Tuesday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 24, },
+            // Wednesday
+            { schedule_code: 'B007', day_of_week: 'Wednesday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 25, },
+            { schedule_code: 'B008', day_of_week: 'Wednesday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 26, },
+            { schedule_code: 'B009', day_of_week: 'Wednesday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 27, },
+            // Thursday
+            { schedule_code: 'B010', day_of_week: 'Thursday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 28, },
+            { schedule_code: 'B011', day_of_week: 'Thursday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 29, },
+            { schedule_code: 'B012', day_of_week: 'Thursday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 30, },
+            // Friday
+            { schedule_code: 'B013', day_of_week: 'Friday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 31, },
+            { schedule_code: 'B014', day_of_week: 'Friday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 32, },
+            { schedule_code: 'B015', day_of_week: 'Friday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 33, },
+            // Saturday
+            { schedule_code: 'B016', day_of_week: 'Saturday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 34, },
+            { schedule_code: 'B017', day_of_week: 'Saturday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 35, },
+            { schedule_code: 'B018', day_of_week: 'Saturday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 36, },
+
+            { schedule_code: 'C001', day_of_week: 'Monday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 37, },
+            { schedule_code: 'C002', day_of_week: 'Monday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 38, },
+            { schedule_code: 'C003', day_of_week: 'Monday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 39, },
+            // Tuesday
+            { schedule_code: 'C004', day_of_week: 'Tuesday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 40, },
+            { schedule_code: 'C005', day_of_week: 'Tuesday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 41, },
+            { schedule_code: 'C006', day_of_week: 'Tuesday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 42, },
+            // Wednesday
+            { schedule_code: 'C007', day_of_week: 'Wednesday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 43, },
+            { schedule_code: 'C008', day_of_week: 'Wednesday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 44, },
+            { schedule_code: 'C009', day_of_week: 'Wednesday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 45, },
+            // Thursday
+            { schedule_code: 'C010', day_of_week: 'Thursday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 46, },
+            { schedule_code: 'C011', day_of_week: 'Thursday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 47, },
+            { schedule_code: 'C012', day_of_week: 'Thursday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 48, },
+            // Friday
+            { schedule_code: 'C013', day_of_week: 'Friday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 49, },
+            { schedule_code: 'C014', day_of_week: 'Friday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 50, },
+            { schedule_code: 'C015', day_of_week: 'Friday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 51, },
+            // Saturday
+            { schedule_code: 'C016', day_of_week: 'Saturday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 52, },
+            { schedule_code: 'C017', day_of_week: 'Saturday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 53, },
+            { schedule_code: 'C018', day_of_week: 'Saturday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 54, },
+
+            { schedule_code: 'D001', day_of_week: 'Monday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 55, },
+            { schedule_code: 'D002', day_of_week: 'Monday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 56, },
+            { schedule_code: 'D003', day_of_week: 'Monday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 57, },
+            // Tuesday
+            { schedule_code: 'D004', day_of_week: 'Tuesday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 58, },
+            { schedule_code: 'D005', day_of_week: 'Tuesday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 59, },
+            { schedule_code: 'D006', day_of_week: 'Tuesday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 60, },
+            // Wednesday
+            { schedule_code: 'D007', day_of_week: 'Wednesday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 61, },
+            { schedule_code: 'D008', day_of_week: 'Wednesday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 62, },
+            { schedule_code: 'D009', day_of_week: 'Wednesday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 63, },
+            // Thursday
+            { schedule_code: 'D010', day_of_week: 'Thursday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 64, },
+            { schedule_code: 'D011', day_of_week: 'Thursday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 65, },
+            { schedule_code: 'D012', day_of_week: 'Thursday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 66, },
+            // Friday
+            { schedule_code: 'D013', day_of_week: 'Friday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 67, },
+            { schedule_code: 'D014', day_of_week: 'Friday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 68, },
+            { schedule_code: 'D015', day_of_week: 'Friday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 69, },
+            // Saturday
+            { schedule_code: 'D016', day_of_week: 'Saturday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 70, },
+            { schedule_code: 'D017', day_of_week: 'Saturday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 71, },
+            { schedule_code: 'D018', day_of_week: 'Saturday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 72, },
+
+            { schedule_code: 'E001', day_of_week: 'Monday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 73, },
+            { schedule_code: 'E002', day_of_week: 'Monday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 74, },
+            { schedule_code: 'E003', day_of_week: 'Monday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 75, },
+            // Tuesday
+            { schedule_code: 'E004', day_of_week: 'Tuesday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 76, },
+            { schedule_code: 'E005', day_of_week: 'Tuesday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 77, },
+            { schedule_code: 'E006', day_of_week: 'Tuesday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 78, },
+            // Wednesday
+            { schedule_code: 'E007', day_of_week: 'Wednesday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 79, },
+            { schedule_code: 'E008', day_of_week: 'Wednesday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 80, },
+            { schedule_code: 'E009', day_of_week: 'Wednesday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 81, },
+            // Thursday
+            { schedule_code: 'E010', day_of_week: 'Thursday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 82, },
+            { schedule_code: 'E011', day_of_week: 'Thursday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 83, },
+            { schedule_code: 'E012', day_of_week: 'Thursday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 84, },
+            // Friday
+            { schedule_code: 'E013', day_of_week: 'Friday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 85, },
+            { schedule_code: 'E014', day_of_week: 'Friday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 86, },
+            { schedule_code: 'E015', day_of_week: 'Friday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 87, },
+            // Saturday
+            { schedule_code: 'E016', day_of_week: 'Saturday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 88, },
+            { schedule_code: 'E017', day_of_week: 'Saturday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 89, },
+            { schedule_code: 'E018', day_of_week: 'Saturday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 90, },
         ];
         console.log("=== SCHEDULE ===");
         await this.connection.transaction(async (manager) => {
