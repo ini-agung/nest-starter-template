@@ -66,7 +66,7 @@ export class SchedulesService {
     }
   }
 
-  async findOne(
+  async findLike(
     day: string,
     time_start: string,
     time_finish: string,

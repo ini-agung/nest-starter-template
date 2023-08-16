@@ -32,11 +32,8 @@ export class StudentsController {
       message: 'Success Get Students',
       data: {}
     };
-    // Enforce a minimum value of 1 for the page parameter
     page = (page < 1) ? 1 : page;
-    // Limit the limit parameter to a maximum value of 10
     limit = (limit > 10) ? 10 : limit;
-
     const students = await this.studentsService.findAll(page, limit);
     data.data = students;
     responseJson(data, data.statusCode, response);
@@ -79,6 +76,19 @@ export class StudentsController {
     };
     const student = await this.studentsService.remove(+id);
     data.data = student;
+    responseJson(data, data.statusCode, response);
+  }
+
+  @Patch(':id/restore')
+  async restore(@Param('id') id: number, @Res() response) {
+    const restoredUser = await this.studentsService.restore(id);
+    const data = {
+      status: true,
+      statusCode: HttpStatus.NO_CONTENT,
+      message: 'Success Restore Teacher',
+      data: {}
+    };
+    data.data = restoredUser;
     responseJson(data, data.statusCode, response);
   }
 }

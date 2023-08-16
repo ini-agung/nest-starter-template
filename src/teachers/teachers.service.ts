@@ -4,7 +4,6 @@ import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Teacher } from './entities/teacher.entity';
-import { Degree } from './entities/degree.entity';
 import { Pagination } from '@app/helper';
 
 @Injectable()
@@ -17,7 +16,7 @@ export class TeachersService {
 
   async create(createTeacherDto: CreateTeacherDto) {
     try {
-      const teacher = this.teachersRepository.create(createTeacherDto);
+      const teacher = await this.teachersRepository.create(createTeacherDto);
       return await this.teachersRepository.save(teacher);
     } catch (error) {
       this.logger.error(`Error saving ${error.message}`);
@@ -74,7 +73,6 @@ export class TeachersService {
       const startIdx = (page - 1) * limit;
       const endIdx = startIdx + limit;
       const data = flattenedTeachers.slice(startIdx, endIdx);
-
       return {
         data,
         total,
@@ -96,7 +94,12 @@ export class TeachersService {
     }
   }
 
-  async findOne(id: number): Promise<Teacher> {
+  async findLike(
+    nik: number,
+    full_name: string,
+    nick_name: string,
+    page: number = 1,
+    limit: number = 10): Promise<any[]> {
     try {
       const teachers = await this.teachersRepository
         .createQueryBuilder('teacher')
@@ -114,12 +117,18 @@ export class TeachersService {
         .leftJoinAndSelect('teacher.user', 'users')
         .leftJoinAndSelect('teacher.religion', 'religions')
         .leftJoinAndSelect('teacher.gender', 'genders')
-        .where('teacher.deletedAt IS NULL')
-        .where('users.deletedAt IS NULL')
-        .where('teacher.id = :id', { id })
-        .getOne();
+      if (nik) {
+        teachers.where('(teacher.nik LIKE :nik)', { nik: `%${nik}%` })
+      }
+      if (full_name) {
+        teachers.where('teacher.full_name = :full_name', { full_name })
+      }
+      if (nick_name) {
+        teachers.where('teacher.nick_name = :nick_name', { nick_name })
+      }
       this.logger.log(teachers);
-      return teachers;
+      const schedulesCounts = await teachers.getRawMany();
+      return schedulesCounts;
     } catch (error) {
       this.logger.error(`Error find teacher :  ${error.message}`);
       const data = {
@@ -175,6 +184,32 @@ export class TeachersService {
       // Instead of a hard delete, mark the teacher as deleted (soft delete)
       teacher.deletedAt = new Date();; // Assuming there's a property called "deleted" on the teacher entity
       return await this.teachersRepository.save(teacher); // Save to persist the soft delete
+    } catch (error) {
+      this.logger.error(`Error find teacher :   ${error.message}`);
+      const data = {
+        status: false,
+        statusCode: HttpStatus.CONFLICT,
+        message: error.sqlMessage,
+        data: {}
+      };
+      data.data = error.message;
+      throw new ConflictException(data, { cause: new Error() });
+    }
+  }
+
+  async restore(id: number): Promise<Teacher> {
+    try {
+      const userToRestore = await this.teachersRepository
+        .createQueryBuilder('user')
+        .withDeleted() // Include soft-deleted entities
+        .where('user.id = :id', { id })
+        .getOne();
+
+      if (userToRestore) {
+        userToRestore.deletedAt = null; // Set deletedAt back to null
+        return this.teachersRepository.save(userToRestore);
+      }
+      return null; // User not found
     } catch (error) {
       this.logger.error(`Error find teacher :   ${error.message}`);
       const data = {

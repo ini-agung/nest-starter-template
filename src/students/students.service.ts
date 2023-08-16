@@ -103,12 +103,57 @@ export class StudentsService {
     }
   }
 
-
-  async findOne(id: number): Promise<Student> {
+  async findOne(id: number): Promise<any> {
     try {
-      return await this.studentRepository.findOneBy({ id });
+      // return await this.studentRepository.findOneBy({ id });
+      const students = await this.studentRepository
+        .createQueryBuilder('student')
+        .select([
+          'student.id', 'student.parent_id', 'student.nis', 'student.full_name', 'student.img',
+          'student.nick_name', 'student.date_birth', 'student.place_birth', 'student.phone',
+          'student.siblings', 'student.child_order', 'student.entry_year', 'student.address',
+        ]) // Specify the columns you want
+        .leftJoinAndSelect('student.user', 'user')
+        .leftJoinAndSelect('student.parent', 'parent')
+        .leftJoinAndSelect('student.gender', 'gender')
+        .leftJoinAndSelect('student.religion', 'religion as a')
+        .leftJoinAndSelect('parent.rf', 'religion as b') // Join parent_religion for father
+        .leftJoinAndSelect('parent.rm', 'religion as c') // Join parent_religion for mother
+        .where('student.deletedAt IS NULL')
+        .getMany();
+      this.logger.log(students);
+      const flattenedStudents = students.map(student => ({
+        student_id: student?.id,
+        user_id: student?.user?.id,
+        nis: student?.nis,
+        student_name: student?.full_name,
+        nick_name: student?.nick_name,
+        username: student?.user?.username,
+        date_birth: student?.date_birth,
+        place_birth: student?.place_birth,
+        entry_year: student?.entry_year,
+        address: student?.address,
+        img: student?.img,
+        siblings: student?.siblings,
+        child_order: student?.child_order,
+        phone: student?.phone,
+        religion: student.religion?.religion,
+        father: {
+          name: student.parent?.father,
+          img: student.parent?.img_father,
+          religion: student.parent?.rf.religion,
+          phone: student.parent?.phone_father,
+        },
+        mother: {
+          name: student.parent?.mother,
+          img: student.parent?.img_mother,
+          religion: student.parent?.rm.religion,
+          phone: student.parent?.phone_mother,
+        }
+      }));
+      return flattenedStudents;
     } catch (error) {
-      this.logger.error(`Error find parent :  ${error.message}`);
+      this.logger.error(`Error find student :  ${error.message}`);
       const data = {
         status: false,
         statusCode: HttpStatus.CONFLICT,
@@ -164,6 +209,32 @@ export class StudentsService {
       return await this.studentRepository.delete(id);
     } catch (error) {
       this.logger.error(`Error find parent :   ${error.message}`);
+      const data = {
+        status: false,
+        statusCode: HttpStatus.CONFLICT,
+        message: error.sqlMessage,
+        data: {}
+      };
+      data.data = error.message;
+      throw new ConflictException(data, { cause: new Error() });
+    }
+  }
+
+  async restore(id: number): Promise<Student> {
+    try {
+      const studentToRestore = await this.studentRepository
+        .createQueryBuilder('student')
+        .withDeleted() // Include soft-deleted entities
+        .where('user.id = :id', { id })
+        .getOne();
+
+      if (studentToRestore) {
+        studentToRestore.deletedAt = null; // Set deletedAt back to null
+        return this.studentRepository.save(studentToRestore);
+      }
+      return null; // User not found
+    } catch (error) {
+      this.logger.error(`Error find student :   ${error.message}`);
       const data = {
         status: false,
         statusCode: HttpStatus.CONFLICT,

@@ -28,13 +28,11 @@ export class SchedulesController {
       message: 'Success Get Schedules',
       data: {}
     };
-    // Enforce a minimum value of 1 for the page parameter
     page = (page < 1) ? 1 : page;
-    // Limit the limit parameter to a maximum value of 10
     limit = (limit > 10) ? 10 : limit;
     let schedules;
     if (day || time_start || time_finish) {
-      schedules = await this.schedulesService.findOne(day, time_start, time_finish, clas, page, limit);
+      schedules = await this.schedulesService.findLike(day, time_start, time_finish, clas, page, limit);
     } else {
       schedules = await this.schedulesService.findAll(page, limit);
     }

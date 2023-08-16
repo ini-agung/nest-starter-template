@@ -25,6 +25,9 @@ export class TeachersController {
   async findAll(
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
+    @Query('nik') nik: number,
+    @Query('full_name') full_name: string,
+    @Query('nick_name') nick_name: string,
     @Res() response) {
     const data = {
       status: true,
@@ -32,11 +35,14 @@ export class TeachersController {
       message: 'Success Get Teachers',
       data: {}
     };
-    // Enforce a minimum value of 1 for the page parameter
     page = (page < 1) ? 1 : page;
-    // Limit the limit parameter to a maximum value of 10
     limit = (limit > 10) ? 10 : limit;
-    const teachers = await this.teachersService.findAll(page, limit);
+    let teachers;
+    if (nik || full_name || nick_name) {
+      teachers = await this.teachersService.findLike(nik, full_name, nick_name);
+    } else {
+      teachers = await this.teachersService.findAll(page, limit);
+    }
     data.data = teachers;
     responseJson(data, data.statusCode, response);
   }
@@ -49,8 +55,8 @@ export class TeachersController {
       message: 'Success Get Teachers',
       data: {}
     };
-    const teacher = await this.teachersService.findOne(+id);
-    data.data = teacher;
+    // const teacher = await this.teachersService.findOne(+id);
+    // data.data = teacher;
     responseJson(data, data.statusCode, response);
   }
 
@@ -77,6 +83,19 @@ export class TeachersController {
     };
     const teacher = await this.teachersService.remove(+id);
     data.data = teacher;
+    responseJson(data, data.statusCode, response);
+  }
+
+  @Patch(':id/restore')
+  async restore(@Param('id') id: number, @Res() response) {
+    const restoredUser = await this.teachersService.restore(id);
+    const data = {
+      status: true,
+      statusCode: HttpStatus.NO_CONTENT,
+      message: 'Success Restore Teacher',
+      data: {}
+    };
+    data.data = restoredUser;
     responseJson(data, data.statusCode, response);
   }
 }
