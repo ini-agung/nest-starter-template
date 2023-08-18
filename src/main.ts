@@ -10,7 +10,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new VersionInterceptor(version));
 
   await app.listen(3000);
-  //*
+  /*
   try {
     const seederService = app.get(SeederService);
     await seederService.seed();

@@ -59,7 +59,7 @@ export class StudentsController {
     limit = (limit > 10) ? 10 : limit;
     let students: object;
     if (nis || name || nick_name) {
-      students = await this.studentsService.findLike(nis, name, nick_name);
+      students = await this.studentsService.findLike(nis, name, nick_name, page, limit);
     } else {
       students = await this.studentsService.findAll(page, limit);
     }
@@ -98,7 +98,7 @@ export class StudentsController {
      */
   @Patch(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateStudentDto: UpdateStudentDto,
     @Res() response,
   ) {
@@ -121,7 +121,7 @@ export class StudentsController {
    */
   @Delete(':id')
   async remove(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Res() response,
   ) {
     const data = {

@@ -63,24 +63,6 @@ export class TeachersController {
     responseJson(data, data.statusCode, response);
   }
 
-  /**
-   * Retrieve a single teacher by ID.
-   *
-   * @param id - ID of the teacher to retrieve.
-   * @param response - HTTP response object.
-   */
-  @Get(':id')
-  async findOne(@Param('id') id: string, @Res() response) {
-    const data = {
-      status: true,
-      statusCode: HttpStatus.OK,
-      message: 'Success Get Teachers',
-      data: {}
-    };
-    // const teacher = await this.teachersService.findOne(+id);
-    // data.data = teacher;
-    responseJson(data, data.statusCode, response);
-  }
 
   /**
   * Update an existing teacher.

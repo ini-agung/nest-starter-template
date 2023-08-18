@@ -43,7 +43,10 @@ export class StudentsService {
    * @param limit - Number of items per page (default: 10).
    * @returns Paginated list of students.
    */
-  async findAll(page: number = 1, limit: number = 10): Promise<Pagination<any>> {
+  async findAll(
+    page: number = 1,
+    limit: number = 10
+  ): Promise<Pagination<any>> {
     try {
       const students = await this.studentRepository
         .createQueryBuilder('student')
@@ -247,20 +250,20 @@ export class StudentsService {
    */
   async update(id: number, updateStudentDto: UpdateStudentDto) {
     try {
-      const parent = await this.studentRepository.findOneBy({ id });
-      if (!parent) {
+      const student = await this.studentRepository.findOneBy({ id });
+      if (!student) {
         const data = {
           status: false,
           statusCode: HttpStatus.CONFLICT,
-          message: `parent with id ${id} is doesnt exists`,
+          message: `student with id ${id} is doesnt exists`,
           data: {}
         };
         throw new ConflictException(data, { cause: new Error() });
       }
-      Object.assign(parent, updateStudentDto);
-      return this.studentRepository.save(parent);
+      Object.assign(student, updateStudentDto);
+      return this.studentRepository.save(student);
     } catch (error) {
-      this.logger.error(`Error find parent :  ${error.message}`);
+      this.logger.error(`Error find student :  ${error.message}`);
       const data = {
         status: false,
         statusCode: HttpStatus.CONFLICT,
@@ -280,20 +283,20 @@ export class StudentsService {
    */
   async remove(id: number) {
     try {
-      const parent = await this.studentRepository.findOneBy({ id });
-      if (!parent) {
+      const student = await this.studentRepository.findOneBy({ id });
+      if (!student) {
         const data = {
           status: false,
           statusCode: HttpStatus.CONFLICT,
-          message: `parent with id ${id} is doesnt exists`,
+          message: `student with id ${id} is doesnt exists`,
           data: {}
         };
         throw new ConflictException(data, { cause: new Error() });
       }
-      parent.deletedAt = new Date();
-      return this.studentRepository.save(parent);
+      student.deletedAt = new Date();
+      return this.studentRepository.save(student);
     } catch (error) {
-      this.logger.error(`Error find parent :   ${error.message}`);
+      this.logger.error(`Error find student :   ${error.message}`);
       const data = {
         status: false,
         statusCode: HttpStatus.CONFLICT,

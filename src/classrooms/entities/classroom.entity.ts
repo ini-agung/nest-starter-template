@@ -1,5 +1,5 @@
 import { Teacher } from "src/teachers/entities/teacher.entity";
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'classrooms' })
 export class Classroom {
@@ -8,6 +8,12 @@ export class Classroom {
 
     @Column({ unique: true })
     classroom: string;
+
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    createdAt: Date;
+
+    @DeleteDateColumn({ type: 'timestamp' })
+    deletedAt: Date | null;
 }
 
 
@@ -21,6 +27,12 @@ export class Subject {
 
     @Column({ type: 'varchar', length: 255 })
     description: string;
+
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    createdAt: Date;
+
+    @DeleteDateColumn({ type: 'timestamp' })
+    deletedAt: Date | null;
 }
 
 @Entity({ name: 'class' })
@@ -54,4 +66,10 @@ export class Class {
 
     @Column({ type: 'int' })
     max_students: number;
+
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    createdAt: Date;
+
+    @DeleteDateColumn({ type: 'timestamp' })
+    deletedAt: Date | null;
 }
