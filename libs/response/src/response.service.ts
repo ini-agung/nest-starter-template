@@ -12,6 +12,15 @@ export function setVersion(apiVersion: string) {
   version = apiVersion;
 }
 
+/**
+ * Sends a JSON response with the provided data and status code.
+ * @param data - The response data object.
+ * @param statusCode - The HTTP status code to be included in the response.
+ * @param response - The HTTP response object to send the response.
+ * @param version - The API version for the response ('v1' or 'v2').
+ * @throws BadRequestException if the provided data status is false.
+ * @throws HttpException if an invalid API version is provided.
+ */
 export function responseJson(data: any, statusCode: HttpStatus, response: Response) {
   if (data.status == false) {
     data.statusCode = HttpStatus.BAD_REQUEST;

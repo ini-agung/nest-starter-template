@@ -639,7 +639,7 @@ export class SeederService {
                 user_id: 1, // Assuming the User ID for this student
                 nis: 17316084,
                 full_name: 'Agung Pangestu',
-                nick_name: 'AP',
+                nick_name: 'Agung',
                 date_birth: new Date('2005-05-15'),
                 place_birth: 'City A',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
@@ -654,8 +654,8 @@ export class SeederService {
                 parent_id: 2, // Assuming the Parent ID for this student
                 user_id: 6, // Assuming the User ID for this student
                 nis: 17316085,
-                full_name: 'Pangestu Agung',
-                nick_name: 'PA',
+                full_name: 'Yulian Khadafi',
+                nick_name: 'Yulian',
                 date_birth: new Date('2006-11-25'),
                 place_birth: 'City B',
                 gender_id: 2, // Assuming the Gender ID for a specific gender
@@ -670,9 +670,9 @@ export class SeederService {
                 parent_id: 3, // Assuming the Parent ID for this student
                 user_id: 11, // Assuming the User ID for this student
                 nis: 17316086,
-                full_name: 'PPPPPPPPPPPPP',
-                nick_name: 'P',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Siska Evi Yantika',
+                nick_name: 'Siska',
+                date_birth: new Date('2001-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
@@ -686,9 +686,9 @@ export class SeederService {
                 parent_id: 4, // Assuming the Parent ID for this student
                 user_id: 17, // Assuming the User ID for this student
                 nis: 17316087,
-                full_name: 'PPPPPPPPPPPPP',
-                nick_name: 'P',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Intan Purnama Sari',
+                nick_name: 'Intan',
+                date_birth: new Date('2002-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
@@ -702,9 +702,9 @@ export class SeederService {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 22, // Assuming the User ID for this student
                 nis: 17316088,
-                full_name: 'MMMMMMMMMM',
-                nick_name: 'M',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Heni Setiawati',
+                nick_name: 'Heni',
+                date_birth: new Date('2003-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
@@ -718,9 +718,9 @@ export class SeederService {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 26, // Assuming the User ID for this student
                 nis: 17316089,
-                full_name: 'AAAAAAAAAA',
-                nick_name: 'A',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Sujatmiko Dae',
+                nick_name: 'Sujatmiko',
+                date_birth: new Date('2000-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
@@ -734,9 +734,9 @@ export class SeederService {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 27, // Assuming the User ID for this student
                 nis: 17316090,
-                full_name: 'BBBBBBBBBB',
-                nick_name: 'B',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Suratman Mike',
+                nick_name: 'Suratman',
+                date_birth: new Date('2001-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
@@ -750,9 +750,9 @@ export class SeederService {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 28, // Assuming the User ID for this student
                 nis: 17316091,
-                full_name: 'CCCCCCCCC',
-                nick_name: 'C',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Sutaji Bie',
+                nick_name: 'Sutaji',
+                date_birth: new Date('2002-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
@@ -766,9 +766,9 @@ export class SeederService {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 29, // Assuming the User ID for this student
                 nis: 17316092,
-                full_name: 'DDDDDDDD',
-                nick_name: 'D',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Sukini Ulaa',
+                nick_name: 'Sukini',
+                date_birth: new Date('2003-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
@@ -782,9 +782,9 @@ export class SeederService {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 30, // Assuming the User ID for this student
                 nis: 17316093,
-                full_name: 'EEEEEEEE',
-                nick_name: 'E',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Zulaeha Anggraeni',
+                nick_name: 'Zulaeha',
+                date_birth: new Date('2004-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
@@ -798,9 +798,9 @@ export class SeederService {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 31, // Assuming the User ID for this student
                 nis: 17316094,
-                full_name: 'FFFFFFFF',
-                nick_name: 'F',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Jaelani Anum',
+                nick_name: 'Jaelani',
+                date_birth: new Date('2001-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
@@ -814,9 +814,9 @@ export class SeederService {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 32, // Assuming the User ID for this student
                 nis: 17316095,
-                full_name: 'GGGGGGGG',
-                nick_name: 'G',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Xena Ananta',
+                nick_name: 'Xena',
+                date_birth: new Date('2002-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
@@ -830,9 +830,9 @@ export class SeederService {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 33, // Assuming the User ID for this student
                 nis: 17316096,
-                full_name: 'HHHHHHHHH',
-                nick_name: 'H',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Angela Karamoy',
+                nick_name: 'Angela',
+                date_birth: new Date('2003-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
@@ -846,9 +846,9 @@ export class SeederService {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 34, // Assuming the User ID for this student
                 nis: 17316097,
-                full_name: 'IIIIIIIIIII',
-                nick_name: 'I',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Ling Soe King',
+                nick_name: 'Ling',
+                date_birth: new Date('2004-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
@@ -862,9 +862,9 @@ export class SeederService {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 35, // Assuming the User ID for this student
                 nis: 17316098,
-                full_name: 'JJJJJJJJJJ',
-                nick_name: 'J',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Karina Amoe',
+                nick_name: 'Karina',
+                date_birth: new Date('2001-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
@@ -878,9 +878,9 @@ export class SeederService {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 36, // Assuming the User ID for this student
                 nis: 17316099,
-                full_name: 'JJJJJJJJJJ',
-                nick_name: 'J',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Yve Uve',
+                nick_name: 'Yve',
+                date_birth: new Date('2002-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
@@ -894,9 +894,9 @@ export class SeederService {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 37, // Assuming the User ID for this student
                 nis: 17316100,
-                full_name: 'KKKKKKKKK',
-                nick_name: 'K',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Odette Korn',
+                nick_name: 'Odette',
+                date_birth: new Date('2003-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
@@ -910,9 +910,9 @@ export class SeederService {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 38, // Assuming the User ID for this student
                 nis: 17316101,
-                full_name: 'LLLLLLLLLL',
-                nick_name: 'L',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Helcurt Boo',
+                nick_name: 'Helcurt',
+                date_birth: new Date('2004-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
@@ -926,9 +926,9 @@ export class SeederService {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 39, // Assuming the User ID for this student
                 nis: 17316102,
-                full_name: 'MMMMMMMM',
-                nick_name: 'M',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Balmond Brad',
+                nick_name: 'Balmond',
+                date_birth: new Date('2001-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
@@ -942,9 +942,9 @@ export class SeederService {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 40, // Assuming the User ID for this student
                 nis: 17316103,
-                full_name: 'NNNNNNNNNN',
-                nick_name: 'N',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Nana Najwa',
+                nick_name: 'Nana',
+                date_birth: new Date('2002-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
@@ -958,9 +958,9 @@ export class SeederService {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 41, // Assuming the User ID for this student
                 nis: 17316104,
-                full_name: 'OOOOOOOOOOO',
-                nick_name: 'O',
-                date_birth: new Date('2006-11-25'),
+                full_name: 'Valir Bert',
+                nick_name: 'Valir',
+                date_birth: new Date('2003-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender
                 religion_id: 4, // Assuming the Religion ID for a specific religion
