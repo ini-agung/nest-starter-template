@@ -13,6 +13,12 @@ export class StudentsService {
     private studentRepository: Repository<Student>,) { }
   private readonly logger = new Logger(StudentsService.name);
 
+  /**
+   * Create a new student.
+   *
+   * @param createStudentDto - Data to create a new student.
+   * @returns Created student data.
+   */
   async create(createStudentDto: CreateStudentDto) {
     try {
       const student = this.studentRepository.create(createStudentDto);
@@ -30,6 +36,13 @@ export class StudentsService {
     }
   }
 
+  /**
+   * Retrieve all students with optional filtering and pagination.
+   *
+   * @param page - Page number for pagination (default: 1).
+   * @param limit - Number of items per page (default: 10).
+   * @returns Paginated list of students.
+   */
   async findAll(page: number = 1, limit: number = 10): Promise<Pagination<any>> {
     try {
       const students = await this.studentRepository
@@ -103,6 +116,16 @@ export class StudentsService {
     }
   }
 
+  /**
+   * Retrieve students based on filters with optional pagination.
+   *
+   * @param nis - Filter by student's National Identity Number (NIS).
+   * @param name - Filter by student's name.
+   * @param nick_name - Filter by student's nickname.
+   * @param page - Page number for pagination (default: 1).
+   * @param limit - Number of items per page (default: 10).
+   * @returns Paginated list of filtered students.
+   */
   async findLike(
     nis: number,
     name: string,
@@ -147,6 +170,12 @@ export class StudentsService {
     };
   }
 
+  /**
+   * Retrieve a single student by ID.
+   *
+   * @param id - ID of the student to retrieve.
+   * @returns Student details.
+   */
   async findOne(id: number): Promise<any> {
     try {
       // return await this.studentRepository.findOneBy({ id });
@@ -209,6 +238,13 @@ export class StudentsService {
     }
   }
 
+  /**
+   * Update an existing student.
+   *
+   * @param id - ID of the student to update.
+   * @param updateStudentDto - Updated student data.
+   * @returns Updated student data.
+   */
   async update(id: number, updateStudentDto: UpdateStudentDto) {
     try {
       const parent = await this.studentRepository.findOneBy({ id });
@@ -236,6 +272,12 @@ export class StudentsService {
     }
   }
 
+  /**
+   * Delete a student (soft delete).
+   *
+   * @param id - ID of the student to delete.
+   * @returns Deleted student data.
+   */
   async remove(id: number) {
     try {
       const parent = await this.studentRepository.findOneBy({ id });
@@ -263,6 +305,12 @@ export class StudentsService {
     }
   }
 
+  /**
+   * Restore a previously soft-deleted student.
+   *
+   * @param id - ID of the student to restore.
+   * @returns Restored student data.
+   */
   async restore(id: number): Promise<Student> {
     try {
       const studentToRestore = await this.studentRepository
