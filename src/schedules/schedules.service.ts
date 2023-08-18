@@ -114,7 +114,6 @@ export class SchedulesService {
     page: number = 1,
     limit: number = 10,
   ): Promise<Pagination<any>> {
-    this.logger.log([day, time_start, time_finish]);
     const queryBuilder = this.schedulesRepository.createQueryBuilder('schedules')
       .select(['schedules.id', 'schedules.schedule_code', 'schedules.day_of_week', 'schedules.time_start', 'schedules.time_finish'])
       .addSelect('class.class', 'class')
