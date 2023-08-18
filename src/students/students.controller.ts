@@ -25,6 +25,9 @@ export class StudentsController {
   async findAll(
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
+    @Query('nis') nis: number,
+    @Query('name') name: string,
+    @Query('nick_name') nick_name: string,
     @Res() response) {
     const data = {
       status: true,
@@ -34,7 +37,12 @@ export class StudentsController {
     };
     page = (page < 1) ? 1 : page;
     limit = (limit > 10) ? 10 : limit;
-    const students = await this.studentsService.findAll(page, limit);
+    let students: object;
+    if (nis || name || nick_name) {
+      students = await this.studentsService.findLike(nis, name, nick_name);
+    } else {
+      students = await this.studentsService.findAll(page, limit);
+    }
     data.data = students;
     responseJson(data, data.statusCode, response);
   }

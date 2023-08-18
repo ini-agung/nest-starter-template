@@ -30,7 +30,7 @@ export class SchedulesController {
     };
     page = (page < 1) ? 1 : page;
     limit = (limit > 10) ? 10 : limit;
-    let schedules;
+    let schedules: object;
     if (day || time_start || time_finish) {
       schedules = await this.schedulesService.findLike(day, time_start, time_finish, clas, page, limit);
     } else {

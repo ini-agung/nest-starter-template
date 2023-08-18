@@ -628,7 +628,7 @@ export class SeederService {
                     teacher.address = data.address;
                     await manager.save(teacher);
                 } else {
-                    console.log(`Religion with value ${data.nik} already exists. Skipping...`);
+                    console.log(`Teacher with value ${data.nik} already exists. Skipping...`);
                 }
             }
         });
@@ -704,6 +704,262 @@ export class SeederService {
                 nis: 17316088,
                 full_name: 'MMMMMMMMMM',
                 nick_name: 'M',
+                date_birth: new Date('2006-11-25'),
+                place_birth: 'City B',
+                gender_id: 1, // Assuming the Gender ID for a specific gender
+                religion_id: 4, // Assuming the Religion ID for a specific religion
+                phone: '9876543210',
+                siblings: 2,
+                child_order: 1,
+                entry_year: new Date('2019-09-01'),
+                address: '456 Elm Street, City B',
+            },
+            {
+                parent_id: 5, // Assuming the Parent ID for this student
+                user_id: 26, // Assuming the User ID for this student
+                nis: 17316089,
+                full_name: 'AAAAAAAAAA',
+                nick_name: 'A',
+                date_birth: new Date('2006-11-25'),
+                place_birth: 'City B',
+                gender_id: 1, // Assuming the Gender ID for a specific gender
+                religion_id: 4, // Assuming the Religion ID for a specific religion
+                phone: '9876543210',
+                siblings: 2,
+                child_order: 1,
+                entry_year: new Date('2019-09-01'),
+                address: '456 Elm Street, City B',
+            },
+            {
+                parent_id: 5, // Assuming the Parent ID for this student
+                user_id: 27, // Assuming the User ID for this student
+                nis: 17316090,
+                full_name: 'BBBBBBBBBB',
+                nick_name: 'B',
+                date_birth: new Date('2006-11-25'),
+                place_birth: 'City B',
+                gender_id: 1, // Assuming the Gender ID for a specific gender
+                religion_id: 4, // Assuming the Religion ID for a specific religion
+                phone: '9876543210',
+                siblings: 2,
+                child_order: 1,
+                entry_year: new Date('2019-09-01'),
+                address: '456 Elm Street, City B',
+            },
+            {
+                parent_id: 5, // Assuming the Parent ID for this student
+                user_id: 28, // Assuming the User ID for this student
+                nis: 17316091,
+                full_name: 'CCCCCCCCC',
+                nick_name: 'C',
+                date_birth: new Date('2006-11-25'),
+                place_birth: 'City B',
+                gender_id: 1, // Assuming the Gender ID for a specific gender
+                religion_id: 4, // Assuming the Religion ID for a specific religion
+                phone: '9876543210',
+                siblings: 2,
+                child_order: 1,
+                entry_year: new Date('2019-09-01'),
+                address: '456 Elm Street, City B',
+            },
+            {
+                parent_id: 5, // Assuming the Parent ID for this student
+                user_id: 29, // Assuming the User ID for this student
+                nis: 17316092,
+                full_name: 'DDDDDDDD',
+                nick_name: 'D',
+                date_birth: new Date('2006-11-25'),
+                place_birth: 'City B',
+                gender_id: 1, // Assuming the Gender ID for a specific gender
+                religion_id: 4, // Assuming the Religion ID for a specific religion
+                phone: '9876543210',
+                siblings: 2,
+                child_order: 1,
+                entry_year: new Date('2019-09-01'),
+                address: '456 Elm Street, City B',
+            },
+            {
+                parent_id: 5, // Assuming the Parent ID for this student
+                user_id: 30, // Assuming the User ID for this student
+                nis: 17316091,
+                full_name: 'EEEEEEEE',
+                nick_name: 'E',
+                date_birth: new Date('2006-11-25'),
+                place_birth: 'City B',
+                gender_id: 1, // Assuming the Gender ID for a specific gender
+                religion_id: 4, // Assuming the Religion ID for a specific religion
+                phone: '9876543210',
+                siblings: 2,
+                child_order: 1,
+                entry_year: new Date('2019-09-01'),
+                address: '456 Elm Street, City B',
+            },
+            {
+                parent_id: 5, // Assuming the Parent ID for this student
+                user_id: 31, // Assuming the User ID for this student
+                nis: 17316092,
+                full_name: 'FFFFFFFF',
+                nick_name: 'F',
+                date_birth: new Date('2006-11-25'),
+                place_birth: 'City B',
+                gender_id: 1, // Assuming the Gender ID for a specific gender
+                religion_id: 4, // Assuming the Religion ID for a specific religion
+                phone: '9876543210',
+                siblings: 2,
+                child_order: 1,
+                entry_year: new Date('2019-09-01'),
+                address: '456 Elm Street, City B',
+            },
+            {
+                parent_id: 5, // Assuming the Parent ID for this student
+                user_id: 32, // Assuming the User ID for this student
+                nis: 17316093,
+                full_name: 'GGGGGGGG',
+                nick_name: 'G',
+                date_birth: new Date('2006-11-25'),
+                place_birth: 'City B',
+                gender_id: 1, // Assuming the Gender ID for a specific gender
+                religion_id: 4, // Assuming the Religion ID for a specific religion
+                phone: '9876543210',
+                siblings: 2,
+                child_order: 1,
+                entry_year: new Date('2019-09-01'),
+                address: '456 Elm Street, City B',
+            },
+            {
+                parent_id: 5, // Assuming the Parent ID for this student
+                user_id: 33, // Assuming the User ID for this student
+                nis: 17316094,
+                full_name: 'HHHHHHHHH',
+                nick_name: 'H',
+                date_birth: new Date('2006-11-25'),
+                place_birth: 'City B',
+                gender_id: 1, // Assuming the Gender ID for a specific gender
+                religion_id: 4, // Assuming the Religion ID for a specific religion
+                phone: '9876543210',
+                siblings: 2,
+                child_order: 1,
+                entry_year: new Date('2019-09-01'),
+                address: '456 Elm Street, City B',
+            },
+            {
+                parent_id: 5, // Assuming the Parent ID for this student
+                user_id: 34, // Assuming the User ID for this student
+                nis: 17316095,
+                full_name: 'IIIIIIIIIII',
+                nick_name: 'I',
+                date_birth: new Date('2006-11-25'),
+                place_birth: 'City B',
+                gender_id: 1, // Assuming the Gender ID for a specific gender
+                religion_id: 4, // Assuming the Religion ID for a specific religion
+                phone: '9876543210',
+                siblings: 2,
+                child_order: 1,
+                entry_year: new Date('2019-09-01'),
+                address: '456 Elm Street, City B',
+            },
+            {
+                parent_id: 5, // Assuming the Parent ID for this student
+                user_id: 35, // Assuming the User ID for this student
+                nis: 17316096,
+                full_name: 'JJJJJJJJJJ',
+                nick_name: 'J',
+                date_birth: new Date('2006-11-25'),
+                place_birth: 'City B',
+                gender_id: 1, // Assuming the Gender ID for a specific gender
+                religion_id: 4, // Assuming the Religion ID for a specific religion
+                phone: '9876543210',
+                siblings: 2,
+                child_order: 1,
+                entry_year: new Date('2019-09-01'),
+                address: '456 Elm Street, City B',
+            },
+            {
+                parent_id: 5, // Assuming the Parent ID for this student
+                user_id: 36, // Assuming the User ID for this student
+                nis: 17316097,
+                full_name: 'JJJJJJJJJJ',
+                nick_name: 'J',
+                date_birth: new Date('2006-11-25'),
+                place_birth: 'City B',
+                gender_id: 1, // Assuming the Gender ID for a specific gender
+                religion_id: 4, // Assuming the Religion ID for a specific religion
+                phone: '9876543210',
+                siblings: 2,
+                child_order: 1,
+                entry_year: new Date('2019-09-01'),
+                address: '456 Elm Street, City B',
+            },
+            {
+                parent_id: 5, // Assuming the Parent ID for this student
+                user_id: 37, // Assuming the User ID for this student
+                nis: 17316098,
+                full_name: 'KKKKKKKKK',
+                nick_name: 'K',
+                date_birth: new Date('2006-11-25'),
+                place_birth: 'City B',
+                gender_id: 1, // Assuming the Gender ID for a specific gender
+                religion_id: 4, // Assuming the Religion ID for a specific religion
+                phone: '9876543210',
+                siblings: 2,
+                child_order: 1,
+                entry_year: new Date('2019-09-01'),
+                address: '456 Elm Street, City B',
+            },
+            {
+                parent_id: 5, // Assuming the Parent ID for this student
+                user_id: 38, // Assuming the User ID for this student
+                nis: 17316099,
+                full_name: 'LLLLLLLLLL',
+                nick_name: 'L',
+                date_birth: new Date('2006-11-25'),
+                place_birth: 'City B',
+                gender_id: 1, // Assuming the Gender ID for a specific gender
+                religion_id: 4, // Assuming the Religion ID for a specific religion
+                phone: '9876543210',
+                siblings: 2,
+                child_order: 1,
+                entry_year: new Date('2019-09-01'),
+                address: '456 Elm Street, City B',
+            },
+            {
+                parent_id: 5, // Assuming the Parent ID for this student
+                user_id: 39, // Assuming the User ID for this student
+                nis: 17316100,
+                full_name: 'MMMMMMMM',
+                nick_name: 'M',
+                date_birth: new Date('2006-11-25'),
+                place_birth: 'City B',
+                gender_id: 1, // Assuming the Gender ID for a specific gender
+                religion_id: 4, // Assuming the Religion ID for a specific religion
+                phone: '9876543210',
+                siblings: 2,
+                child_order: 1,
+                entry_year: new Date('2019-09-01'),
+                address: '456 Elm Street, City B',
+            },
+            {
+                parent_id: 5, // Assuming the Parent ID for this student
+                user_id: 40, // Assuming the User ID for this student
+                nis: 17316101,
+                full_name: 'NNNNNNNNNN',
+                nick_name: 'N',
+                date_birth: new Date('2006-11-25'),
+                place_birth: 'City B',
+                gender_id: 1, // Assuming the Gender ID for a specific gender
+                religion_id: 4, // Assuming the Religion ID for a specific religion
+                phone: '9876543210',
+                siblings: 2,
+                child_order: 1,
+                entry_year: new Date('2019-09-01'),
+                address: '456 Elm Street, City B',
+            },
+            {
+                parent_id: 5, // Assuming the Parent ID for this student
+                user_id: 41, // Assuming the User ID for this student
+                nis: 17316102,
+                full_name: 'OOOOOOOOOOO',
+                nick_name: 'O',
                 date_birth: new Date('2006-11-25'),
                 place_birth: 'City B',
                 gender_id: 1, // Assuming the Gender ID for a specific gender

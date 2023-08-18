@@ -72,7 +72,8 @@ export class SchedulesService {
     time_finish: string,
     clas: string,
     page: number = 1,
-    limit: number = 10) {
+    limit: number = 10,
+  ): Promise<Pagination<any>> {
     this.logger.log([day, time_start, time_finish]);
     const queryBuilder = this.schedulesRepository.createQueryBuilder('schedules')
       .select(['schedules.id', 'schedules.schedule_code', 'schedules.day_of_week', 'schedules.time_start', 'schedules.time_finish'])
@@ -96,7 +97,18 @@ export class SchedulesService {
       queryBuilder.andWhere('(schedules.schedule_code LIKE :clas OR class.class LIKE :clas)', { clas: `%${clas}%` });
     }
     const schedulesCounts = await queryBuilder.getRawMany();
-    return schedulesCounts;
+    const total = schedulesCounts.length;
+    const startIdx = (page - 1) * limit;
+    const endIdx = startIdx + limit;
+    const data = schedulesCounts.slice(startIdx, endIdx);
+    return {
+      data,
+      total,
+      currentPage: page,
+      perPage: limit,
+      prevPage: page > 1 ? `/schedules?page=${(parseInt(page.toString()) - 1)}` : undefined,
+      nextPage: endIdx < total ? `/schedules?page=${(parseInt(page.toString()) + 1)}` : undefined,
+    };
   }
 
   async update(id: number, updateScheduleDto: UpdateScheduleDto) {

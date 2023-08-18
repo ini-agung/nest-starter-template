@@ -103,6 +103,50 @@ export class StudentsService {
     }
   }
 
+  async findLike(
+    nis: number,
+    name: string,
+    nick_name: string,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<Pagination<any>> {
+    this.logger.log([nis, name, nick_name]);
+    const queryBuilder = await this.studentRepository
+      .createQueryBuilder('student')
+      .select([
+        'student.id', 'student.parent_id', 'student.nis', 'student.full_name', 'student.img',
+        'student.nick_name', 'student.date_birth', 'student.place_birth', 'student.phone',
+        'student.siblings', 'student.child_order', 'student.entry_year', 'student.address',
+      ]) // Specify the columns you want
+      .leftJoinAndSelect('student.user', 'user')
+      .leftJoinAndSelect('student.parent', 'parent')
+      .leftJoinAndSelect('student.gender', 'gender')
+      .leftJoinAndSelect('student.religion', 'religion as a')
+      .leftJoinAndSelect('parent.rf', 'religion as b') // Join parent_religion for father
+      .leftJoinAndSelect('parent.rm', 'religion as c') // Join parent_religion for mother
+      .where('student.deletedAt IS NULL')
+
+    if (nis) {
+      queryBuilder.where('student.nis = :nis', { nis });
+    }
+    if (name || nick_name) {
+      queryBuilder.andWhere('(student.full_name LIKE :name OR student.nick_name LIKE :nick_name)', { name: `%${name}%`, nick_name: `%${nick_name}%` });
+    }
+    const studentsCounts = await queryBuilder.getRawMany();
+    const total = studentsCounts.length;
+    const startIdx = (page - 1) * limit;
+    const endIdx = startIdx + limit;
+    const data = studentsCounts.slice(startIdx, endIdx);
+    return {
+      data,
+      total,
+      currentPage: page,
+      perPage: limit,
+      prevPage: page > 1 ? `/students?page=${(parseInt(page.toString()) - 1)}` : undefined,
+      nextPage: endIdx < total ? `/students?page=${(parseInt(page.toString()) + 1)}` : undefined,
+    };
+  }
+
   async findOne(id: number): Promise<any> {
     try {
       // return await this.studentRepository.findOneBy({ id });
