@@ -4,15 +4,46 @@ import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
 import { responseJson } from '@app/response';
 
+/**
+ * Controller responsible for managing schedules.
+ */
 @Controller('schedules')
 export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) { }
 
+  /**
+   * Create a new schedule.
+   *
+   * @param createScheduleDto - Data to create a new schedule.
+   * @param response - HTTP response object.
+   */
   @Post()
-  create(@Body() createScheduleDto: CreateScheduleDto) {
-    return this.schedulesService.create(createScheduleDto);
+  async create(
+    @Body() createScheduleDto: CreateScheduleDto,
+    @Res() response,
+  ) {
+    const data = {
+      status: true,
+      statusCode: HttpStatus.ACCEPTED,
+      message: 'Success Create New Teacher',
+      data: {}
+    };
+    const teacher = await this.schedulesService.create(createScheduleDto);
+    data.data = teacher;
+    responseJson(data, data.statusCode, response);
   }
 
+  /**
+   * Retrieve schedules based on optional query parameters.
+   *
+   * @param day - Filter by day of the week.
+   * @param time_start - Filter by start time.
+   * @param time_finish - Filter by finish time.
+   * @param clas - Filter by class.
+   * @param page - Page number for pagination (default: 1).
+   * @param limit - Number of items per page (default: 10).
+   * @param response - HTTP response object.
+   */
   @Get()
   async findAll(
     @Query('day') day: string,
@@ -21,7 +52,8 @@ export class SchedulesController {
     @Query('class') clas: string,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
-    @Res() response) {
+    @Res() response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -40,13 +72,41 @@ export class SchedulesController {
     responseJson(data, data.statusCode, response);
   }
 
+  /**
+   * Update an existing schedule.
+   *
+   * @param id - ID of the schedule to update.
+   * @param updateScheduleDto - Updated schedule data.
+   * @param response - HTTP response object.
+   */
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateScheduleDto: UpdateScheduleDto, @Res() response) {
-    return this.schedulesService.update(+id, updateScheduleDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateScheduleDto: UpdateScheduleDto,
+    @Res() response,
+  ) {
+    const data = {
+      status: true,
+      statusCode: HttpStatus.OK,
+      message: 'Success Update Schedule',
+      data: {}
+    };
+    const schedule = await this.schedulesService.update(+id, updateScheduleDto);
+    data.data = schedule;
+    responseJson(data, data.statusCode, response);
   }
 
+  /**
+   * Delete a schedule.
+   *
+   * @param id - ID of the schedule to delete.
+   * @param response - HTTP response object.
+   */
   @Delete(':id')
-  async remove(@Param('id') id: string, @Res() response) {
+  async remove(
+    @Param('id') id: string,
+    @Res() response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -58,8 +118,17 @@ export class SchedulesController {
     responseJson(data, data.statusCode, response);
   }
 
+  /**
+   * Restore a deleted schedule.
+   *
+   * @param id - ID of the schedule to restore.
+   * @param response - HTTP response object.
+   */
   @Patch(':id/restore')
-  async restore(@Param('id') id: number, @Res() response) {
+  async restore(
+    @Param('id') id: number,
+    @Res() response,
+  ) {
     const restoredSchedule = await this.schedulesService.restore(id);
     const data = {
       status: true,

@@ -8,6 +8,12 @@ import { responseJson } from '@app/response';
 export class TeachersController {
   constructor(private readonly teachersService: TeachersService) { }
 
+  /**
+   * Create a new teacher.
+   *
+   * @param createTeacherDto - Data to create a new teacher.
+   * @param response - HTTP response object.
+   */
   @Post()
   async create(@Body() createTeacherDto: CreateTeacherDto, @Res() response) {
     const data = {
@@ -21,6 +27,16 @@ export class TeachersController {
     responseJson(data, data.statusCode, response);
   }
 
+  /**
+   * Retrieve all teachers with optional filtering and pagination.
+   *
+   * @param page - Page number for pagination (default: 1).
+   * @param limit - Number of items per page (default: 10).
+   * @param nik - Filter by teacher's National Identification Number (NIK).
+   * @param full_name - Filter by teacher's full name.
+   * @param nick_name - Filter by teacher's nickname.
+   * @param response - HTTP response object.
+   */
   @Get()
   async findAll(
     @Query('page') page: number = 1,
@@ -47,6 +63,12 @@ export class TeachersController {
     responseJson(data, data.statusCode, response);
   }
 
+  /**
+   * Retrieve a single teacher by ID.
+   *
+   * @param id - ID of the teacher to retrieve.
+   * @param response - HTTP response object.
+   */
   @Get(':id')
   async findOne(@Param('id') id: string, @Res() response) {
     const data = {
@@ -60,6 +82,13 @@ export class TeachersController {
     responseJson(data, data.statusCode, response);
   }
 
+  /**
+  * Update an existing teacher.
+  *
+  * @param id - ID of the teacher to update.
+  * @param updateTeacherDto - Updated teacher data.
+  * @param response - HTTP response object.
+  */
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateTeacherDto: UpdateTeacherDto, @Res() response) {
     const data = {
@@ -73,6 +102,12 @@ export class TeachersController {
     responseJson(data, data.statusCode, response);
   }
 
+  /**
+   * Soft-delete a teacher.
+   *
+   * @param id - ID of the teacher to delete.
+   * @param response - HTTP response object.
+   */
   @Delete(':id')
   async remove(@Param('id') id: string, @Res() response) {
     const data = {
@@ -86,6 +121,12 @@ export class TeachersController {
     responseJson(data, data.statusCode, response);
   }
 
+  /**
+   * Restore a previously soft-deleted teacher.
+   *
+   * @param id - ID of the teacher to restore.
+   * @param response - HTTP response object.
+   */
   @Patch(':id/restore')
   async restore(@Param('id') id: number, @Res() response) {
     const restoredUser = await this.teachersService.restore(id);

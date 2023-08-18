@@ -14,6 +14,13 @@ export class TeachersService {
   ) { }
   private readonly logger = new Logger(TeachersService.name);
 
+  /**
+     * Create a new teacher.
+     *
+     * @param createTeacherDto - Data to create a new teacher.
+     * @returns The created teacher.
+     * @throws ConflictException if there's an error while creating the teacher.
+     */
   async create(createTeacherDto: CreateTeacherDto) {
     try {
       const teacher = await this.teachersRepository.create(createTeacherDto);
@@ -31,6 +38,14 @@ export class TeachersService {
     }
   }
 
+  /**
+   * Retrieve all teachers with pagination.
+   *
+   * @param page - Page number for pagination (default: 1).
+   * @param limit - Number of items per page (default: 10).
+   * @returns A paginated list of teachers.
+   * @throws ConflictException if there's an error while retrieving teachers.
+   */
   async findAll(page: number = 1, limit: number = 10): Promise<Pagination<any>> {
     try {
       const teachers = await this.teachersRepository
@@ -94,6 +109,17 @@ export class TeachersService {
     }
   }
 
+  /**
+   * Retrieve teachers based on query parameters.
+   *
+   * @param nik - Filter by teacher's National Identification Number (NIK).
+   * @param full_name - Filter by teacher's full name.
+   * @param nick_name - Filter by teacher's nickname.
+   * @param page - Page number for pagination (default: 1).
+   * @param limit - Number of items per page (default: 10).
+   * @returns An array of teachers that match the query criteria.
+   * @throws ConflictException if there's an error while retrieving teachers.
+   */
   async findLike(
     nik: number,
     full_name: string,
@@ -142,6 +168,14 @@ export class TeachersService {
     }
   }
 
+  /**
+   * Update an existing teacher.
+   *
+   * @param id - ID of the teacher to update.
+   * @param updateTeacherDto - Updated teacher data.
+   * @returns The updated teacher.
+   * @throws ConflictException if the teacher doesn't exist or there's an error during update.
+   */
   async update(id: number, updateTeacherDto: UpdateTeacherDto) {
     try {
       const teacher = await this.teachersRepository.findOneBy({ id });
@@ -169,6 +203,13 @@ export class TeachersService {
     }
   }
 
+  /**
+   * Soft-delete a teacher.
+   *
+   * @param id - ID of the teacher to delete.
+   * @returns The soft-deleted teacher.
+   * @throws ConflictException if the teacher doesn't exist or there's an error during deletion.
+   */
   async remove(id: number) {
     try {
       const teacher = await this.teachersRepository.findOneBy({ id });
@@ -197,6 +238,13 @@ export class TeachersService {
     }
   }
 
+  /**
+   * Restore a previously soft-deleted teacher.
+   *
+   * @param id - ID of the teacher to restore.
+   * @returns The restored teacher or null if not found.
+   * @throws ConflictException if there's an error during restoration.
+   */
   async restore(id: number): Promise<Teacher> {
     try {
       const userToRestore = await this.teachersRepository
