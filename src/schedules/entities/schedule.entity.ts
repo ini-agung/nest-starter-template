@@ -1,5 +1,5 @@
 import { Class } from "src/classrooms/entities/classroom.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'schedules' })
 export class Schedule {
@@ -22,4 +22,10 @@ export class Schedule {
     @JoinColumn({ name: 'class_id' })
     @Column()
     class_id: number;
+
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    createdAt: Date;
+
+    @DeleteDateColumn({ type: 'timestamp' })
+    deletedAt: Date | null;
 }

@@ -781,7 +781,7 @@ export class SeederService {
             {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 30, // Assuming the User ID for this student
-                nis: 17316091,
+                nis: 17316093,
                 full_name: 'EEEEEEEE',
                 nick_name: 'E',
                 date_birth: new Date('2006-11-25'),
@@ -797,7 +797,7 @@ export class SeederService {
             {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 31, // Assuming the User ID for this student
-                nis: 17316092,
+                nis: 17316094,
                 full_name: 'FFFFFFFF',
                 nick_name: 'F',
                 date_birth: new Date('2006-11-25'),
@@ -813,7 +813,7 @@ export class SeederService {
             {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 32, // Assuming the User ID for this student
-                nis: 17316093,
+                nis: 17316095,
                 full_name: 'GGGGGGGG',
                 nick_name: 'G',
                 date_birth: new Date('2006-11-25'),
@@ -829,7 +829,7 @@ export class SeederService {
             {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 33, // Assuming the User ID for this student
-                nis: 17316094,
+                nis: 17316096,
                 full_name: 'HHHHHHHHH',
                 nick_name: 'H',
                 date_birth: new Date('2006-11-25'),
@@ -845,7 +845,7 @@ export class SeederService {
             {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 34, // Assuming the User ID for this student
-                nis: 17316095,
+                nis: 17316097,
                 full_name: 'IIIIIIIIIII',
                 nick_name: 'I',
                 date_birth: new Date('2006-11-25'),
@@ -861,7 +861,7 @@ export class SeederService {
             {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 35, // Assuming the User ID for this student
-                nis: 17316096,
+                nis: 17316098,
                 full_name: 'JJJJJJJJJJ',
                 nick_name: 'J',
                 date_birth: new Date('2006-11-25'),
@@ -877,7 +877,7 @@ export class SeederService {
             {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 36, // Assuming the User ID for this student
-                nis: 17316097,
+                nis: 17316099,
                 full_name: 'JJJJJJJJJJ',
                 nick_name: 'J',
                 date_birth: new Date('2006-11-25'),
@@ -893,7 +893,7 @@ export class SeederService {
             {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 37, // Assuming the User ID for this student
-                nis: 17316098,
+                nis: 17316100,
                 full_name: 'KKKKKKKKK',
                 nick_name: 'K',
                 date_birth: new Date('2006-11-25'),
@@ -909,7 +909,7 @@ export class SeederService {
             {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 38, // Assuming the User ID for this student
-                nis: 17316099,
+                nis: 17316101,
                 full_name: 'LLLLLLLLLL',
                 nick_name: 'L',
                 date_birth: new Date('2006-11-25'),
@@ -925,7 +925,7 @@ export class SeederService {
             {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 39, // Assuming the User ID for this student
-                nis: 17316100,
+                nis: 17316102,
                 full_name: 'MMMMMMMM',
                 nick_name: 'M',
                 date_birth: new Date('2006-11-25'),
@@ -941,7 +941,7 @@ export class SeederService {
             {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 40, // Assuming the User ID for this student
-                nis: 17316101,
+                nis: 17316103,
                 full_name: 'NNNNNNNNNN',
                 nick_name: 'N',
                 date_birth: new Date('2006-11-25'),
@@ -957,7 +957,7 @@ export class SeederService {
             {
                 parent_id: 5, // Assuming the Parent ID for this student
                 user_id: 41, // Assuming the User ID for this student
-                nis: 17316102,
+                nis: 17316104,
                 full_name: 'OOOOOOOOOOO',
                 nick_name: 'O',
                 date_birth: new Date('2006-11-25'),

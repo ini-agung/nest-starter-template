@@ -41,12 +41,33 @@ export class SchedulesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateScheduleDto: UpdateScheduleDto) {
+  async update(@Param('id') id: string, @Body() updateScheduleDto: UpdateScheduleDto, @Res() response) {
     return this.schedulesService.update(+id, updateScheduleDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.schedulesService.remove(+id);
+  async remove(@Param('id') id: string, @Res() response) {
+    const data = {
+      status: true,
+      statusCode: HttpStatus.OK,
+      message: 'Success Delete Schedule',
+      data: {}
+    };
+    const schedule = await this.schedulesService.remove(+id);
+    data.data = schedule;
+    responseJson(data, data.statusCode, response);
+  }
+
+  @Patch(':id/restore')
+  async restore(@Param('id') id: number, @Res() response) {
+    const restoredSchedule = await this.schedulesService.restore(id);
+    const data = {
+      status: true,
+      statusCode: HttpStatus.NO_CONTENT,
+      message: 'Success Restore Schedule',
+      data: {}
+    };
+    data.data = restoredSchedule;
+    responseJson(data, data.statusCode, response);
   }
 }

@@ -82,9 +82,9 @@ export class SchedulesService {
       .addSelect('class.max_students', 'max_students')
       .addSelect('class.teacher_id', 'teacher_id')
       .leftJoin('schedules.class_id', 'class')
-
+      .where('schedules.deletedAt IS NULL')
     if (day) {
-      queryBuilder.where('schedules.day_of_week = :day', { day });
+      queryBuilder.andWhere('schedules.day_of_week = :day', { day });
     }
     if (time_start) {
       queryBuilder.andWhere('schedules.time_start = :time_start', { time_start });
@@ -116,6 +116,53 @@ export class SchedulesService {
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} schedule`;
+    try {
+      const schedule = await this.schedulesRepository.findOneBy({ id });
+      if (!schedule) {
+        const data = {
+          status: false,
+          statusCode: HttpStatus.CONFLICT,
+          message: `schedule with id ${id} is doesnt exists`,
+          data: {}
+        };
+        throw new ConflictException(data, { cause: new Error() });
+      }
+      schedule.deletedAt = new Date();
+      return this.schedulesRepository.save(schedule);
+    } catch (error) {
+      this.logger.error(`Error find parent :   ${error.message}`);
+      const data = {
+        status: false,
+        statusCode: HttpStatus.CONFLICT,
+        message: error.sqlMessage,
+        data: {}
+      };
+      data.data = error.message;
+      throw new ConflictException(data, { cause: new Error() });
+    }
+  }
+  async restore(id: number): Promise<Schedule> {
+    try {
+      const scheduleToRestore = await this.schedulesRepository
+        .createQueryBuilder('schedule')
+        .withDeleted() // Include soft-deleted entities
+        .where('schedule.id = :id', { id })
+        .getOne();
+      if (scheduleToRestore) {
+        scheduleToRestore.deletedAt = null; // Set deletedAt back to null
+        return await this.schedulesRepository.save(scheduleToRestore);
+      }
+      return null; // User not found
+    } catch (error) {
+      this.logger.error(`Error find teacher :   ${error.message}`);
+      const data = {
+        status: false,
+        statusCode: HttpStatus.CONFLICT,
+        message: error.sqlMessage,
+        data: {}
+      };
+      data.data = error.message;
+      throw new ConflictException(data, { cause: new Error() });
+    }
   }
 }

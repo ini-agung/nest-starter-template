@@ -127,7 +127,7 @@ export class StudentsService {
       .where('student.deletedAt IS NULL')
 
     if (nis) {
-      queryBuilder.where('student.nis = :nis', { nis });
+      queryBuilder.andWhere('student.nis = :nis', { nis });
     }
     if (name || nick_name) {
       queryBuilder.andWhere('(student.full_name LIKE :name OR student.nick_name LIKE :nick_name)', { name: `%${name}%`, nick_name: `%${nick_name}%` });
@@ -250,7 +250,6 @@ export class StudentsService {
       }
       parent.deletedAt = new Date();
       return this.studentRepository.save(parent);
-      return await this.studentRepository.delete(id);
     } catch (error) {
       this.logger.error(`Error find parent :   ${error.message}`);
       const data = {
