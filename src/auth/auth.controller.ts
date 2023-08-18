@@ -12,6 +12,11 @@ export class AuthController {
     constructor(private readonly authService: AuthService,
         private readonly userService: UsersService,
         private readonly jwtLibService: JwtLibsService) { }
+    /**
+     * Handles user sign-in.
+     * @param signinDto - The DTO containing user's identity and password.
+     * @param response - The HTTP response object.
+     */
     @Public()
     @Post('signin')
     async signin(@Body(new ValidationPipe()) signinDto: SigninDto, @Res() response) {
@@ -54,6 +59,11 @@ export class AuthController {
         }
     }
 
+    /**
+    * Handles user sign-up.
+    * @param signUpDto - The DTO containing user's registration information.
+    * @param response - The HTTP response object.
+    */
     @Public()
     @Post('signup')
     async signup(@Body(new ValidationPipe) signUpDto: SignupDto, @Res() response) {
