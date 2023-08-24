@@ -1,6 +1,8 @@
 import { Length } from '@nestjs/class-validator';
 import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, OneToOne, JoinColumn, Relation, ManyToOne, Index } from 'typeorm';
 import { Role } from './role.entity';
+import { Student } from 'src/students/entities/student.entity';
+import { Parent } from 'src/parents/entities/parent.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -20,6 +22,14 @@ export class User {
 
   @Column({ unique: true })
   email: string;
+
+  @OneToOne(() => Student, student => student.user, { eager: true, nullable: true })
+  @JoinColumn()
+  student: Student;
+
+  @OneToOne(() => Parent, parent => parent.user, { eager: true, nullable: true })
+  @JoinColumn()
+  parent: Parent;
 
   @Column({ type: 'varchar', length: 255 })
   password: string;

@@ -1,6 +1,7 @@
-import { OneToMany, Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, JoinColumn, ManyToOne } from 'typeorm';
+import { OneToMany, Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { Student } from '../../students/entities/student.entity';
 import { Religion } from '../../users/entities/religion.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity({ name: 'parents' })
 export class Parent {
@@ -11,7 +12,11 @@ export class Parent {
     @JoinColumn({ name: 'student_id' })
     student: Student[]
 
-    @Column({ type: 'bigint', unique: true })
+    @OneToOne(() => User, (user) => user.id)
+    @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+    user!: User;
+
+    @Column()
     user_id: number;
 
     @Column({ type: 'varchar', length: 100 })

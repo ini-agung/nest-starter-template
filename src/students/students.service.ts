@@ -338,7 +338,7 @@ export class StudentsService {
 
       if (studentToRestore) {
         studentToRestore.deletedAt = null; // Set deletedAt back to null
-        return this.studentRepository.save(studentToRestore);
+        return await this.studentRepository.save(studentToRestore);
       }
       return null; // User not found
     } catch (error) {

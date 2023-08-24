@@ -7,6 +7,7 @@ import { UsersService } from 'src/users/users.service';
 import { JwtLibsService, comparePasswords } from '@app/jwt-libs';
 import { JwtLibsGuard } from '@app/jwt-libs/jwt-libs.guard';
 import { Public } from '@app/jwt-libs/public.decorator';
+import { type } from 'os';
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService,
@@ -20,42 +21,41 @@ export class AuthController {
     @Public()
     @Post('signin')
     async signin(@Body(new ValidationPipe()) signinDto: SigninDto, @Res() response) {
-        const user = await this.userService.findOne(signinDto.identity);
-        if (user.length > 0) {
-            const compare = await comparePasswords(signinDto.password, user[0].password)
+        const user = await this.userService.findLike(signinDto.identity);
+        if (user) {
+            const compare = await comparePasswords(signinDto.password, user.password);
             if (compare) {
-                const payload = { id: user[0].id, username: user[0].username, email: user[0].email, createdAt: user[0].createdAt, role: user[0].role, current_datetime: user[0].current_datetime };
-                const payload_refresh = { id: user[0].id, username: user[0].username, email: user[0].email, createdAt: user[0].createdAt, role: user[0].role, current_datetime: user[0].current_datetime, refreshToken: true };
-                const token = await this.jwtLibService.generateToken(payload);
-                const refresh_token = await this.jwtLibService.generateRefresh(payload_refresh);
-                const decode = await this.jwtLibService.decodeJwt(token.access_token);
+                const payload = {
+                    id: user.id,
+                    username: user.username,
+                    email: user.email,
+                    createdAt: user.createdAt,
+                    role: user.role,
+                    current_datetime: user.current_datetime,
+                    detail: user.detail,
+                };
+                const access_token = await this.jwtLibService.generateToken(payload);
+                const refresh_token = await this.jwtLibService.generateRefresh({ user, refreshToken: true });
+                const decode = await this.jwtLibService.decodeJwt(access_token.access_token);
                 const data = {
                     status: true,
                     statusCode: HttpStatus.OK,
                     message: 'Success Login',
                     data: {}
                 };
-                delete user[0].password;
+                delete user.password;
                 data.data = Object.assign(data.data,
-                    { access_token: token.access_token, refresh_token: refresh_token, expIn: decode.exp });
+                    { access_token: access_token.access_token, refresh_token: refresh_token, expIn: decode.exp });
                 responseJson(data, data.statusCode, response);
             } else {
                 const data = {
                     status: true,
-                    statusCode: 200,
+                    statusCode: HttpStatus.BAD_REQUEST,
                     message: 'Wrong Password',
                     data: {}
                 };
                 responseJson(data, data.statusCode, response);
             }
-        } else {
-            const data = {
-                status: false,
-                statusCode: 200,
-                message: 'users not found',
-                data: {}
-            };
-            responseJson(data, data.statusCode, response);
         }
     }
 
@@ -67,24 +67,14 @@ export class AuthController {
     @Public()
     @Post('signup')
     async signup(@Body(new ValidationPipe) signUpDto: SignupDto, @Res() response) {
-        const signUpNewUser = await this.userService.create(signUpDto);
-        if (signUpNewUser.affectedRows > 0) {
-            const data = {
-                status: true,
-                statusCode: HttpStatus.ACCEPTED,
-                message: 'Success create new user',
-                data: {}
-            };
-            responseJson(data, data.statusCode, response);
-        } else {
-            const data = {
-                status: true,
-                statusCode: HttpStatus.BAD_REQUEST,
-                message: 'Failed to created user',
-                data: {}
-            };
-            responseJson(data, data.statusCode, response);
-        }
+        const user = await this.userService.create(signUpDto);
+        const data = {
+            status: true,
+            statusCode: HttpStatus.ACCEPTED,
+            message: 'Success Create New User',
+            data: {}
+        };
+        data.data = user;
+        responseJson(data, data.statusCode, response);
     }
-
 }

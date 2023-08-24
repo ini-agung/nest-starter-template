@@ -43,7 +43,7 @@ export class UsersController {
       message: 'Success Get Users',
       data: {}
     };
-    const users = await this.usersService.findOne(identity);
+    const users = await this.usersService.findLike(identity);
     data.data = users;
     responseJson(data, data.statusCode, response);
   }
@@ -52,8 +52,8 @@ export class UsersController {
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Res() response) {
     const data = {
       status: true,
-      statusCode: HttpStatus.OK,
-      message: 'Success Update Users',
+      statusCode: HttpStatus.ACCEPTED,
+      message: 'Success Create New Student',
       data: {}
     };
     const users = await this.usersService.update(+id, updateUserDto);
