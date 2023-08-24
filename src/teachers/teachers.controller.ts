@@ -56,7 +56,7 @@ export class TeachersController {
     page = (page < 1) ? this._page : page;
     limit = (limit > this._limit) ? this._limit : limit;
     console.log(this._limit)
-    let teachers;
+    let teachers: object;
     if (nik || name) {
       teachers = await this.teachersService.findLike(nik, name);
     } else {
