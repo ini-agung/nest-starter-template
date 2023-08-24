@@ -48,11 +48,9 @@ export class UsersController {
       data: {}
     };
     page = (page < 1) ? this._page : page;
-    limit = (limit > this._page) ? this._limit : limit;
+    limit = (limit > this._limit) ? this._limit : limit;
     let users: object;
-    if (username || email) {
-      users = await this.usersService.findAll(page, limit, username, email);
-    }
+    users = await this.usersService.findAll(page, limit, username, email);
     data.data = users;
     responseJson(data, data.statusCode, response);
   }

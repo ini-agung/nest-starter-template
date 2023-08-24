@@ -41,7 +41,7 @@ export class ClassroomsController {
       data: {}
     };
     page = (page < 1) ? this._page : page;
-    limit = (limit > this._page) ? this._limit : limit;
+    limit = (limit > this._limit) ? this._limit : limit;
     let classrooms: object;
     if (id || classroom) {
       classrooms = await this.classroomsService.findLike(id, classroom, page, limit);

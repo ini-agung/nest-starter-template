@@ -54,7 +54,7 @@ export class EnrolmentController {
       data: {}
     };
     page = (page < 1) ? this._page : page;
-    limit = (limit > this._page) ? this._limit : limit;
+    limit = (limit > this._limit) ? this._limit : limit;
     let enrolements: object;
     if (enrol_code || schedule) {
       enrolements = await this.enrolmentService.findLike(enrol_code, schedule, page, limit);

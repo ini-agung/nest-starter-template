@@ -41,11 +41,12 @@ export class TeachersController {
    */
   @Get()
   async findAll(
-    @Query('page') page: number = this._page,
-    @Query('limit') limit: number = this._limit,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
     @Query('nik') nik: number,
     @Query('name') name: string,
     @Res() response) {
+    console.log(limit)
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -53,7 +54,8 @@ export class TeachersController {
       data: {}
     };
     page = (page < 1) ? this._page : page;
-    limit = (limit > this._page) ? this._limit : limit;
+    limit = (limit > this._limit) ? this._limit : limit;
+    console.log(this._limit)
     let teachers;
     if (nik || name) {
       teachers = await this.teachersService.findLike(nik, name);

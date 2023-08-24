@@ -149,7 +149,7 @@ export class TeachersService {
       if (name) {
         teachers.andWhere('((teacher.full_name LIKE :name) OR (teacher.nick_name LIKE :name))', { name })
       }
-      this.logger.log(teachers);
+      // this.logger.log(teachers);
       const schedulesCounts = await teachers.getMany();
       return schedulesCounts;
     } catch (error) {

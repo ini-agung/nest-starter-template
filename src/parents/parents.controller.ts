@@ -33,7 +33,7 @@ export class ParentsController {
       data: {}
     };
     page = (page < 1) ? this._page : page;
-    limit = (limit > this._page) ? this._limit : limit;
+    limit = (limit > this._limit) ? this._limit : limit;
     const parents = await this.parentsService.findAll(page, limit);
     data.data = parents;
     responseJson(data, data.statusCode, response);

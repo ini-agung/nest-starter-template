@@ -57,7 +57,7 @@ export class StudentsController {
       data: {}
     };
     page = (page < 1) ? this._page : page;
-    limit = (limit > this._page) ? this._limit : limit;
+    limit = (limit > this._limit) ? this._limit : limit;
     let students: object;
     if (nis || name || nick_name) {
       students = await this.studentsService.findLike(nis, name, nick_name, page, limit);
