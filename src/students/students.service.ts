@@ -1,4 +1,4 @@
-import { Injectable, HttpStatus, ConflictException, Logger } from '@nestjs/common';
+import { Injectable, HttpStatus, ConflictException, Logger, BadRequestException } from '@nestjs/common';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { Repository } from 'typeorm';
@@ -13,6 +13,7 @@ export class StudentsService {
     private studentRepository: Repository<Student>,) { }
   private readonly logger = new Logger(StudentsService.name);
 
+  private page = process.env.PAGINATION_LIMIT;
   /**
    * Create a new student.
    *
@@ -48,6 +49,7 @@ export class StudentsService {
     limit: number = 10
   ): Promise<Pagination<any>> {
     try {
+      console.log(this.page)
       const students = await this.studentRepository
         .createQueryBuilder('student')
         .select([
@@ -63,7 +65,6 @@ export class StudentsService {
         .leftJoinAndSelect('parent.rm', 'religion as c') // Join parent_religion for mother
         .where('student.deletedAt IS NULL')
         .getMany();
-      this.logger.log(students);
       const flattenedStudents = students.map(student => ({
         student_id: student?.id,
         user_id: student?.user?.id,
@@ -137,40 +138,53 @@ export class StudentsService {
     limit: number = 10
   ): Promise<Pagination<any>> {
     this.logger.log([nis, name, nick_name]);
-    const queryBuilder = await this.studentRepository
-      .createQueryBuilder('student')
-      .select([
-        'student.id', 'student.parent_id', 'student.nis', 'student.full_name', 'student.img',
-        'student.nick_name', 'student.date_birth', 'student.place_birth', 'student.phone',
-        'student.siblings', 'student.child_order', 'student.entry_year', 'student.address',
-      ]) // Specify the columns you want
-      .leftJoinAndSelect('student.user', 'user')
-      .leftJoinAndSelect('student.parent', 'parent')
-      .leftJoinAndSelect('student.gender', 'gender')
-      .leftJoinAndSelect('student.religion', 'religion as a')
-      .leftJoinAndSelect('parent.rf', 'religion as b') // Join parent_religion for father
-      .leftJoinAndSelect('parent.rm', 'religion as c') // Join parent_religion for mother
-      .where('student.deletedAt IS NULL')
+    try {
 
-    if (nis) {
-      queryBuilder.andWhere('student.nis = :nis', { nis });
+      const queryBuilder = await this.studentRepository
+        .createQueryBuilder('student')
+        .select([
+          'student.id', 'student.parent_id', 'student.nis', 'student.full_name', 'student.img',
+          'student.nick_name', 'student.date_birth', 'student.place_birth', 'student.phone',
+          'student.siblings', 'student.child_order', 'student.entry_year', 'student.address',
+        ]) // Specify the columns you want
+        .leftJoinAndSelect('student.user', 'user')
+        .leftJoinAndSelect('student.parent', 'parent')
+        .leftJoinAndSelect('student.gender', 'gender')
+        .leftJoinAndSelect('student.religion', 'religion as a')
+        .leftJoinAndSelect('parent.rf', 'religion as b') // Join parent_religion for father
+        .leftJoinAndSelect('parent.rm', 'religion as c') // Join parent_religion for mother
+        .where('student.deletedAt IS NULL')
+
+      if (nis) {
+        queryBuilder.andWhere('student.nis LIKE :nis', { nis: `%${nis}%` });
+      }
+      if (name || nick_name) {
+        queryBuilder.andWhere('(student.full_name LIKE :name OR student.nick_name LIKE :nick_name)', { name: `%${name}%`, nick_name: `%${nick_name}%` });
+      }
+      const studentsCounts = await queryBuilder.getRawMany();
+      const total = studentsCounts.length;
+      const startIdx = (page - 1) * limit;
+      const endIdx = startIdx + limit;
+      const data = studentsCounts.slice(startIdx, endIdx);
+      return {
+        data,
+        total,
+        currentPage: page,
+        perPage: limit,
+        prevPage: page > 1 ? `/students?page=${(parseInt(page.toString()) - 1)}` : undefined,
+        nextPage: endIdx < total ? `/students?page=${(parseInt(page.toString()) + 1)}` : undefined,
+      };
+    } catch (error) {
+      this.logger.error(`Error find student :  ${error.message}`);
+      const data = {
+        status: false,
+        statusCode: HttpStatus.CONFLICT,
+        message: error.sqlMessage,
+        data: {}
+      };
+      data.data = error.message;
+      throw new ConflictException(data, { cause: new Error() });
     }
-    if (name || nick_name) {
-      queryBuilder.andWhere('(student.full_name LIKE :name OR student.nick_name LIKE :nick_name)', { name: `%${name}%`, nick_name: `%${nick_name}%` });
-    }
-    const studentsCounts = await queryBuilder.getRawMany();
-    const total = studentsCounts.length;
-    const startIdx = (page - 1) * limit;
-    const endIdx = startIdx + limit;
-    const data = studentsCounts.slice(startIdx, endIdx);
-    return {
-      data,
-      total,
-      currentPage: page,
-      perPage: limit,
-      prevPage: page > 1 ? `/students?page=${(parseInt(page.toString()) - 1)}` : undefined,
-      nextPage: endIdx < total ? `/students?page=${(parseInt(page.toString()) + 1)}` : undefined,
-    };
   }
 
   /**
@@ -254,11 +268,11 @@ export class StudentsService {
       if (!student) {
         const data = {
           status: false,
-          statusCode: HttpStatus.CONFLICT,
+          statusCode: HttpStatus.BAD_REQUEST,
           message: `student with id ${id} is doesnt exists`,
           data: {}
         };
-        throw new ConflictException(data, { cause: new Error() });
+        throw new BadRequestException(data, { cause: new Error() });
       }
       Object.assign(student, updateStudentDto);
       return this.studentRepository.save(student);
@@ -287,11 +301,11 @@ export class StudentsService {
       if (!student) {
         const data = {
           status: false,
-          statusCode: HttpStatus.CONFLICT,
+          statusCode: HttpStatus.BAD_REQUEST,
           message: `student with id ${id} is doesnt exists`,
           data: {}
         };
-        throw new ConflictException(data, { cause: new Error() });
+        throw new BadRequestException(data, { cause: new Error() });
       }
       student.deletedAt = new Date();
       return this.studentRepository.save(student);
@@ -299,7 +313,7 @@ export class StudentsService {
       this.logger.error(`Error find student :   ${error.message}`);
       const data = {
         status: false,
-        statusCode: HttpStatus.CONFLICT,
+        statusCode: HttpStatus.BAD_REQUEST,
         message: error.sqlMessage,
         data: {}
       };

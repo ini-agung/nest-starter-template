@@ -18,64 +18,46 @@ export class SeederService {
     constructor(private readonly connection: Connection) { }
 
     async seed() {
-        const genders = [
-            { gender: 'Laki-laki' },
-            { gender: 'Perempuan' },
-            { gender: 'Lainnya' },
-        ];
+        console.log("=== START ===");
         console.log("=== GENDER ===");
+        const genders = ['Laki-laki', 'Perempuan', 'Lainnya'];
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Gender table
             for (const data of genders) {
-                const existingGender = await manager.findOne(Gender, { where: { gender: data.gender } });
+                console.log(data)
+                const existingGender = await manager.findOne(Gender, { where: { gender: data } });
                 if (!existingGender) {
                     const gender = new Gender();
-                    gender.gender = data.gender;
+                    gender.gender = data;
                     await manager.save(gender);
                 } else {
-                    console.log(`Gender with value ${data.gender} already exists. Skipping...`);
+                    console.log(`Gender with value ${data} already exists. Skipping...`);
                 }
             }
         });
 
-        const classrooms = [
-            { clasroom: 'Ruang 101 A' },
-            { clasroom: 'Ruang 102 A' },
-            { clasroom: 'Ruang 103 A' },
-            { clasroom: 'Ruang 104 A' },
-            { clasroom: 'Ruang 105 A' },
-            { clasroom: 'Ruang 201 A' },
-            { clasroom: 'Ruang 202 A' },
-            { clasroom: 'Ruang 203 A' },
-            { clasroom: 'Ruang 204 A' },
-            { clasroom: 'Ruang 205 A' },
-            { clasroom: 'Ruang 101 B' },
-            { clasroom: 'Ruang 102 B' },
-            { clasroom: 'Ruang 103 B' },
-            { clasroom: 'Ruang 104 B' },
-            { clasroom: 'Ruang 105 B' },
-            { clasroom: 'Ruang 201 B' },
-            { clasroom: 'Ruang 202 B' },
-            { clasroom: 'Ruang 203 B' },
-            { clasroom: 'Ruang 204 B' },
-            { clasroom: 'Ruang 205 B' },
-        ];
-
         console.log("=== CLASSROOM ===");
+        const classrooms = [
+            'Ruang 101 A', 'Ruang 102 A', 'Ruang 103 A', 'Ruang 104 A', 'Ruang 105 A',
+            'Ruang 201 A', 'Ruang 202 A', 'Ruang 203 A', 'Ruang 204 A',
+            'Ruang 205 A', 'Ruang 101 B', 'Ruang 102 B', 'Ruang 103 B',
+            'Ruang 104 B', 'Ruang 105 B', 'Ruang 201 B', 'Ruang 202 B',
+            'Ruang 203 B', 'Ruang 204 B', 'Ruang 205 B',];
         await this.connection.transaction(async (manager) => {
             //Check duplicates for Classroom table
             for (const data of classrooms) {
-                const existingClassrom = await manager.findOne(Classroom, { where: { classroom: data.clasroom } });
+                const existingClassrom = await manager.findOne(Classroom, { where: { classroom: data } });
                 if (!existingClassrom) {
                     const classroom = new Classroom();
-                    classroom.classroom = data.clasroom;
+                    classroom.classroom = data;
                     await manager.save(classroom)
                 } else {
-                    console.log(`Classrooms with value ${data.clasroom} already exists. Skipping...`);
+                    console.log(`Classrooms with value ${data} already exists. Skipping...`);
                 }
             }
         });
 
+        console.log("=== SUBJECTS ===");
         const subjects = [
             { subject: "Matematika", description: "Pelajaran tentang angka, hitungan, dan perhitungan dalam berbagai bentuk." },
             { subject: "Bahasa Indonesia", description: "Pelajaran tentang bahasa Indonesia, tata bahasa, dan sastra Indonesia." },
@@ -98,8 +80,6 @@ export class SeederService {
             { subject: "Antropologi", description: "Pelajaran tentang manusia, budaya, dan kehidupan sosial." },
             { subject: "Arkeologi", description: "Pelajaran tentang peninggalan budaya dan artefak dari masa lalu." }
         ];
-
-        console.log("=== SUBJECTS ===");
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Religion table
             for (const data of subjects) {
@@ -115,78 +95,68 @@ export class SeederService {
             }
         });
 
-        const religions = [
-            { religion: 'Budha' },
-            { religion: 'Hindu' },
-            { religion: 'Islam' },
-            { religion: 'Konghucu' },
-            { religion: 'Kristen Katolik' },
-            { religion: 'Kristen Protestan' },
-        ];
-
         console.log("=== RELIGIONS ===");
+        const religions = ['Budha', 'Hindu', 'Islam',
+            'Konghucu', 'Kristen Katolik',
+            'Kristen Protestan',
+        ];
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Religion table
             for (const data of religions) {
-                const existingReligion = await manager.findOne(Religion, { where: { religion: data.religion } });
+                const existingReligion = await manager.findOne(Religion, { where: { religion: data } });
                 if (!existingReligion) {
                     const religion = new Religion();
-                    religion.religion = data.religion;
+                    religion.religion = data;
                     await manager.save(religion);
                 } else {
-                    console.log(`Religion with value ${data.religion} already exists. Skipping...`);
+                    console.log(`Religion with value ${data} already exists. Skipping...`);
                 }
             }
         });
 
-        const degrees = [
-            { degree: 'Doktor' },
-            { degree: 'Magister' },
-            { degree: 'Sarjana' },
-            { degree: 'Sarjana Terapan' },
-            { degree: 'Ahli Madya' },
-            { degree: 'Ahli Pratama' },
-            { degree: 'Ahli Muda' },
-        ];
-
         console.log("=== DEGREES ===");
+        const degrees = [
+            'Doktor', 'Magister',
+            'Sarjana', 'Sarjana Terapan',
+            'Ahli Madya', 'Ahli Pratama', 'Ahli Muda',
+        ];
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Degree table
             for (const data of degrees) {
-                const existingDegree = await manager.findOne(Degree, { where: { degree: data.degree } });
+                const existingDegree = await manager.findOne(Degree, { where: { degree: data } });
                 if (!existingDegree) {
                     const degree = new Degree();
-                    degree.degree = data.degree;
+                    degree.degree = data;
                     await manager.save(degree);
                 } else {
-                    console.log(`Degree with value ${data.degree} already exists. Skipping...`);
+                    console.log(`Degree with value ${data} already exists. Skipping...`);
                 }
             }
         });
 
-        const roles = [
-            { role: 'Siswa' },
-            { role: 'Guru' },
-            { role: 'Staff' },
-            { role: 'Orang Tua' },
-            { role: 'Kepala Sekolah' },
-        ];
-
         console.log("=== ROLES ===");
+        const roles = [
+            'Siswa',
+            'Guru',
+            'Staff',
+            'Orang Tua',
+            'Kepala Sekolah',
+        ];
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Roles table
             for (const data of roles) {
-                const existingRole = await manager.findOne(Role, { where: { role: data.role } });
+                const existingRole = await manager.findOne(Role, { where: { role: data } });
                 if (!existingRole) {
                     const role = new Role();
-                    role.role = data.role;
+                    role.role = data;
                     await manager.save(role);
                 } else {
-                    console.log(`Role with value ${data.role} already exists. Skipping...`);
+                    console.log(`Role with value ${data} already exists. Skipping...`);
                 }
             }
         });
 
+        console.log("=== USERS ===");
         const users = [
             { role_id: 1, username: 'agung', email: 'agung@gmail.com' },
             { role_id: 2, username: 'pangestu', email: 'pangestu@gmail.com' },
@@ -243,8 +213,6 @@ export class SeederService {
             { role_id: 2, username: 'ferdi', email: 'ferdi@gmail.com' },
             { role_id: 2, username: 'sambo', email: 'sambo@gmail.com' },
         ];
-
-        console.log("=== USERS ===");
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Users table
             for (const data of users) {
@@ -265,6 +233,7 @@ export class SeederService {
             }
         });
 
+        console.log("=== PARENTS ===");
         const parents = [
             {
                 user_id: 4,
@@ -328,7 +297,6 @@ export class SeederService {
             },
 
         ];
-        console.log("=== PARENTS ===");
         await this.connection.transaction(async (manager) => {
             // // Check duplicates for Parents table
             for (const data of parents) {
@@ -352,6 +320,7 @@ export class SeederService {
             }
         });
 
+        console.log("=== Teachers ===");
         const teachers = [
             {
                 nik: 10001,
@@ -606,8 +575,6 @@ export class SeederService {
                 address: '456 Elm Street, City B',
             },
         ]
-
-        console.log("=== Teachers ===");
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Religion table
             for (const data of teachers) {
@@ -633,6 +600,7 @@ export class SeederService {
             }
         });
 
+        console.log("=== Student ===");
         const students = [
             {
                 parent_id: 1, // Assuming the Parent ID for this student
@@ -971,8 +939,6 @@ export class SeederService {
                 address: '456 Elm Street, City B',
             },
         ];
-        console.log("=== Student ===");
-
         await this.connection.transaction(async (manager) => {
             for (const data of students) {
                 const existingStudent = await manager.findOne(Student, { where: { nis: data.nis } });
@@ -999,6 +965,7 @@ export class SeederService {
             }
         })
 
+        console.log("=== CLASS ===");
         const classes = [
             { class: "X IPA 1", classroom_id: 1, teacher_id: 1, subject_id: 1, max_student: 20 },
             { class: "X IPA 1", classroom_id: 1, teacher_id: 2, subject_id: 2, max_student: 20 },
@@ -1316,8 +1283,6 @@ export class SeederService {
             { class: "XII IPS 2", classroom_id: 16, teacher_id: 4, subject_id: 19, max_student: 20 },
             { class: "XII IPS 2", classroom_id: 16, teacher_id: 5, subject_id: 20, max_student: 20 },
         ];
-
-        console.log("=== CLASS ===");
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Religion table
             for (const data of classes) {
@@ -1335,6 +1300,8 @@ export class SeederService {
                 }
             }
         })
+
+        console.log("=== SCHEDULE ===");
         const schedules = [
             // Monday
             { schedule_code: 'A001', day_of_week: 'Monday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 1, },
@@ -1458,7 +1425,6 @@ export class SeederService {
             { schedule_code: 'E017', day_of_week: 'Saturday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 89, },
             { schedule_code: 'E018', day_of_week: 'Saturday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 90, },
         ];
-        console.log("=== SCHEDULE ===");
         await this.connection.transaction(async (manager) => {
             // Check duplicates for SCHEDULE table
             for (const data of schedules) {
@@ -1477,31 +1443,27 @@ export class SeederService {
             };
         });
 
-        const enrolments = [
-            { enrol_code: "1-1", student_id: 1, schedule_id: 1, enrolment_date: new Date('2023-08-01 10:00:00'), enrolment_status: true },
-            { enrol_code: "2-1", student_id: 2, schedule_id: 1, enrolment_date: new Date('2023-08-01 10:00:00'), enrolment_status: true },
-            { enrol_code: "1-2", student_id: 1, schedule_id: 2, enrolment_date: new Date('2023-08-01 10:00:00'), enrolment_status: true },
-            { enrol_code: "2-2", student_id: 2, schedule_id: 2, enrolment_date: new Date('2023-08-01 10:00:00'), enrolment_status: true },
-        ];
         console.log("=== Enrolment ===");
-        await this.connection.transaction(async (manager) => {
-            // Check duplicates for Users table
-            for (const data of enrolments) {
-                const existingEnrolment = await manager.findOne(Enrolment, { where: { enrol_code: data.enrol_code } });
-                if (!existingEnrolment) {
-                    const schedule = new Enrolment();
-                    schedule.enrol_code = data.enrol_code;
-                    schedule.student_id = data.student_id;
-                    schedule.schedule_id = data.schedule_id;
-                    schedule.enrolment_date = data.enrolment_date;
-                    schedule.enrolment_status = data.enrolment_status;
-                    await manager.save(schedule);
-                } else {
-                    console.log(`Enrolment with value ${data.enrol_code} already exists. Skipping...`);
-                }
-            };
-        });
-
+        for (let i = 1; i <= 21; i++) {
+            for (let j = 1; j <= 90; j++) {
+                const a = i + "-" + j;
+                const enrolments = { enrol_code: a, student_id: i, schedule_id: j, enrolment_date: new Date('2023-08-01 10:00:00'), enrolment_status: true };
+                await this.connection.transaction(async (manager) => {
+                    const existingEnrolment = await manager.findOne(Enrolment, { where: { enrol_code: enrolments.enrol_code } });
+                    if (!existingEnrolment) {
+                        const schedule = new Enrolment();
+                        schedule.enrol_code = enrolments.enrol_code;
+                        schedule.student_id = enrolments.student_id;
+                        schedule.schedule_id = enrolments.schedule_id;
+                        schedule.enrolment_date = enrolments.enrolment_date;
+                        schedule.enrolment_status = enrolments.enrolment_status;
+                        await manager.save(schedule);
+                    } else {
+                        console.log(`Enrolment with value ${enrolments.enrol_code} already exists. Skipping...`);
+                    }
+                });
+            }
+        }
 
         console.log("=== Finish ===");
     }
