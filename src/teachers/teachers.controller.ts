@@ -42,8 +42,7 @@ export class TeachersController {
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
     @Query('nik') nik: number,
-    @Query('full_name') full_name: string,
-    @Query('nick_name') nick_name: string,
+    @Query('name') name: string,
     @Res() response) {
     const data = {
       status: true,
@@ -54,8 +53,8 @@ export class TeachersController {
     page = (page < 1) ? 1 : page;
     limit = (limit > 10) ? 10 : limit;
     let teachers;
-    if (nik || full_name || nick_name) {
-      teachers = await this.teachersService.findLike(nik, full_name, nick_name);
+    if (nik || name) {
+      teachers = await this.teachersService.findLike(nik, name);
     } else {
       teachers = await this.teachersService.findAll(page, limit);
     }

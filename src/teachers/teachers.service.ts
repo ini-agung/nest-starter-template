@@ -122,8 +122,7 @@ export class TeachersService {
    */
   async findLike(
     nik: number,
-    full_name: string,
-    nick_name: string,
+    name: string,
     page: number = 1,
     limit: number = 10): Promise<any[]> {
     try {
@@ -143,17 +142,15 @@ export class TeachersService {
         .leftJoinAndSelect('teacher.user', 'users')
         .leftJoinAndSelect('teacher.religion', 'religions')
         .leftJoinAndSelect('teacher.gender', 'genders')
+        .where('teacher.deletedAt IS NULL')
       if (nik) {
-        teachers.where('(teacher.nik LIKE :nik)', { nik: `%${nik}%` })
+        teachers.andWhere('(teacher.nik LIKE :nik)', { nik: `%${nik}%` })
       }
-      if (full_name) {
-        teachers.where('teacher.full_name = :full_name', { full_name })
-      }
-      if (nick_name) {
-        teachers.where('teacher.nick_name = :nick_name', { nick_name })
+      if (name) {
+        teachers.andWhere('((teacher.full_name LIKE :name) OR (teacher.nick_name LIKE :name))', { name })
       }
       this.logger.log(teachers);
-      const schedulesCounts = await teachers.getRawMany();
+      const schedulesCounts = await teachers.getMany();
       return schedulesCounts;
     } catch (error) {
       this.logger.error(`Error find teacher :  ${error.message}`);
