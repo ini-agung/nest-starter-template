@@ -150,7 +150,8 @@ export class TeachersService {
         teachers.andWhere('((teacher.full_name LIKE :name) OR (teacher.nick_name LIKE :name))', { name })
       }
       // this.logger.log(teachers);
-      const schedulesCounts = await teachers.getMany();
+      const schedulesCounts = await teachers.orderBy('teacher.nik', 'ASC').getMany();
+
       return schedulesCounts;
     } catch (error) {
       this.logger.error(`Error find teacher :  ${error.message}`);

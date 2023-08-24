@@ -64,6 +64,7 @@ export class StudentsService {
         .leftJoinAndSelect('parent.rf', 'religion as b') // Join parent_religion for father
         .leftJoinAndSelect('parent.rm', 'religion as c') // Join parent_religion for mother
         .where('student.deletedAt IS NULL')
+        .orderBy('student.nis', 'ASC')
         .getMany();
       const flattenedStudents = students.map(student => ({
         student_id: student?.id,
@@ -154,7 +155,7 @@ export class StudentsService {
         .leftJoinAndSelect('parent.rf', 'religion as b') // Join parent_religion for father
         .leftJoinAndSelect('parent.rm', 'religion as c') // Join parent_religion for mother
         .where('student.deletedAt IS NULL')
-
+        .orderBy('student.nis', 'ASC')
       if (nis) {
         queryBuilder.andWhere('student.nis LIKE :nis', { nis: `%${nis}%` });
       }

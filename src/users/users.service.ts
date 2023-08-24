@@ -33,6 +33,7 @@ export class UsersService {
    */
   async create(createUserDto: CreateUserDto) {
     try {
+      createUserDto.password = await hashPassword(createUserDto.password);
       const user = this.userRepository.create(createUserDto);
       return await this.userRepository.save(user);
     } catch (error) {
@@ -75,7 +76,7 @@ export class UsersService {
       if (email) {
         queryBuilder.andWhere('user.email LIKE :email', { email: `%${email}%` });
       }
-      const users = await queryBuilder.getMany();
+      const users = await queryBuilder.orderBy('user.id', 'ASC').getMany();
       for (const user of users) {
         if (user.id == 1) {
           const metadata = await this.studentRepository
