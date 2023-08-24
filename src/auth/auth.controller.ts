@@ -21,7 +21,7 @@ export class AuthController {
     @Public()
     @Post('signin')
     async signin(@Body(new ValidationPipe()) signinDto: SigninDto, @Res() response) {
-        const user = await this.userService.findLike(signinDto.identity);
+        const user = await this.userService.findOne(signinDto.identity);
         if (user) {
             const compare = await comparePasswords(signinDto.password, user.password);
             if (compare) {

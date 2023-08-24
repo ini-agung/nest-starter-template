@@ -25,7 +25,7 @@ export class UsersService {
   private readonly logger = new Logger(UsersService.name);
 
   /**
-   * Create a new student.
+   * Create a new user.
    *
    * @param createUserDto - Data to create a new user.
    * @returns Created user data.
@@ -74,7 +74,7 @@ export class UsersService {
    * @param limit - Number of items per page (default: 10).
    * @returns Paginated list of filtered user.
    */
-  async findLike(identity: string): Promise<any> {
+  async findOne(identity: string): Promise<any> {
     try {
       const user = await this.userRepository
         .createQueryBuilder('user')
