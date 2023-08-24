@@ -49,7 +49,7 @@ export class UsersService {
   }
 
   /**
-   * Retrieve user based on filters with optional pagination.
+   * Retrieve users based on filters with optional pagination.
    *
    * @param username - Filter by username.
    * @param email - Filter by email.
@@ -121,8 +121,9 @@ export class UsersService {
       throw new BadRequestException(data, { cause: new Error() });
     }
   }
+
   /**
-   * Retrieve user based on filters with optional pagination.
+   * Retrieve user based on filters with param.
    *
    * @param identity - Identity can be email or username.
    * @returns Paginated list of filtered user.

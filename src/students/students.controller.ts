@@ -150,7 +150,7 @@ export class StudentsController {
     const data = {
       status: true,
       statusCode: HttpStatus.NO_CONTENT,
-      message: 'Success Restore Teacher',
+      message: 'Success Restore Student',
       data: {}
     };
     data.data = restoredUser;

@@ -57,7 +57,7 @@ export class UsersController {
   }
 
   /**
-    * Get details of a specific user by username or email.
+    * Get details of a specific user by identity (username or email).
     *
     * @param identity - Username or email of the user.
     * @returns User details.
@@ -111,6 +111,28 @@ export class UsersController {
     };
     const users = await this.usersService.remove(+id);
     data.data = users;
+    responseJson(data, data.statusCode, response);
+  }
+
+  /**
+  * Restore a previously soft-deleted user.
+  *
+  * @param id - ID of the user to restore.
+  * @param response - HTTP response object.
+  */
+  @Patch(':id/restore')
+  async restore(
+    @Param('id') id: number,
+    @Res() response,
+  ) {
+    const restoredUser = await this.usersService.restore(id);
+    const data = {
+      status: true,
+      statusCode: HttpStatus.NO_CONTENT,
+      message: 'Success Restore User',
+      data: {}
+    };
+    data.data = restoredUser;
     responseJson(data, data.statusCode, response);
   }
 }
