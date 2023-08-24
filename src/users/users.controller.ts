@@ -7,7 +7,8 @@ import { responseJson } from '@app/response';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
-
+  private _page = parseInt(process.env.PAGINATION_PAGE)
+  private _limit = parseInt(process.env.PAGINATION_LIMIT)
   /**
      * Create a new user.
      *
@@ -34,8 +35,8 @@ export class UsersController {
      */
   @Get()
   async findAll(
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
+    @Query('page') page: number = this._page,
+    @Query('limit') limit: number = this._limit,
     @Query('username') username: string,
     @Query('email') email: string,
 
@@ -46,8 +47,8 @@ export class UsersController {
       message: 'Success Get Users',
       data: {}
     };
-    page = (page < 1) ? 1 : page;
-    limit = (limit > 10) ? 10 : limit;
+    page = (page < 1) ? this._page : page;
+    limit = (limit > this._page) ? this._limit : limit;
     let users: object;
     if (username || email) {
       users = await this.usersService.findAll(page, limit, username, email);

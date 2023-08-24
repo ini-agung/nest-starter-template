@@ -10,7 +10,8 @@ import { responseJson } from '@app/response';
 @Controller('schedules')
 export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) { }
-
+  private _page = parseInt(process.env.PAGINATION_PAGE)
+  private _limit = parseInt(process.env.PAGINATION_LIMIT)
   /**
    * Create a new schedule.
    *
@@ -50,8 +51,8 @@ export class SchedulesController {
     @Query('start_time') time_start: string,
     @Query('finish_time') time_finish: string,
     @Query('class') clas: string,
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
+    @Query('page') page: number = this._page,
+    @Query('limit') limit: number = this._limit,
     @Res() response,
   ) {
     const data = {
@@ -60,8 +61,8 @@ export class SchedulesController {
       message: 'Success Get Schedules',
       data: {}
     };
-    page = (page < 1) ? 1 : page;
-    limit = (limit > 10) ? 10 : limit;
+    page = (page < 1) ? this._page : page;
+    limit = (limit > this._page) ? this._limit : limit;
     let schedules: object;
     if (day || time_start || time_finish) {
       schedules = await this.schedulesService.findLike(day, time_start, time_finish, clas, page, limit);

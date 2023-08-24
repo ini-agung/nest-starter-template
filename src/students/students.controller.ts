@@ -7,7 +7,8 @@ import { responseJson } from '@app/response';
 @Controller('students')
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) { }
-
+  private _page = parseInt(process.env.PAGINATION_PAGE)
+  private _limit = parseInt(process.env.PAGINATION_LIMIT)
   /**
      * Create a new student.
      *
@@ -42,8 +43,8 @@ export class StudentsController {
    */
   @Get()
   async findAll(
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
+    @Query('page') page: number = this._page,
+    @Query('limit') limit: number = this._limit,
     @Query('nis') nis: number,
     @Query('name') name: string,
     @Query('nick_name') nick_name: string,
@@ -55,8 +56,8 @@ export class StudentsController {
       message: 'Success Get Students',
       data: {}
     };
-    page = (page < 1) ? 1 : page;
-    limit = (limit > 10) ? 10 : limit;
+    page = (page < 1) ? this._page : page;
+    limit = (limit > this._page) ? this._limit : limit;
     let students: object;
     if (nis || name || nick_name) {
       students = await this.studentsService.findLike(nis, name, nick_name, page, limit);

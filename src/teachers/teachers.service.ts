@@ -46,7 +46,7 @@ export class TeachersService {
    * @returns A paginated list of teachers.
    * @throws ConflictException if there's an error while retrieving teachers.
    */
-  async findAll(page: number = 1, limit: number = 10): Promise<Pagination<any>> {
+  async findAll(page: number = 1, limit: number = 50): Promise<Pagination<any>> {
     try {
       const teachers = await this.teachersRepository
         .createQueryBuilder('teacher')

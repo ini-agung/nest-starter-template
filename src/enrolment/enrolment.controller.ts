@@ -7,7 +7,8 @@ import { responseJson } from '@app/response';
 @Controller('enrolment')
 export class EnrolmentController {
   constructor(private readonly enrolmentService: EnrolmentService) { }
-
+  private _page = parseInt(process.env.PAGINATION_PAGE)
+  private _limit = parseInt(process.env.PAGINATION_LIMIT)
   /**
        * Create a new enrolment.
        *
@@ -40,8 +41,8 @@ export class EnrolmentController {
      */
   @Get()
   async findAll(
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
+    @Query('page') page: number = this._page,
+    @Query('limit') limit: number = this._limit,
     @Query('enrol_code') enrol_code: string,
     @Query('schedule') schedule: number,
     @Res() response,
@@ -52,8 +53,8 @@ export class EnrolmentController {
       message: 'Success Get Enrolments',
       data: {}
     };
-    page = (page < 1) ? 1 : page;
-    limit = (limit > 10) ? 10 : limit;
+    page = (page < 1) ? this._page : page;
+    limit = (limit > this._page) ? this._limit : limit;
     let enrolements: object;
     if (enrol_code || schedule) {
       enrolements = await this.enrolmentService.findLike(enrol_code, schedule, page, limit);

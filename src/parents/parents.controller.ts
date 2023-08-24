@@ -6,7 +6,8 @@ import { responseJson } from '@app/response';
 @Controller('parents')
 export class ParentsController {
   constructor(private readonly parentsService: ParentsService) { }
-
+  private _page = parseInt(process.env.PAGINATION_PAGE)
+  private _limit = parseInt(process.env.PAGINATION_LIMIT)
   @Post()
   async create(@Body() createParentDto: CreateParentsDto, @Res() response) {
     const parent = await this.parentsService.create(createParentDto);
@@ -31,10 +32,8 @@ export class ParentsController {
       message: 'Success Get Parents',
       data: {}
     };
-    // Enforce a minimum value of 1 for the page parameter
-    page = (page < 1) ? 1 : page;
-    // Limit the limit parameter to a maximum value of 10
-    limit = (limit > 10) ? 10 : limit;
+    page = (page < 1) ? this._page : page;
+    limit = (limit > this._page) ? this._limit : limit;
     const parents = await this.parentsService.findAll(page, limit);
     data.data = parents;
     responseJson(data, data.statusCode, response);

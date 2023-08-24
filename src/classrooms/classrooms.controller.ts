@@ -8,6 +8,8 @@ import { responseJson } from '@app/response';
 export class ClassroomsController {
   constructor(private readonly classroomsService: ClassroomsService) { }
 
+  private _page = parseInt(process.env.PAGINATION_PAGE)
+  private _limit = parseInt(process.env.PAGINATION_LIMIT)
   @Post()
   async create(@Body() createClassroomDto: CreateClassroomDto,
     @Res() response,
@@ -26,8 +28,8 @@ export class ClassroomsController {
 
   @Get()
   async findAll(
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
+    @Query('page') page: number = this._page,
+    @Query('limit') limit: number = this._limit,
     @Query('id') id: number,
     @Query('classroom') classroom: string,
     @Res() response,
@@ -38,8 +40,8 @@ export class ClassroomsController {
       message: 'Success Get classrooms',
       data: {}
     };
-    page = (page < 1) ? 1 : page;
-    limit = (limit > 10) ? 10 : limit;
+    page = (page < 1) ? this._page : page;
+    limit = (limit > this._page) ? this._limit : limit;
     let classrooms: object;
     if (id || classroom) {
       classrooms = await this.classroomsService.findLike(id, classroom, page, limit);

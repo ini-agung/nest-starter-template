@@ -8,6 +8,8 @@ import { responseJson } from '@app/response';
 export class TeachersController {
   constructor(private readonly teachersService: TeachersService) { }
 
+  private _page = parseInt(process.env.PAGINATION_PAGE)
+  private _limit = parseInt(process.env.PAGINATION_LIMIT)
   /**
    * Create a new teacher.
    *
@@ -39,8 +41,8 @@ export class TeachersController {
    */
   @Get()
   async findAll(
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
+    @Query('page') page: number = this._page,
+    @Query('limit') limit: number = this._limit,
     @Query('nik') nik: number,
     @Query('name') name: string,
     @Res() response) {
@@ -50,8 +52,8 @@ export class TeachersController {
       message: 'Success Get Teachers',
       data: {}
     };
-    page = (page < 1) ? 1 : page;
-    limit = (limit > 10) ? 10 : limit;
+    page = (page < 1) ? this._page : page;
+    limit = (limit > this._page) ? this._limit : limit;
     let teachers;
     if (nik || name) {
       teachers = await this.teachersService.findLike(nik, name);
