@@ -48,6 +48,15 @@ export class UsersService {
     }
   }
 
+  /**
+   * Retrieve user based on filters with optional pagination.
+   *
+   * @param username - Filter by username.
+   * @param email - Filter by email.
+   * @param page - Page number for pagination (default: 1).
+   * @param limit - Number of items per page (default: 10).
+   * @returns Paginated list of filtered user.
+   */
   async findAll(
     page: number = 1,
     limit: number = 10,
