@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Student } from 'src/students/entities/student.entity';
 import { Teacher } from 'src/teachers/entities/teacher.entity';
 import { Parent } from 'src/parents/entities/parent.entity';
+import { Pagination } from '@app/helper';
 
 @Injectable()
 export class UsersService {
@@ -46,14 +47,30 @@ export class UsersService {
       throw new ConflictException(data, { cause: new Error() });
     }
   }
-  async findAll(): Promise<any> {
+
+  async findAll(
+    page: number = 1,
+    limit: number = 10
+  ): Promise<Pagination<any>> {
     try {
       const user = await this.userRepository
         .createQueryBuilder('user')
+        .select(['user.id', 'user.email', 'user.username', 'user.createdAt'])
         .leftJoinAndSelect('user.role', 'role')
-        .where('user.deletetAt is NULL')
+        .where('user.deletedAt is NULL')
         .getMany()
-      return user;
+      const total = user.length;
+      const startIdx = (page - 1) * limit;
+      const endIdx = startIdx + limit;
+      const data = user.slice(startIdx, endIdx);
+      return {
+        data,
+        total,
+        currentPage: page,
+        perPage: limit,
+        prevPage: page > 1 ? `/students?page=${(parseInt(page.toString()) - 1)}` : undefined,
+        nextPage: endIdx < total ? `/students?page=${(parseInt(page.toString()) + 1)}` : undefined,
+      };
     } catch (error) {
       const data = {
         status: false,

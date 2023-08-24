@@ -1,4 +1,4 @@
-import { Res, Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus } from '@nestjs/common';
+import { Res, Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -33,14 +33,19 @@ export class UsersController {
      * @returns List of users.
      */
   @Get()
-  async findAll(@Res() response) {
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Res() response) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
       message: 'Success Get Users',
       data: {}
     };
-    const users = await this.usersService.findAll();
+    page = (page < 1) ? 1 : page;
+    limit = (limit > 10) ? 10 : limit;
+    const users = await this.usersService.findAll(page, limit);
     data.data = users;
     responseJson(data, data.statusCode, response);
   }
