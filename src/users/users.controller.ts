@@ -36,6 +36,9 @@ export class UsersController {
   async findAll(
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
+    @Query('username') username: string,
+    @Query('email') email: string,
+
     @Res() response) {
     const data = {
       status: true,
@@ -45,7 +48,10 @@ export class UsersController {
     };
     page = (page < 1) ? 1 : page;
     limit = (limit > 10) ? 10 : limit;
-    const users = await this.usersService.findAll(page, limit);
+    let users: object;
+    if (username || email) {
+      users = await this.usersService.findAll(page, limit, username, email);
+    }
     data.data = users;
     responseJson(data, data.statusCode, response);
   }

@@ -23,14 +23,6 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @OneToOne(() => Student, student => student.user, { eager: true, nullable: true })
-  @JoinColumn()
-  student: Student;
-
-  @OneToOne(() => Parent, parent => parent.user, { eager: true, nullable: true })
-  @JoinColumn()
-  parent: Parent;
-
   @Column({ type: 'varchar', length: 255 })
   password: string;
 

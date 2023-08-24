@@ -33,8 +33,8 @@ export class UsersService {
    */
   async create(createUserDto: CreateUserDto) {
     try {
-      const student = this.studentRepository.create(createUserDto);
-      return await this.studentRepository.save(student);
+      const user = this.userRepository.create(createUserDto);
+      return await this.userRepository.save(user);
     } catch (error) {
       this.logger.error(`Error saving ${error.message}`);
       const data = {
@@ -50,19 +50,50 @@ export class UsersService {
 
   async findAll(
     page: number = 1,
-    limit: number = 10
+    limit: number = 10,
+    username: string,
+    email: string
   ): Promise<Pagination<any>> {
     try {
-      const user = await this.userRepository
+      const queryBuilder = await this.userRepository
         .createQueryBuilder('user')
         .select(['user.id', 'user.email', 'user.username', 'user.createdAt'])
         .leftJoinAndSelect('user.role', 'role')
         .where('user.deletedAt is NULL')
-        .getMany()
-      const total = user.length;
+      if (username) {
+        queryBuilder.andWhere('user.username LIKE :username', { username: `%${username}%` });
+      }
+      if (email) {
+        queryBuilder.andWhere('user.email LIKE :email', { email: `%${email}%` });
+      }
+      const users = await queryBuilder.getMany();
+      for (const user of users) {
+        if (user.id == 1) {
+          const metadata = await this.studentRepository
+            .createQueryBuilder('student')
+            .where('student.user_id = :id', { id: user.id })
+            .getOne();
+          Object.assign(user, { metadata });
+        }
+        if (user.id == 2 || user.id == 3 || user.id == 5) {
+          const metadata = await this.teacherRepository
+            .createQueryBuilder('teacher')
+            .where('teacher.user_id = :id', { id: user.id })
+            .getOne();
+          Object.assign(user, { metadata });
+        }
+        if (user.id == 5) {
+          const metadata = await this.parentRepository
+            .createQueryBuilder('parent')
+            .where('parent.user_id = :id', { id: user.id })
+            .getOne();
+          Object.assign(user, { metadata });
+        }
+      }
+      const total = users.length;
       const startIdx = (page - 1) * limit;
       const endIdx = startIdx + limit;
-      const data = user.slice(startIdx, endIdx);
+      const data = users.slice(startIdx, endIdx);
       return {
         data,
         total,
@@ -84,11 +115,7 @@ export class UsersService {
   /**
    * Retrieve user based on filters with optional pagination.
    *
-   * @param nis - Filter by student's National Identity Number (NIS).
-   * @param name - Filter by student's name.
-   * @param nick_name - Filter by student's nickname.
-   * @param page - Page number for pagination (default: 1).
-   * @param limit - Number of items per page (default: 10).
+   * @param identity - Identity can be email or username.
    * @returns Paginated list of filtered user.
    */
   async findOne(identity: string): Promise<any> {
@@ -100,33 +127,43 @@ export class UsersService {
         .orWhere('user.email=:identity', { identity })
         .andWhere('user.deletedAt is NULL')
         .getOne()
-      if (user.id == 1) {
-        const detail = await this.studentRepository
-          .createQueryBuilder('student')
-          .where('student.user_id = :id', { id: user.id })
-          .getOne();
-        Object.assign(user, { detail });
+      if (user) {
+        if (user.id == 1) {
+          const metadata = await this.studentRepository
+            .createQueryBuilder('student')
+            .where('student.user_id = :id', { id: user.id })
+            .getOne();
+          Object.assign(user, { metadata });
+        }
+        if (user.id == 2 || user.id == 3 || user.id == 5) {
+          const metadata = await this.teacherRepository
+            .createQueryBuilder('teacher')
+            .where('teacher.user_id = :id', { id: user.id })
+            .getOne();
+          Object.assign(user, { metadata });
+        }
+        if (user.id == 5) {
+          const metadata = await this.parentRepository
+            .createQueryBuilder('parent')
+            .where('parent.user_id = :id', { id: user.id })
+            .getOne();
+          Object.assign(user, { metadata });
+        }
+        return user;
+      } else {
+        const data = {
+          status: false,
+          statusCode: HttpStatus.BAD_GATEWAY,
+          message: "error.sqlMessage",
+          data: {}
+        };
+        throw new BadRequestException(data, { cause: new Error() });
       }
-      if (user.id == 2 || user.id == 3 || user.id == 5) {
-        const detail = await this.teacherRepository
-          .createQueryBuilder('teacher')
-          .where('teacher.user_id = :id', { id: user.id })
-          .getOne();
-        Object.assign(user, { detail });
-      }
-      if (user.id == 5) {
-        const detail = await this.parentRepository
-          .createQueryBuilder('parent')
-          .where('parent.user_id = :id', { id: user.id })
-          .getOne();
-        Object.assign(user, { detail });
-      }
-      return user;
     } catch (error) {
       const data = {
         status: false,
         statusCode: HttpStatus.BAD_REQUEST,
-        message: "Username or Email not found",
+        message: error.sqlMessage,
         data: {}
       };
       throw new BadRequestException(data, { cause: new Error() });

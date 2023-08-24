@@ -32,7 +32,7 @@ export class AuthController {
                     createdAt: user.createdAt,
                     role: user.role,
                     current_datetime: user.current_datetime,
-                    detail: user.detail,
+                    detail: user.metadata,
                 };
                 const access_token = await this.jwtLibService.generateToken(payload);
                 const refresh_token = await this.jwtLibService.generateRefresh({ user, refreshToken: true });
