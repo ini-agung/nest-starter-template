@@ -40,8 +40,8 @@ export class ClassroomsController {
       message: 'Success Get classrooms',
       data: {}
     };
-    page = (page < 1) ? this._page : page;
-    limit = (limit > this._limit) ? this._limit : limit;
+    page = (page == undefined) ? this._page : page;
+    limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
     let classrooms: object;
     if (id || classroom) {
       classrooms = await this.classroomsService.findLike(id, classroom, page, limit);

@@ -53,8 +53,8 @@ export class EnrolmentController {
       message: 'Success Get Enrolments',
       data: {}
     };
-    page = (page < 1) ? this._page : page;
-    limit = (limit > this._limit) ? this._limit : limit;
+    page = (page == undefined) ? this._page : page;
+    limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
     let enrolements: object;
     if (enrol_code || schedule) {
       enrolements = await this.enrolmentService.findLike(enrol_code, schedule, page, limit);

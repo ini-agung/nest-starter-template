@@ -47,7 +47,7 @@ export class SchedulesService {
    * @returns A paginated list of schedules.
    * @throws ConflictException if there's an error while retrieving schedules.
    */
-  async findAll(page: number = 1, limit: number = 10): Promise<Pagination<any>> {
+  async findAll(page: number, limit: number): Promise<Pagination<any>> {
     // return await this.schedulesRepository.find();
     try {
       // const schedulesCounts = await this.schedulesRepository.find();
@@ -111,8 +111,8 @@ export class SchedulesService {
     time_start: string,
     time_finish: string,
     clas: string,
-    page: number = 1,
-    limit: number = 10,
+    page: number,
+    limit: number,
   ): Promise<Pagination<any>> {
     const queryBuilder = this.schedulesRepository.createQueryBuilder('schedules')
       .select(['schedules.id', 'schedules.schedule_code', 'schedules.day_of_week', 'schedules.time_start', 'schedules.time_finish'])

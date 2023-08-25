@@ -59,8 +59,8 @@ export class UsersService {
    * @returns Paginated list of filtered user.
    */
   async findAll(
-    page: number = 1,
-    limit: number = 10,
+    page: number,
+    limit: number,
     username: string,
     email: string
   ): Promise<Pagination<any>> {
@@ -214,6 +214,7 @@ export class UsersService {
       throw new ConflictException(data, { cause: new Error() });
     }
   }
+
   /**
    * Delete a user (soft delete).
    *
@@ -246,6 +247,7 @@ export class UsersService {
       throw new ConflictException(data, { cause: new Error() });
     }
   }
+
   /**
    * Restore a previously soft-deleted user.
    *

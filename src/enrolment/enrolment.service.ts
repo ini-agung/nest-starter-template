@@ -80,7 +80,10 @@ export class EnrolmentService {
      * @param limit - The number of enrolments per page (default: 10).
      * @returns A paginated list of enrolments with additional information.
      */
-  async findAll(page: number = 1, limit: number = 10): Promise<Pagination<any>> {
+  async findAll(
+    page: number,
+    limit: number,
+  ): Promise<Pagination<any>> {
     try {
       const result: {
         schedule_id: number;
@@ -145,8 +148,8 @@ export class EnrolmentService {
   async findLike(
     enrol_code: string,
     schedule: number,
-    page: number = 1,
-    limit: number = 10,
+    page: number,
+    limit: number,
   ) {
     const queryBuilder = await this.enrolmentRepository
       .createQueryBuilder('enrolment')

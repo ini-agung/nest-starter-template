@@ -46,7 +46,10 @@ export class TeachersService {
    * @returns A paginated list of teachers.
    * @throws ConflictException if there's an error while retrieving teachers.
    */
-  async findAll(page: number = 1, limit: number = 50): Promise<Pagination<any>> {
+  async findAll(
+    page: number,
+    limit: number,
+  ): Promise<Pagination<any>> {
     try {
       const teachers = await this.teachersRepository
         .createQueryBuilder('teacher')
@@ -67,7 +70,7 @@ export class TeachersService {
         .where('teacher.deletedAt IS NULL')
         .where('users.deletedAt IS NULL')
         .getMany();
-      this.logger.log(teachers);
+      // this.logger.log(teachers);
       const flattenedTeachers = teachers.map(teacher => ({
         user_id: teacher?.user?.id,
         teacher_id: teacher?.id,
@@ -84,6 +87,8 @@ export class TeachersService {
         phone: teacher?.phone,
         degree: teacher?.degree?.degree, // Access the 'degree' property directly
       }));
+      // this.logger.log("flattenedTeachers.length", flattenedTeachers.length);
+
       const total = flattenedTeachers.length;
       const startIdx = (page - 1) * limit;
       const endIdx = startIdx + limit;
@@ -113,8 +118,7 @@ export class TeachersService {
    * Retrieve teachers based on query parameters.
    *
    * @param nik - Filter by teacher's National Identification Number (NIK).
-   * @param full_name - Filter by teacher's full name.
-   * @param nick_name - Filter by teacher's nickname.
+   * @param name - Filter by teacher's full name.
    * @param page - Page number for pagination (default: 1).
    * @param limit - Number of items per page (default: 10).
    * @returns An array of teachers that match the query criteria.
@@ -123,8 +127,9 @@ export class TeachersService {
   async findLike(
     nik: number,
     name: string,
-    page: number = 1,
-    limit: number = 10): Promise<any[]> {
+    page: number,
+    limit: number,
+  ): Promise<Pagination<any>> {
     try {
       const teachers = await this.teachersRepository
         .createQueryBuilder('teacher')
@@ -151,8 +156,18 @@ export class TeachersService {
       }
       // this.logger.log(teachers);
       const schedulesCounts = await teachers.orderBy('teacher.nik', 'ASC').getMany();
-
-      return schedulesCounts;
+      const total = schedulesCounts.length;
+      const startIdx = (page - 1) * limit;
+      const endIdx = startIdx + limit;
+      const data = schedulesCounts.slice(startIdx, endIdx);
+      return {
+        data,
+        total,
+        currentPage: page,
+        perPage: limit,
+        prevPage: page > 1 ? `/students?page=${(parseInt(page.toString()) - 1)}` : undefined,
+        nextPage: endIdx < total ? `/students?page=${(parseInt(page.toString()) + 1)}` : undefined,
+      };
     } catch (error) {
       this.logger.error(`Error find teacher :  ${error.message}`);
       const data = {

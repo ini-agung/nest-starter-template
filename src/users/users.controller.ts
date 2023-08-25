@@ -47,8 +47,8 @@ export class UsersController {
       message: 'Success Get Users',
       data: {}
     };
-    page = (page < 1) ? this._page : page;
-    limit = (limit > this._limit) ? this._limit : limit;
+    page = (page == undefined) ? this._page : page;
+    limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
     let users: object;
     users = await this.usersService.findAll(page, limit, username, email);
     data.data = users;

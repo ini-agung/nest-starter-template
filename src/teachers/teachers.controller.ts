@@ -46,19 +46,17 @@ export class TeachersController {
     @Query('nik') nik: number,
     @Query('name') name: string,
     @Res() response) {
-    console.log(limit)
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
       message: 'Success Get Teachers',
       data: {}
     };
-    page = (page < 1) ? this._page : page;
-    limit = (limit > this._limit) ? this._limit : limit;
-    console.log(this._limit)
+    page = (page == undefined) ? this._page : page;
+    limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
     let teachers: object;
     if (nik || name) {
-      teachers = await this.teachersService.findLike(nik, name);
+      teachers = await this.teachersService.findLike(nik, name, page, limit);
     } else {
       teachers = await this.teachersService.findAll(page, limit);
     }

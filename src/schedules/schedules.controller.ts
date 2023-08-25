@@ -61,8 +61,8 @@ export class SchedulesController {
       message: 'Success Get Schedules',
       data: {}
     };
-    page = (page < 1) ? this._page : page;
-    limit = (limit > this._limit) ? this._limit : limit;
+    page = (page == undefined) ? this._page : page;
+    limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
     let schedules: object;
     if (day || time_start || time_finish) {
       schedules = await this.schedulesService.findLike(day, time_start, time_finish, clas, page, limit);

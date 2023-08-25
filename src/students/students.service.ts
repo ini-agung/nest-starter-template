@@ -40,13 +40,13 @@ export class StudentsService {
   /**
    * Retrieve all students with optional filtering and pagination.
    *
-   * @param page - Page number for pagination (default: 1).
-   * @param limit - Number of items per page (default: 10).
+   * @param page - Page number for pagination.
+   * @param limit - Number of items per page.
    * @returns Paginated list of students.
    */
   async findAll(
-    page: number = 1,
-    limit: number = 10
+    page: number,
+    limit: number,
   ): Promise<Pagination<any>> {
     try {
       console.log(this.page)
@@ -127,20 +127,18 @@ export class StudentsService {
    * @param nis - Filter by student's National Identity Number (NIS).
    * @param name - Filter by student's name.
    * @param nick_name - Filter by student's nickname.
-   * @param page - Page number for pagination (default: 1).
-   * @param limit - Number of items per page (default: 10).
+   * @param page - Page number for pagination.
+   * @param limit - Number of items per page.
    * @returns Paginated list of filtered students.
    */
   async findLike(
     nis: number,
     name: string,
     nick_name: string,
-    page: number = 1,
-    limit: number = 10
+    page: number,
+    limit: number,
   ): Promise<Pagination<any>> {
-    this.logger.log([nis, name, nick_name]);
     try {
-
       const queryBuilder = await this.studentRepository
         .createQueryBuilder('student')
         .select([
