@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Student } from 'src/students/entities/student.entity';
 import { Teacher } from 'src/teachers/entities/teacher.entity';
 import { Parent } from 'src/parents/entities/parent.entity';
-import { Pagination } from '@app/helper';
+import { Pagination, captureSentryException } from '@app/helper';
 import { RolePermission, UserPermission } from 'src/permissions/entities/permission.entity';
 
 @Injectable()
@@ -50,6 +50,7 @@ export class UsersService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }
@@ -124,6 +125,7 @@ export class UsersService {
         message: error.sqlMessage,
         data: {}
       };
+      captureSentryException(error);
       throw new BadRequestException(data, { cause: new Error() });
     }
   }
@@ -143,6 +145,7 @@ export class UsersService {
         .orWhere('user.email=:identity', { identity })
         .andWhere('user.deletedAt is NULL')
         .getOne()
+
       if (user) {
         let permissions: any = [];
         try {
@@ -156,9 +159,9 @@ export class UsersService {
           // console.log(rolePermission)
           permissions.push(rolePermission)
         } catch (error) {
+          captureSentryException(error);
           console.log(error.sqlMessage)
         }
-
         try {
           const userPermission = await this.upRepository
             .createQueryBuilder('up')
@@ -168,7 +171,8 @@ export class UsersService {
             .getRawMany();
           permissions.push(userPermission)
         } catch (error) {
-          console.log(error)
+          captureSentryException(error);
+          console.log(error);
         }
         const flattenedPermissions = permissions.flatMap(row => row.map(item => item.code));
         Object.assign(user, { flattenedPermissions });
@@ -208,9 +212,11 @@ export class UsersService {
       const data = {
         status: false,
         statusCode: HttpStatus.BAD_REQUEST,
-        message: error.sqlMessage,
+        message: "user not found",
         data: {}
       };
+      this.logger.log("error", error);
+      captureSentryException(error);
       throw new BadRequestException(data, { cause: new Error() });
     }
   }
@@ -245,6 +251,7 @@ export class UsersService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }
@@ -278,6 +285,7 @@ export class UsersService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }
@@ -291,7 +299,7 @@ export class UsersService {
   async restore(id: number): Promise<User> {
     try {
       const userToRestore = await this.userRepository
-        .createQueryBuilder('student')
+        .createQueryBuilder('user')
         .withDeleted() // Include soft-deleted entities
         .where('user.id = :id', { id })
         .getOne();
@@ -302,7 +310,7 @@ export class UsersService {
       }
       return null; // User not found
     } catch (error) {
-      this.logger.error(`Error find student :   ${error.message}`);
+      this.logger.error(`Error find user :   ${error.message}`);
       const data = {
         status: false,
         statusCode: HttpStatus.CONFLICT,
@@ -310,6 +318,7 @@ export class UsersService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }

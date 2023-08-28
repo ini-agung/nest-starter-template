@@ -4,7 +4,7 @@ import { UpdateStudentDto } from './dto/update-student.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Student } from './entities/student.entity';
-import { Pagination } from '@app/helper';
+import { Pagination, captureSentryException } from '@app/helper';
 
 @Injectable()
 export class StudentsService {
@@ -33,6 +33,7 @@ export class StudentsService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }
@@ -117,6 +118,7 @@ export class StudentsService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }
@@ -182,6 +184,7 @@ export class StudentsService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }
@@ -250,6 +253,7 @@ export class StudentsService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }
@@ -317,6 +321,7 @@ export class StudentsService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }
@@ -349,6 +354,7 @@ export class StudentsService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }

@@ -4,7 +4,7 @@ import { UpdateParentsDto } from './dto/update-parents.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Parent } from './entities/parent.entity';
 import { Repository } from 'typeorm';
-import { Pagination } from '@app/helper';
+import { Pagination, captureSentryException } from '@app/helper';
 @Injectable()
 export class ParentsService {
   constructor(
@@ -12,6 +12,12 @@ export class ParentsService {
     private parentsRepository: Repository<Parent>,) { }
   private readonly logger = new Logger(ParentsService.name);
 
+  /**
+     * Create a new parent.
+     *
+     * @param createParentDto - The data to create a new parent.
+     * @returns The created parent data.
+     */
   async create(createParentDto: CreateParentsDto) {
     try {
       const parent = this.parentsRepository.create(createParentDto);
@@ -25,10 +31,17 @@ export class ParentsService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }
 
+  /**
+* Retrieve enrolments for a specific schedule.
+*
+* @param page - The ID of the schedule to retrieve enrolments for.
+* @returns An array of enrolments associated with the given schedule.
+*/
   async findAll(page: number, limit: number): Promise<Pagination<any>> {
     try {
       console.log(page, limit);
@@ -72,6 +85,7 @@ export class ParentsService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }
@@ -117,22 +131,6 @@ export class ParentsService {
       }
       const studentsCounts = await queryBuilder.getMany();
       this.logger.log(studentsCounts);
-      // const flattenedParents = studentsCounts.map(parent => ({
-      //   parent_id: parent.id,
-      //   user_id: parent.user_id,
-      //   father: {
-      //     name: parent.father,
-      //     phone: parent.phone_father,
-      //     img: parent.img_father,
-      //     religion: parent.rf.religion,
-      //   },
-      //   mother: {
-      //     name: parent.mother,
-      //     phone: parent.phone_mother,
-      //     img: parent.img_mother,
-      //     religion: parent.rm.religion,
-      //   },
-      // }));
       const total = studentsCounts.length;
       const startIdx = (page - 1) * limit;
       const endIdx = startIdx + limit;
@@ -153,11 +151,18 @@ export class ParentsService {
         message: error.sqlMessage,
         data: {}
       };
+      captureSentryException(error);
       data.data = error.message;
       throw new ConflictException(data, { cause: new Error() });
     }
   }
 
+  /**
+     * Retrieve user based on filters with param.
+     *
+     * @param id - Id Parent.
+     * @returns Paginated list of filtered user.
+     */
   async findOne(id: number): Promise<Parent> {
     try {
       return await this.parentsRepository.findOneBy({ id });
@@ -170,10 +175,18 @@ export class ParentsService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }
 
+  /**
+    * Update an existing parent.
+    *
+    * @param id - ID of the parent to update.
+    * @param updateParentDto - Updated parent data.
+    * @returns Updated parent data.
+    */
   async update(id: number, updateParentDto: UpdateParentsDto) {
     try {
       const parent = await this.parentsRepository.findOneBy({ id });
@@ -197,10 +210,17 @@ export class ParentsService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }
 
+  /**
+   * Delete a teacher (soft delete).
+   *
+   * @param id - ID of the teacher to delete.
+   * @returns Deleted teacher data.
+   */
   async remove(id: number) {
     try {
       const parent = await this.parentsRepository.findOneBy({ id });
@@ -214,8 +234,7 @@ export class ParentsService {
         throw new ConflictException(data, { cause: new Error() });
       }
       parent.deletedAt = new Date();
-      return this.parentsRepository.save(parent);
-      return await this.parentsRepository.delete(id);
+      return await this.parentsRepository.save(parent);
     } catch (error) {
       this.logger.error(`Error find parent :   ${error.message}`);
       const data = {
@@ -225,6 +244,39 @@ export class ParentsService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
+      throw new ConflictException(data, { cause: new Error() });
+    }
+  }
+
+  /**
+ * Restore a previously soft-deleted parent.
+ *
+ * @param id - ID of the parent to restore.
+ * @returns Restored parent data.
+ */
+  async restore(id: number): Promise<Parent> {
+    try {
+      const parentToRestore = await this.parentsRepository
+        .createQueryBuilder('parent')
+        .withDeleted() // Include soft-deleted entities
+        .where('parent.id = :id', { id })
+        .getOne();
+      if (parentToRestore) {
+        parentToRestore.deletedAt = null; // Set deletedAt back to null
+        return await this.parentsRepository.save(parentToRestore);
+      }
+      return null; // User not found
+    } catch (error) {
+      this.logger.error(`Error find student :   ${error.message}`);
+      const data = {
+        status: false,
+        statusCode: HttpStatus.CONFLICT,
+        message: error.sqlMessage,
+        data: {}
+      };
+      data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }

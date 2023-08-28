@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as crypto from 'crypto';
+import * as Sentry from '@sentry/node';
 import { createCipheriv, createDecipheriv } from 'crypto';
 
 const algorithm: string = 'aes-256-cbc';
@@ -50,6 +51,10 @@ export function setCurrentUser(current_user: object) {
 
 export function currentUser(): object {
     return currentUserValue;
+}
+
+export function captureSentryException(error: Error): void {
+    Sentry.captureException(error);
 }
 
 @Injectable()

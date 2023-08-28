@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 import { Class } from 'src/classrooms/entities/classroom.entity';
 import { Student } from 'src/students/entities/student.entity';
 import { Schedule } from 'src/schedules/entities/schedule.entity';
-import { Pagination } from '@app/helper';
+import { Pagination, captureSentryException } from '@app/helper';
 
 @Injectable()
 export class EnrolmentService {
@@ -38,6 +38,7 @@ export class EnrolmentService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }
@@ -132,6 +133,7 @@ export class EnrolmentService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }
@@ -151,32 +153,45 @@ export class EnrolmentService {
     page: number,
     limit: number,
   ) {
-    const queryBuilder = await this.enrolmentRepository
-      .createQueryBuilder('enrolment')
-      .select('enrolment.schedule_id', 'schedule_id')
-      .addSelect('enrolment.enrol_code', 'enrol_code')
-      .addSelect('enrolment.schedule_id', 'schedule_id')
-      .leftJoinAndSelect('enrolment.student', 'student')
-      .where('enrolment.enrolment_status = 1')
-    if (schedule) {
-      queryBuilder.andWhere('enrolment.schedule_id = :schedule', { schedule });
+    try {
+      const queryBuilder = await this.enrolmentRepository
+        .createQueryBuilder('enrolment')
+        .select('enrolment.schedule_id', 'schedule_id')
+        .addSelect('enrolment.enrol_code', 'enrol_code')
+        .addSelect('enrolment.schedule_id', 'schedule_id')
+        .leftJoinAndSelect('enrolment.student', 'student')
+        .where('enrolment.enrolment_status = 1')
+      if (schedule) {
+        queryBuilder.andWhere('enrolment.schedule_id = :schedule', { schedule });
+      }
+      if (enrol_code) {
+        queryBuilder.andWhere('enrolment.enrol_code = :enrol_code', { enrol_code });
+      }
+      const enrolmentCounts = await queryBuilder.getRawMany();
+      const total = enrolmentCounts.length;
+      const startIdx = (page - 1) * limit;
+      const endIdx = startIdx + limit;
+      const data = enrolmentCounts.slice(startIdx, endIdx);
+      return {
+        data,
+        total,
+        currentPage: page,
+        perPage: limit,
+        prevPage: page > 1 ? `/enrolments?page=${(parseInt(page.toString()) - 1)}` : undefined,
+        nextPage: endIdx < total ? `/enrolments?page=${(parseInt(page.toString()) + 1)}` : undefined,
+      };
+    } catch (error) {
+      this.logger.error(`Error find parent :  ${error.message}`);
+      const data = {
+        status: false,
+        statusCode: HttpStatus.CONFLICT,
+        message: error.sqlMessage,
+        data: {}
+      };
+      data.data = error.message;
+      captureSentryException(error);
+      throw new ConflictException(data, { cause: new Error() });
     }
-    if (enrol_code) {
-      queryBuilder.andWhere('enrolment.enrol_code = :enrol_code', { enrol_code });
-    }
-    const enrolmentCounts = await queryBuilder.getRawMany();
-    const total = enrolmentCounts.length;
-    const startIdx = (page - 1) * limit;
-    const endIdx = startIdx + limit;
-    const data = enrolmentCounts.slice(startIdx, endIdx);
-    return {
-      data,
-      total,
-      currentPage: page,
-      perPage: limit,
-      prevPage: page > 1 ? `/enrolments?page=${(parseInt(page.toString()) - 1)}` : undefined,
-      nextPage: endIdx < total ? `/enrolments?page=${(parseInt(page.toString()) + 1)}` : undefined,
-    };
   }
 
   /**
@@ -209,6 +224,7 @@ export class EnrolmentService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }
@@ -242,6 +258,7 @@ export class EnrolmentService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }
@@ -275,6 +292,7 @@ export class EnrolmentService {
         data: {}
       };
       data.data = error.message;
+      captureSentryException(error);
       throw new ConflictException(data, { cause: new Error() });
     }
   }
