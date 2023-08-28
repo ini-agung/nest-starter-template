@@ -12,6 +12,7 @@ import { Schedule } from 'src/schedules/entities/schedule.entity';
 import { Teacher } from 'src/teachers/entities/teacher.entity';
 import { Student } from 'src/students/entities/student.entity';
 import { Enrolment } from 'src/enrolment/entities/enrolment.entity';
+import { Permission, RolePermission } from 'src/permissions/entities/permission.entity';
 
 @Injectable()
 export class SeederService {
@@ -24,25 +25,24 @@ export class SeederService {
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Gender table
             for (const data of genders) {
-                console.log(data)
                 const existingGender = await manager.findOne(Gender, { where: { gender: data } });
                 if (!existingGender) {
                     const gender = new Gender();
                     gender.gender = data;
                     await manager.save(gender);
                 } else {
-                    console.log(`Gender with value ${data} already exists. Skipping...`);
+                    console.log(`Skipping...`);
                 }
             }
         });
 
         console.log("=== CLASSROOM ===");
         const classrooms = [
-            'Ruang 101 A', 'Ruang 102 A', 'Ruang 103 A', 'Ruang 104 A', 'Ruang 105 A',
-            'Ruang 201 A', 'Ruang 202 A', 'Ruang 203 A', 'Ruang 204 A',
-            'Ruang 205 A', 'Ruang 101 B', 'Ruang 102 B', 'Ruang 103 B',
-            'Ruang 104 B', 'Ruang 105 B', 'Ruang 201 B', 'Ruang 202 B',
-            'Ruang 203 B', 'Ruang 204 B', 'Ruang 205 B',];
+            'Ruang 101 A', 'Ruang 102 A', 'Ruang 103 A', 'Ruang 104 A',
+            'Ruang 105 A', 'Ruang 201 A', 'Ruang 202 A', 'Ruang 203 A',
+            'Ruang 204 A', 'Ruang 205 A', 'Ruang 101 B', 'Ruang 102 B',
+            'Ruang 103 B', 'Ruang 104 B', 'Ruang 105 B', 'Ruang 201 B',
+            'Ruang 202 B', 'Ruang 203 B', 'Ruang 204 B', 'Ruang 205 B',];
         await this.connection.transaction(async (manager) => {
             //Check duplicates for Classroom table
             for (const data of classrooms) {
@@ -52,7 +52,7 @@ export class SeederService {
                     classroom.classroom = data;
                     await manager.save(classroom)
                 } else {
-                    console.log(`Classrooms with value ${data} already exists. Skipping...`);
+                    console.log(`Skipping...`);
                 }
             }
         });
@@ -90,13 +90,14 @@ export class SeederService {
                     subject.description = data.description;
                     await manager.save(subject);
                 } else {
-                    console.log(`Subject with value ${data.subject} already exists. Skipping...`);
+                    console.log(`Skipping...`);
                 }
             }
         });
 
         console.log("=== RELIGIONS ===");
-        const religions = ['Budha', 'Hindu', 'Islam',
+        const religions = [
+            'Budha', 'Hindu', 'Islam',
             'Konghucu', 'Kristen Katolik',
             'Kristen Protestan',
         ];
@@ -109,16 +110,17 @@ export class SeederService {
                     religion.religion = data;
                     await manager.save(religion);
                 } else {
-                    console.log(`Religion with value ${data} already exists. Skipping...`);
+                    console.log(`Skipping...`);
                 }
             }
         });
 
         console.log("=== DEGREES ===");
         const degrees = [
-            'Doktor', 'Magister',
+            'Doktor', 'Magister', 'Profesi/Spesialis',
             'Sarjana', 'Sarjana Terapan',
-            'Ahli Madya', 'Ahli Pratama', 'Ahli Muda',
+            'Ahli Madya', 'Ahli Pratama',
+            'Ahli Muda',
         ];
         await this.connection.transaction(async (manager) => {
             // Check duplicates for Degree table
@@ -129,7 +131,7 @@ export class SeederService {
                     degree.degree = data;
                     await manager.save(degree);
                 } else {
-                    console.log(`Degree with value ${data} already exists. Skipping...`);
+                    console.log(`Skipping...`);
                 }
             }
         });
@@ -151,7 +153,7 @@ export class SeederService {
                     role.role = data;
                     await manager.save(role);
                 } else {
-                    console.log(`Role with value ${data} already exists. Skipping...`);
+                    console.log(`Skipping...`);
                 }
             }
         });
@@ -228,7 +230,7 @@ export class SeederService {
                     user.password = password;
                     await manager.save(user);
                 } else {
-                    console.log(`User with username ${data.username} or email ${data.email} already exists. Skipping...`);
+                    console.log(`Skipping...`);
                 }
             }
         });
@@ -315,7 +317,7 @@ export class SeederService {
                     parent.address = data.address;
                     await manager.save(parent);
                 } else {
-                    console.log(`Parent with user_id ${data.user_id} already exists. Skipping...`);
+                    console.log(`Skipping...`);
                 }
             }
         });
@@ -595,7 +597,7 @@ export class SeederService {
                     teacher.address = data.address;
                     await manager.save(teacher);
                 } else {
-                    console.log(`Teacher with value ${data.nik} already exists. Skipping...`);
+                    console.log(`Skipping...`);
                 }
             }
         });
@@ -960,7 +962,7 @@ export class SeederService {
                     student.address = data.address;
                     await manager.save(student);
                 } else {
-                    console.log(`student with value ${data.nis} already exists. Skipping...`);
+                    console.log(`Skipping...`);
                 }
             }
         })
@@ -1296,7 +1298,7 @@ export class SeederService {
                     singleClass.max_students = data.max_student;
                     await manager.save(singleClass);
                 } else {
-                    console.log(`CLASS with value ${data.class} already exists. Skipping...`);
+                    console.log(`Skipping...`);
                 }
             }
         })
@@ -1438,7 +1440,7 @@ export class SeederService {
                     schedule.class_id = data.class_id;
                     await manager.save(schedule);
                 } else {
-                    console.log(`SCHEDULE with value ${data.schedule_code} already exists. Skipping...`);
+                    console.log(`Skipping...`);
                 }
             };
         });
@@ -1459,11 +1461,151 @@ export class SeederService {
                         schedule.enrolment_status = enrolments.enrolment_status;
                         await manager.save(schedule);
                     } else {
-                        console.log(`Enrolment with value ${enrolments.enrol_code} already exists. Skipping...`);
+                        console.log(`Skipping...`);
                     }
                 });
             }
         }
+
+        console.log("=== PERMISSIONS ===");
+        const permissions = [
+            { code: "CU", description: "Create User" },
+            { code: "RU", description: "Read User" },
+            { code: "UU", description: "Update User" },
+            { code: "DU", description: "Delete User" },
+
+            { code: "CC", description: "Create Class" },
+            { code: "RC", description: "Read Class" },
+            { code: "UC", description: "Update Class" },
+            { code: "DC", description: "Delete Class" },
+
+            { code: "CCR", description: "Create Class Room" },
+            { code: "RCR", description: "Read Class Room" },
+            { code: "UCR", description: "Update Class Room" },
+            { code: "DCR", description: "Delete Class Room" },
+
+            { code: "CE", description: "Create Enrolments" },
+            { code: "RE", description: "Read Enrolments" },
+            { code: "UE", description: "Update Enrolments" },
+            { code: "DE", description: "Delete Enrolments" },
+
+            { code: "CD", description: "Create Degree" },
+            { code: "RD", description: "Read Degree" },
+            { code: "UD", description: "Update Degree" },
+            { code: "DD", description: "Delete Degree" },
+
+            { code: "CPR", description: "Create Parent" },
+            { code: "RPR", description: "Read Parent" },
+            { code: "UPR", description: "Update Parent" },
+            { code: "DPR", description: "Delete Parent" },
+
+            { code: "CRE", description: "Create Religion" },
+            { code: "RRE", description: "Read Religion" },
+            { code: "URE", description: "Update Religion" },
+            { code: "DRE", description: "Delete Religion" },
+
+            { code: "CRP", description: "Create Role Permission" },
+            { code: "RRP", description: "Read Role Permission" },
+            { code: "URP", description: "Update Role Permission" },
+            { code: "DRP", description: "Delete Role Permission" },
+
+            { code: "CR", description: "Create Role" },
+            { code: "RR", description: "Read Role" },
+            { code: "UR", description: "Update Role" },
+            { code: "DR", description: "Delete Role" },
+
+            { code: "CP", description: "Create Permission" },
+            { code: "RP", description: "Read Permission" },
+            { code: "UP", description: "Update Permission" },
+            { code: "DP", description: "Delete Permission" },
+
+            { code: "CSC", description: "Create Schedule" },
+            { code: "RSC", description: "Read Schedule" },
+            { code: "USC", description: "Update Schedule" },
+            { code: "DSC", description: "Delete Schedule" },
+
+            { code: "CST", description: "Create Student" },
+            { code: "RST", description: "Read Student" },
+            { code: "UST", description: "Update Student" },
+            { code: "DST", description: "Delete Student" },
+
+            { code: "CSB", description: "Create Subject" },
+            { code: "RSB", description: "Read Subject" },
+            { code: "USB", description: "Update Subject" },
+            { code: "DSB", description: "Delete Subject" },
+
+            { code: "CT", description: "Create Teacher" },
+            { code: "RT", description: "Read Teacher" },
+            { code: "UT", description: "Update Teacher" },
+            { code: "DT", description: "Delete Teacher" },
+
+            { code: "CSP", description: "Create User Permission" },
+            { code: "RSP", description: "Read User Permission" },
+            { code: "USP", description: "Update User Permission" },
+            { code: "DSP", description: "Delete User Permission" },
+
+            { code: "CPP", description: "Create User Profile" },
+            { code: "RPP", description: "Read User Profile" },
+            { code: "UPP", description: "Update User Profile" },
+            { code: "DPP", description: "Delete User Profile" },
+
+        ];
+        await this.connection.transaction(async (manager) => {
+            // Check duplicates for PERMISSIONS table
+            for (const data of permissions) {
+                const existingPermission = await manager.findOne(Permission, { where: { code: data.code } });
+                if (!existingPermission) {
+                    const permission = new Permission();
+                    permission.code = data.code;
+                    permission.description = data.description;
+                    await manager.save(permission);
+                } else {
+                    console.log(`Skipping...`);
+                }
+            };
+        });
+
+        console.log("=== ROLE PERMISSION ===")
+        const userPermission = [13, 14, 15, 21, 22, 23, 61, 62, 63];
+        const teacherPermission = [5, 6, 7, 8, 9, 10, 11, 12, 41, 42, 43, 44,];
+        await this.connection.transaction(async (manager) => {
+            // Check duplicates for PERMISSIONS table
+            for (let index = 1; index < 61; index++) {
+                const existingPermission = await manager.findOne(RolePermission, { where: { role_id: 3, permission_id: index } });
+                if (!existingPermission) {
+                    const rp = new RolePermission();
+                    rp.role_id = 3;
+                    rp.permission_id = index;
+                    await manager.save(rp);
+                } else {
+                    console.log(`Skipping...`);
+                }
+            }
+
+            for (const data of teacherPermission) {
+                const existingPermission = await manager.findOne(RolePermission, { where: { role_id: 2, permission_id: data } });
+                if (!existingPermission) {
+                    const rp = new RolePermission();
+                    rp.role_id = 2;
+                    rp.permission_id = data;
+                    await manager.save(rp);
+                } else {
+                    console.log(`Skipping...`);
+                }
+            }
+
+            for (const data of userPermission) {
+                const existingPermission = await manager.findOne(RolePermission, { where: { role_id: 1, permission_id: data } });
+                if (!existingPermission) {
+                    const rp = new RolePermission();
+                    rp.role_id = 1;
+                    rp.permission_id = data;
+                    await manager.save(rp);
+                } else {
+                    console.log(`Skipping...`);
+                }
+            }
+        });
 
         console.log("=== Finish ===");
     }

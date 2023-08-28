@@ -1,8 +1,7 @@
 import { Length } from '@nestjs/class-validator';
-import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, OneToOne, JoinColumn, Relation, ManyToOne, Index } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, OneToOne, JoinColumn, Relation, ManyToOne, Index, ManyToMany, JoinTable } from 'typeorm';
 import { Role } from './role.entity';
-import { Student } from 'src/students/entities/student.entity';
-import { Parent } from 'src/parents/entities/parent.entity';
+import { Permission } from 'src/permissions/entities/permission.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -25,6 +24,7 @@ export class User {
 
   @Column({ type: 'varchar', length: 255 })
   password: string;
+
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

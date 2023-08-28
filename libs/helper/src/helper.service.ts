@@ -43,7 +43,14 @@ function generateEncryptionKey(key: string): Buffer {
 
     return crypto.pbkdf2Sync(key, salt, 100000, keyLength, 'sha256');
 }
+let currentUserValue: object;
+export function setCurrentUser(current_user: object) {
+    currentUserValue = current_user;
+}
 
+export function currentUser(): object {
+    return currentUserValue;
+}
 
 @Injectable()
 export class HelperService { }

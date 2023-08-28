@@ -3,6 +3,7 @@ import { TeachersService } from './teachers.service';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { responseJson } from '@app/response';
+import { currentUser } from '@app/helper';
 
 @Controller('teachers')
 export class TeachersController {
@@ -35,8 +36,7 @@ export class TeachersController {
    * @param page - Page number for pagination (default: 1).
    * @param limit - Number of items per page (default: 10).
    * @param nik - Filter by teacher's National Identification Number (NIK).
-   * @param full_name - Filter by teacher's full name.
-   * @param nick_name - Filter by teacher's nickname.
+   * @param name - Filter by teacher's full name or nickname.
    * @param response - HTTP response object.
    */
   @Get()

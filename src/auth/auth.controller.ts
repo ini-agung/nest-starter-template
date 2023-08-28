@@ -8,6 +8,7 @@ import { JwtLibsService, comparePasswords } from '@app/jwt-libs';
 import { JwtLibsGuard } from '@app/jwt-libs/jwt-libs.guard';
 import { Public } from '@app/jwt-libs/public.decorator';
 import { type } from 'os';
+import { setCurrentUser } from '@app/helper';
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService,
@@ -33,7 +34,9 @@ export class AuthController {
                     role: user.role,
                     current_datetime: user.current_datetime,
                     detail: user.metadata,
+                    permission: user.flattenedPermissions,
                 };
+                setCurrentUser(payload);
                 const access_token = await this.jwtLibService.generateToken(payload);
                 const refresh_token = await this.jwtLibService.generateRefresh({ user, refreshToken: true });
                 const decode = await this.jwtLibService.decodeJwt(access_token.access_token);

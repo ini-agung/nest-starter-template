@@ -14,6 +14,7 @@ import { SeederModule } from '@app/seeder';
 import { SchedulesModule } from './schedules/schedules.module';
 import { EnrolmentModule } from './enrolment/enrolment.module';
 import { ParentsModule } from './parents/parents.module';
+import { PermissionsModule } from './permissions/permissions.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { ParentsModule } from './parents/parents.module';
     StudentsModule, ClassroomsModule,
     SeederModule, SchedulesModule,
     EnrolmentModule, ParentsModule,
-    TeachersModule
+    TeachersModule,
+    PermissionsModule
   ],
   controllers: [AppController],
   providers: [AppService,

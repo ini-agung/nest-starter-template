@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Relation } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Relation, ManyToMany, JoinTable, DeleteDateColumn, OneToMany } from 'typeorm';
 import { User } from './user.entity';
+import { Permission, RolePermission } from 'src/permissions/entities/permission.entity';
 
 @Entity({ name: 'roles' })
 export class Role {
@@ -9,7 +10,16 @@ export class Role {
   @Column({ type: 'varchar', length: 20, unique: true })
   role: string;
 
-  @OneToOne(() => User, (user) => user.role)
-  user: Relation<User>
+  @OneToMany(() => User, user => user.role)
+  users: User[];
+
+  @OneToMany(() => RolePermission, rolePermission => rolePermission.role)
+  rolePermissions: RolePermission[];
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @DeleteDateColumn({ type: 'timestamp', nullable: true, default: null })
+  deletedAt: Date | null;
 }
 

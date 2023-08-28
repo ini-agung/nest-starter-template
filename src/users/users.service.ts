@@ -9,6 +9,7 @@ import { Student } from 'src/students/entities/student.entity';
 import { Teacher } from 'src/teachers/entities/teacher.entity';
 import { Parent } from 'src/parents/entities/parent.entity';
 import { Pagination } from '@app/helper';
+import { RolePermission, UserPermission } from 'src/permissions/entities/permission.entity';
 
 @Injectable()
 export class UsersService {
@@ -21,6 +22,10 @@ export class UsersService {
     private teacherRepository: Repository<Teacher>,
     @InjectRepository(Parent)
     private parentRepository: Repository<Parent>,
+    @InjectRepository(RolePermission)
+    private rpRepository: Repository<RolePermission>,
+    @InjectRepository(UserPermission)
+    private upRepository: Repository<UserPermission>,
   ) { }
 
   private readonly logger = new Logger(UsersService.name);
@@ -139,6 +144,34 @@ export class UsersService {
         .andWhere('user.deletedAt is NULL')
         .getOne()
       if (user) {
+        let permissions: any = [];
+        try {
+          const rolePermission = await this.rpRepository
+            .createQueryBuilder('rp')
+            .select('permission.code', 'code')
+            .leftJoin('rp.permission', 'permission')
+            .where('rp.role_id = :role_id', { role_id: user.role_id })
+            .andWhere('((rp.deletedAt IS NULL)AND(permission.deletedAt IS NULL))')
+            .getRawMany();
+          // console.log(rolePermission)
+          permissions.push(rolePermission)
+        } catch (error) {
+          console.log(error.sqlMessage)
+        }
+
+        try {
+          const userPermission = await this.upRepository
+            .createQueryBuilder('up')
+            .select('permission.code', 'code')
+            .leftJoin('up.permission', 'permission')
+            .where('up.user_id = :user_id', { user_id: user.id })
+            .getRawMany();
+          permissions.push(userPermission)
+        } catch (error) {
+          console.log(error)
+        }
+        const flattenedPermissions = permissions.flatMap(row => row.map(item => item.code));
+        Object.assign(user, { flattenedPermissions });
         if (user.id == 1) {
           const metadata = await this.studentRepository
             .createQueryBuilder('student')
@@ -160,6 +193,7 @@ export class UsersService {
             .getOne();
           Object.assign(user, { metadata });
         }
+        // console.log(user);
         return user;
       } else {
         const data = {
