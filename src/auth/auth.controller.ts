@@ -5,9 +5,7 @@ import { SignupDto } from './dto/signup.dto';
 import { responseJson } from '@app/response';
 import { UsersService } from 'src/users/users.service';
 import { JwtLibsService, comparePasswords } from '@app/jwt-libs';
-import { JwtLibsGuard } from '@app/jwt-libs/jwt-libs.guard';
 import { Public } from '@app/jwt-libs/public.decorator';
-import { type } from 'os';
 import { setCurrentUser } from '@app/helper';
 @Controller('auth')
 export class AuthController {
