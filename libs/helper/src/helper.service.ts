@@ -57,5 +57,9 @@ export function captureSentryException(error: Error): void {
     Sentry.captureException(error);
 }
 
+export function logLever() {
+    return process.env.NODE_ENV === 'production' ? 'warn' : 'log';
+}
+
 @Injectable()
 export class HelperService { }

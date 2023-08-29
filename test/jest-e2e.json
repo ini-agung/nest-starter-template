@@ -26,6 +26,8 @@
     "@app/seeder/(.*)": "<rootDir>/../libs/seeder/src/$1",
     "@app/seeder": "<rootDir>/../libs/seeder/src",
     "@app/helper/(.*)": "<rootDir>/../libs/helper/src/$1",
-    "@app/helper": "<rootDir>/../libs/helper/src"
+    "@app/helper": "<rootDir>/../libs/helper/src",
+    "@app/middleware/(.*)": "<rootDir>/../libs/middleware/src/$1",
+    "@app/middleware": "<rootDir>/../libs/middleware/src"
   }
 }

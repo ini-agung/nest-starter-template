@@ -65,6 +65,12 @@
       ],
       "@app/helper/*": [
         "libs/helper/src/*"
+      ],
+      "@app/middleware": [
+        "libs/middleware/src"
+      ],
+      "@app/middleware/*": [
+        "libs/middleware/src/*"
       ]
     }
   }

@@ -4,6 +4,8 @@ import { SeederService } from '@app/seeder';
 import { VersionInterceptor } from './version.interceptor';
 import * as dotenv from 'dotenv'; // Import dotenv
 import * as Sentry from '@sentry/node';
+import { Logger } from '@nestjs/common';
+import { logLever } from '@app/helper';
 dotenv.config(); // Load environment variables from .env file
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,6 +17,7 @@ async function bootstrap() {
     // Performance Monitoring
     tracesSampleRate: 1.0, // Capture 100% of the transactions, reduce in production!
   });
+  app.useLogger(new Logger(logLever()));
   await app.listen(3000);
   /*
     const transaction = Sentry.startTransaction({

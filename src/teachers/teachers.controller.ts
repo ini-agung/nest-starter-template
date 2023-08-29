@@ -95,7 +95,7 @@ export class TeachersController {
   async remove(@Param('id') id: string, @Res() response) {
     const data = {
       status: true,
-      statusCode: HttpStatus.NO_CONTENT,
+      statusCode: HttpStatus.OK,
       message: 'Success Delete Teacher',
       data: {}
     };
@@ -115,7 +115,7 @@ export class TeachersController {
     const restoredUser = await this.teachersService.restore(id);
     const data = {
       status: true,
-      statusCode: HttpStatus.NO_CONTENT,
+      statusCode: HttpStatus.OK,
       message: 'Success Restore Teacher',
       data: {}
     };

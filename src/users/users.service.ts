@@ -13,6 +13,7 @@ import { RolePermission, UserPermission } from 'src/permissions/entities/permiss
 
 @Injectable()
 export class UsersService {
+  private readonly logger = new Logger(UsersService.name);
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -26,9 +27,9 @@ export class UsersService {
     private rpRepository: Repository<RolePermission>,
     @InjectRepository(UserPermission)
     private upRepository: Repository<UserPermission>,
-  ) { }
+  ) {
+  }
 
-  private readonly logger = new Logger(UsersService.name);
 
   /**
    * Create a new user.
@@ -110,6 +111,7 @@ export class UsersService {
       const startIdx = (page - 1) * limit;
       const endIdx = startIdx + limit;
       const data = users.slice(startIdx, endIdx);
+      this.logger.log(`findAll : `, data);
       return {
         data,
         total,
@@ -156,11 +158,9 @@ export class UsersService {
             .where('rp.role_id = :role_id', { role_id: user.role_id })
             .andWhere('((rp.deletedAt IS NULL)AND(permission.deletedAt IS NULL))')
             .getRawMany();
-          // console.log(rolePermission)
           permissions.push(rolePermission)
         } catch (error) {
           captureSentryException(error);
-          console.log(error.sqlMessage)
         }
         try {
           const userPermission = await this.upRepository
@@ -172,7 +172,6 @@ export class UsersService {
           permissions.push(userPermission)
         } catch (error) {
           captureSentryException(error);
-          console.log(error);
         }
         const flattenedPermissions = permissions.flatMap(row => row.map(item => item.code));
         Object.assign(user, { flattenedPermissions });
