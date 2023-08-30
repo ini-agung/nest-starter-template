@@ -17,6 +17,7 @@ import { ParentsModule } from './parents/parents.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { SuccessRequestInterceptor } from './success-request.interceptor';
 import { ConfigModule } from '@nestjs/config';
+import { SubjectsModule } from './subjects/subjects.module';
 @Module({
   imports: [
     ConnectionsModule, UsersModule,
@@ -29,6 +30,7 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true, // Make ConfigService available throughout the app
     }),
+    SubjectsModule,
   ],
   controllers: [AppController],
   providers: [AppService,

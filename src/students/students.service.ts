@@ -38,90 +38,6 @@ export class StudentsService {
   }
 
   /**
-   * Retrieve all students with optional filtering and pagination.
-   *
-   * @param page - Page number for pagination.
-   * @param limit - Number of items per page.
-   * @returns Paginated list of students.
-   */
-  async findAll(
-    page: number,
-    limit: number,
-  ): Promise<Pagination<any>> {
-    try {
-      const students = await this.studentRepository
-        .createQueryBuilder('student')
-        .select([
-          'student.id', 'student.parent_id', 'student.nis', 'student.full_name', 'student.img',
-          'student.nick_name', 'student.date_birth', 'student.place_birth', 'student.phone',
-          'student.siblings', 'student.child_order', 'student.entry_year', 'student.address',
-        ]) // Specify the columns you want
-        .leftJoinAndSelect('student.user', 'user')
-        .leftJoinAndSelect('student.parent', 'parent')
-        .leftJoinAndSelect('student.gender', 'gender')
-        .leftJoinAndSelect('student.religion', 'religion as a')
-        .leftJoinAndSelect('parent.rf', 'religion as b') // Join parent_religion for father
-        .leftJoinAndSelect('parent.rm', 'religion as c') // Join parent_religion for mother
-        .where('student.deletedAt IS NULL')
-        .orderBy('student.nis', 'ASC')
-        .getMany();
-      const flattenedStudents = students.map(student => ({
-        student_id: student?.id,
-        user_id: student?.user?.id,
-        nis: student?.nis,
-        student_name: student?.full_name,
-        nick_name: student?.nick_name,
-        username: student?.user?.username,
-        date_birth: student?.date_birth,
-        place_birth: student?.place_birth,
-        entry_year: student?.entry_year,
-        address: student?.address,
-        img: student?.img,
-        siblings: student?.siblings,
-        child_order: student?.child_order,
-        phone: student?.phone,
-        religion: student.religion?.religion,
-        father: {
-          name: student.parent?.father,
-          img: student.parent?.img_father,
-          religion: student.parent?.rf.religion,
-          phone: student.parent?.phone_father,
-        },
-        mother: {
-          name: student.parent?.mother,
-          img: student.parent?.img_mother,
-          religion: student.parent?.rm.religion,
-          phone: student.parent?.phone_mother,
-        }
-      }));
-      const total = flattenedStudents.length;
-      const startIdx = (page - 1) * limit;
-      const endIdx = startIdx + limit;
-      const data = flattenedStudents.slice(startIdx, endIdx);
-
-      return {
-        data,
-        total,
-        currentPage: page,
-        perPage: limit,
-        prevPage: page > 1 ? `/students?page=${(parseInt(page.toString()) - 1)}` : undefined,
-        nextPage: endIdx < total ? `/students?page=${(parseInt(page.toString()) + 1)}` : undefined,
-      };
-    } catch (error) {
-      this.logger.error(`Error find students : ${error.message}`);
-      const data = {
-        status: false,
-        statusCode: HttpStatus.CONFLICT,
-        message: error.sqlMessage,
-        data: {}
-      };
-      data.data = error.message;
-      captureSentryException(error);
-      throw new ConflictException(data, { cause: new Error() });
-    }
-  }
-
-  /**
    * Retrieve students based on filters with optional pagination.
    *
    * @param nis - Filter by student's National Identity Number (NIS).
@@ -335,7 +251,7 @@ export class StudentsService {
       const studentToRestore = await this.studentRepository
         .createQueryBuilder('student')
         .withDeleted() // Include soft-deleted entities
-        .where('user.id = :id', { id })
+        .where('student.id = :id', { id })
         .getOne();
 
       if (studentToRestore) {

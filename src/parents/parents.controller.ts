@@ -24,7 +24,7 @@ export class ParentsController {
   @Get()
   async findAll(
     @Query('page') page: number = this._page,
-    @Query('limit') limit: number = this._page,
+    @Query('limit') limit: number = this._limit,
     @Query('name') name: string,
     @Query('phone') phone: string,
     @Res() response) {
@@ -36,13 +36,8 @@ export class ParentsController {
     };
     page = (page == undefined) ? this._page : page;
     limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
-
-    let parents: object;
-    if (name || phone) {
-      parents = await this.parentsService.findLike(phone, name, page, limit);
-    } else {
-      parents = await this.parentsService.findAll(page, limit);
-    }
+    console.log("limit", limit)
+    const parents = await this.parentsService.findLike(phone, name, page, limit);
     data.data = parents;
     responseJson(data, data.statusCode, response);
   }

@@ -63,12 +63,7 @@ export class SchedulesController {
     };
     page = (page == undefined) ? this._page : page;
     limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
-    let schedules: object;
-    if (day || time_start || time_finish) {
-      schedules = await this.schedulesService.findLike(day, time_start, time_finish, clas, page, limit);
-    } else {
-      schedules = await this.schedulesService.findAll(page, limit);
-    }
+    const schedules = await this.schedulesService.findLike(day, time_start, time_finish, clas, page, limit);
     data.data = schedules;
     responseJson(data, data.statusCode, response);
   }
@@ -133,7 +128,7 @@ export class SchedulesController {
     const restoredSchedule = await this.schedulesService.restore(id);
     const data = {
       status: true,
-      statusCode: HttpStatus.NO_CONTENT,
+      statusCode: HttpStatus.OK,
       message: 'Success Restore Schedule',
       data: {}
     };

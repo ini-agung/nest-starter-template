@@ -19,7 +19,4 @@ export class CreateUserDto {
     @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, { message: 'Password too weak, combine uppercase, lowercase and digits' })
     password: string;
 
-    @IsString()
-    @IsOptional()
-    img: string = "default.jpg";
 }

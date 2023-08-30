@@ -58,12 +58,8 @@ export class StudentsController {
     };
     page = (page == undefined) ? this._page : page;
     limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
-    let students: object;
-    if (nis || name || nick_name) {
-      students = await this.studentsService.findLike(nis, name, nick_name, page, limit);
-    } else {
-      students = await this.studentsService.findAll(page, limit);
-    }
+    console.log("limit", limit)
+    const students = await this.studentsService.findLike(nis, name, nick_name, page, limit);
     data.data = students;
     responseJson(data, data.statusCode, response);
   }
@@ -150,7 +146,7 @@ export class StudentsController {
     const restoredUser = await this.studentsService.restore(id);
     const data = {
       status: true,
-      statusCode: HttpStatus.NO_CONTENT,
+      statusCode: HttpStatus.OK,
       message: 'Success Restore Student',
       data: {}
     };

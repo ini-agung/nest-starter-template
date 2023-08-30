@@ -37,60 +37,6 @@ export class ParentsService {
   }
 
   /**
-* Retrieve enrolments for a specific schedule.
-*
-* @param page - The ID of the schedule to retrieve enrolments for.
-* @returns An array of enrolments associated with the given schedule.
-*/
-  async findAll(page: number, limit: number): Promise<Pagination<any>> {
-    try {
-      console.log(page, limit);
-      const parents = await this.parentsRepository
-        .createQueryBuilder('parent')
-        .select([
-          'parent.id', 'parent.user_id', 'parent.father', 'parent.mother', 'parent.phone_father',
-          'parent.phone_mother', 'parent.img_mother', 'parent.img_father', 'parent.address',
-        ])
-        .leftJoinAndSelect('parent.rf', 'religion as religion_father')
-        .leftJoinAndSelect('parent.rm', 'religion as religion_mother')
-        // .leftJoinAndMapMany('parent.students', 'students', 'students', 'students.parent_id = parent_id')  // Join students using parent_id
-        .leftJoinAndMapMany(
-          'parent.students',
-          'students',
-          'students',
-          'students.parent_id = parent_id AND students.parent_id = parent.id'  // Join students using parent_id and match parent_id with parent.id
-        )
-        .where('parent.deletedAt IS NULL')
-        .getMany();
-      // this.logger.log(parents);
-      const total = parents.length;
-      const startIdx = (page - 1) * limit;
-      const endIdx = startIdx + limit;
-      const data = parents.slice(startIdx, endIdx);
-
-      return {
-        data,
-        total,
-        currentPage: page,
-        perPage: limit,
-        prevPage: page > 1 ? `/parents?page=${(parseInt(page.toString()) - 1)}` : undefined,
-        nextPage: endIdx < total ? `/parents?page=${(parseInt(page.toString()) + 1)}` : undefined,
-      };
-    } catch (error) {
-      this.logger.error(`Error find parents : ${error.message}`);
-      const data = {
-        status: false,
-        statusCode: HttpStatus.CONFLICT,
-        message: error.sqlMessage,
-        data: {}
-      };
-      data.data = error.message;
-      captureSentryException(error);
-      throw new ConflictException(data, { cause: new Error() });
-    }
-  }
-
-  /**
   * Retrieve students based on filters with optional pagination.
   *
   * @param phone - Filter by phone of father or mother.
@@ -106,7 +52,6 @@ export class ParentsService {
     limit: number,
   ): Promise<Pagination<any>> {
     try {
-      console.log(phone, name)
       const queryBuilder = this.parentsRepository
         .createQueryBuilder('parent')
         .select([

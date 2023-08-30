@@ -75,70 +75,6 @@ export class EnrolmentService {
   }
 
   /**
-     * Retrieve all enrolments with pagination and additional information.
-     *
-     * @param page - The current page number (default: 1).
-     * @param limit - The number of enrolments per page (default: 10).
-     * @returns A paginated list of enrolments with additional information.
-     */
-  async findAll(
-    page: number,
-    limit: number,
-  ): Promise<Pagination<any>> {
-    try {
-      const result: {
-        schedule_id: number;
-        total_students: number;
-        enrolments: Enrolment[];
-        schedule: string;
-      }[] = [];
-
-      const enrolmentCounts = await this.enrolmentRepository
-        .createQueryBuilder('enrolment')
-        .select('enrolment.schedule_id', 'schedule_id')
-        .addSelect('COUNT(enrolment.id)', 'total_students')
-        .groupBy('enrolment.schedule_id')
-        .getRawMany();
-      for (const item of enrolmentCounts) {
-        const { schedule_id } = item;
-        const enrolments = await this.fetchEnrolmentsByScheduleId(schedule_id);
-        const schedule = await this.fetchSchedule(schedule_id);
-        result.push({
-          schedule,
-          schedule_id,
-          total_students: item.total_students,
-          enrolments,
-        });
-      }
-
-      const total = result.length;
-      const startIdx = (page - 1) * limit;
-      const endIdx = startIdx + limit;
-      const data = result.slice(startIdx, endIdx);
-
-      return {
-        data,
-        total,
-        currentPage: page,
-        perPage: limit,
-        prevPage: page > 1 ? `/enrolments?page=${(parseInt(page.toString()) - 1)}` : undefined,
-        nextPage: endIdx < total ? `/enrolments?page=${(parseInt(page.toString()) + 1)}` : undefined,
-      };
-    } catch (error) {
-      this.logger.error(`Error find Enrolments : ${error.message}`);
-      const data = {
-        status: false,
-        statusCode: HttpStatus.CONFLICT,
-        message: error.sqlMessage,
-        data: {}
-      };
-      data.data = error.message;
-      captureSentryException(error);
-      throw new ConflictException(data, { cause: new Error() });
-    }
-  }
-
-  /**
   * Retrieve filtered enrolments with pagination.
   *
   * @param enrol_code - The enrolment code for filtering.
@@ -152,7 +88,7 @@ export class EnrolmentService {
     schedule: number,
     page: number,
     limit: number,
-  ) {
+  ): Promise<Pagination<any>> {
     try {
       const queryBuilder = await this.enrolmentRepository
         .createQueryBuilder('enrolment')

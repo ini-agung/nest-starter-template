@@ -55,12 +55,7 @@ export class EnrolmentController {
     };
     page = (page == undefined) ? this._page : page;
     limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
-    let enrolements: object;
-    if (enrol_code || schedule) {
-      enrolements = await this.enrolmentService.findLike(enrol_code, schedule, page, limit);
-    } else {
-      enrolements = await this.enrolmentService.findAll(page, limit);
-    }
+    const enrolements = await this.enrolmentService.findLike(enrol_code, schedule, page, limit);
     data.data = enrolements;
     responseJson(data, data.statusCode, response);
   }

@@ -1,3 +1,4 @@
+import { Subject } from "src/subjects/entities/subject.entity";
 import { Teacher } from "src/teachers/entities/teacher.entity";
 import { Column, DeleteDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -16,24 +17,6 @@ export class Classroom {
     deletedAt: Date | null;
 }
 
-
-@Entity({ name: 'subjects' })
-export class Subject {
-    @PrimaryGeneratedColumn({ type: 'int' })
-    id: number;
-
-    @Column({ type: 'varchar', length: 50 })
-    subject: string;
-
-    @Column({ type: 'varchar', length: 255 })
-    description: string;
-
-    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    createdAt: Date;
-
-    @DeleteDateColumn({ type: 'timestamp' })
-    deletedAt: Date | null;
-}
 
 @Entity({ name: 'class' })
 export class Class {

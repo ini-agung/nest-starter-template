@@ -54,12 +54,7 @@ export class TeachersController {
     };
     page = (page == undefined) ? this._page : page;
     limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
-    let teachers: object;
-    if (nik || name) {
-      teachers = await this.teachersService.findLike(nik, name, page, limit);
-    } else {
-      teachers = await this.teachersService.findAll(page, limit);
-    }
+    const teachers = await this.teachersService.findLike(nik, name, page, limit);
     data.data = teachers;
     responseJson(data, data.statusCode, response);
   }

@@ -38,81 +38,6 @@ export class TeachersService {
     }
   }
 
-  /**
-   * Retrieve all teachers with pagination.
-   *
-   * @param page - Page number for pagination (default: 1).
-   * @param limit - Number of items per page (default: 10).
-   * @returns A paginated list of teachers.
-   * @throws ConflictException if there's an error while retrieving teachers.
-   */
-  async findAll(
-    page: number,
-    limit: number,
-  ): Promise<Pagination<any>> {
-    try {
-      const teachers = await this.teachersRepository
-        .createQueryBuilder('teacher')
-        .select([
-          'teacher.id',
-          'teacher.nik',
-          'teacher.full_name',
-          'teacher.nick_name',
-          'teacher.phone',
-          'teacher.date_birth',
-          'teacher.place_birth',
-          'teacher.entry_year',
-        ])
-        .leftJoinAndSelect('teacher.degree', 'degree')
-        .leftJoinAndSelect('teacher.user', 'users')
-        .leftJoinAndSelect('teacher.religion', 'religions')
-        .leftJoinAndSelect('teacher.gender', 'genders')
-        .where('teacher.deletedAt IS NULL')
-        .where('users.deletedAt IS NULL')
-        .getMany();
-      // this.logger.log(teachers);
-      const flattenedTeachers = teachers.map(teacher => ({
-        user_id: teacher?.user?.id,
-        teacher_id: teacher?.id,
-        nik: teacher?.nik,
-        username: teacher?.user?.username,
-        email: teacher?.user?.email,
-        full_name: teacher?.full_name,
-        nick_name: teacher?.nick_name,
-        date_birth: teacher?.date_birth,
-        place_birth: teacher?.place_birth,
-        religion: teacher?.religion?.religion,
-        entry_year: teacher?.entry_year,
-        gender: teacher?.gender?.gender,
-        phone: teacher?.phone,
-        degree: teacher?.degree?.degree, // Access the 'degree' property directly
-      }));
-      // this.logger.log("flattenedTeachers.length", flattenedTeachers.length);
-
-      const total = flattenedTeachers.length;
-      const startIdx = (page - 1) * limit;
-      const endIdx = startIdx + limit;
-      const data = flattenedTeachers.slice(startIdx, endIdx);
-      return {
-        data,
-        total,
-        currentPage: page,
-        perPage: limit,
-        prevPage: page > 1 ? `/parents?page=${(parseInt(page.toString()) - 1)}` : undefined,
-        nextPage: endIdx < total ? `/parents?page=${(parseInt(page.toString()) + 1)}` : undefined,
-      };
-    } catch (error) {
-      this.logger.error(`Error find all ${error.message}`);
-      const data = {
-        status: false,
-        statusCode: HttpStatus.CONFLICT,
-        message: error.sqlMessage,
-        data: {}
-      };
-      data.data = error.message;
-      throw new ConflictException(data, { cause: new Error() });
-    }
-  }
 
   /**
    * Retrieve teachers based on query parameters.
@@ -152,7 +77,7 @@ export class TeachersService {
         teachers.andWhere('(teacher.nik LIKE :nik)', { nik: `%${nik}%` })
       }
       if (name) {
-        teachers.andWhere('((teacher.full_name LIKE :name) OR (teacher.nick_name LIKE :name))', { name })
+        teachers.andWhere('((teacher.full_name LIKE :name) OR (teacher.nick_name LIKE :name))', { name: `%${name}%` })
       }
       // this.logger.log(teachers);
       const schedulesCounts = await teachers.orderBy('teacher.nik', 'ASC').getMany();

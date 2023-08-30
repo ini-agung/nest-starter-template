@@ -10,6 +10,14 @@ export class ClassroomsController {
 
   private _page = parseInt(process.env.PAGINATION_PAGE)
   private _limit = parseInt(process.env.PAGINATION_LIMIT)
+  private _version = (process.env.VERSION.toLowerCase() == 'v2') ? true : false;
+
+  /**
+   * Create a new classroom.
+   *
+   * @param createClassroomDto - Data to create a new classroom.
+   * @returns Created classroom data.
+   */
   @Post()
   async create(@Body() createClassroomDto: CreateClassroomDto,
     @Res() response,
@@ -26,6 +34,11 @@ export class ClassroomsController {
     responseJson(data, data.statusCode, response);
   }
 
+  /**
+   * Get a list of all classrooms.
+   *
+   * @returns List of classrooms.
+   */
   @Get()
   async findAll(
     @Query('page') page: number = this._page,
@@ -53,7 +66,13 @@ export class ClassroomsController {
     return await this.classroomsService.findAll();
   }
 
-
+  /**
+     * Update a classroom's details.
+     *
+     * @param id - ID of the classroom to update.
+     * @param updateClassroomDto - Data to update the classroom.
+     * @returns Updated classroom data.
+     */
   @Patch(':id')
   async update(@Param('id') id: string,
     @Body() updateClassroomDto: UpdateClassroomDto,
@@ -70,6 +89,12 @@ export class ClassroomsController {
     responseJson(data, data.statusCode, response);
   }
 
+  /**
+     * Delete a classroom.
+     *
+     * @param id - ID of the classroom to delete.
+     * @returns Deleted classroom data.
+     */
   @Delete(':id')
   async remove(
     @Param('id') id: number,
@@ -86,6 +111,12 @@ export class ClassroomsController {
     responseJson(data, data.statusCode, response);
   }
 
+  /**
+    * Restore a previously soft-deleted classroom.
+    *
+    * @param id - ID of the classroom to restore.
+    * @param response - HTTP response object.
+    */
   @Patch(':id/restore')
   async restore(
     @Param('id') id: number,
@@ -94,8 +125,8 @@ export class ClassroomsController {
     const restoredUser = await this.classroomsService.restore(id);
     const data = {
       status: true,
-      statusCode: HttpStatus.NO_CONTENT,
-      message: 'Success Restore Teacher',
+      statusCode: HttpStatus.OK,
+      message: 'Success Restore Classroom',
       data: {}
     };
     data.data = restoredUser;
