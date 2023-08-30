@@ -101,6 +101,7 @@ export class EnrolmentService {
         queryBuilder.andWhere('enrolment.schedule_id = :schedule', { schedule });
       }
       if (enrol_code) {
+        console.log(enrol_code)
         queryBuilder.andWhere('enrolment.enrol_code = :enrol_code', { enrol_code });
       }
       const enrolmentCounts = await queryBuilder.getRawMany();

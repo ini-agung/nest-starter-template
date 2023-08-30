@@ -5,9 +5,16 @@ import { UpdateParentsDto } from './dto/update-parents.dto';
 import { responseJson } from '@app/response';
 @Controller('parents')
 export class ParentsController {
+
   constructor(private readonly parentsService: ParentsService) { }
   private _page = parseInt(process.env.PAGINATION_PAGE)
   private _limit = parseInt(process.env.PAGINATION_LIMIT)
+  /**
+     * Create a new parent.
+     *
+     * @param createParentDto - Data to create a new parent.
+     * @param response - HTTP response object.
+     */
   @Post()
   async create(@Body() createParentDto: CreateParentsDto, @Res() response) {
     const parent = await this.parentsService.create(createParentDto);
@@ -21,6 +28,15 @@ export class ParentsController {
     responseJson(data, data.statusCode, response);
   }
 
+  /**
+   * Retrieve all parents with optional filtering and pagination.
+   *
+   * @param page - Page number for pagination (default: 1).
+   * @param limit - Number of items per page (default: 10).
+   * @param name - Filter by parent's name.
+   * @param phone - Filter by parent's phone.
+   * @param response - HTTP response object.
+   */
   @Get()
   async findAll(
     @Query('page') page: number = this._page,
@@ -42,6 +58,12 @@ export class ParentsController {
     responseJson(data, data.statusCode, response);
   }
 
+  /**
+   * Retrieve a single parent by ID.
+   *
+   * @param id - ID of the parent to retrieve.
+   * @param response - HTTP response object.
+   */
   @Get(':id')
   async findOne(@Param('id') id: string, @Res() response) {
     const data = {
@@ -55,6 +77,13 @@ export class ParentsController {
     responseJson(data, data.statusCode, response);
   }
 
+  /**
+     * Update an existing parent.
+     *
+     * @param id - ID of the parent to update.
+     * @param updateParentDto - Updated parent data.
+     * @param response - HTTP response object.
+     */
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateParentDto: UpdateParentsDto, @Res() response) {
     const data = {
@@ -68,6 +97,12 @@ export class ParentsController {
     responseJson(data, data.statusCode, response);
   }
 
+  /**
+   * Delete a parent (soft delete).
+   *
+   * @param id - ID of the parent to delete.
+   * @param response - HTTP response object.
+   */
   @Delete(':id')
   async remove(@Param('id') id: string, @Res() response) {
     const data = {
@@ -78,6 +113,28 @@ export class ParentsController {
     };
     const parent = await this.parentsService.remove(+id);
     data.data = parent;
+    responseJson(data, data.statusCode, response);
+  }
+
+  /**
+  * Restore a previously soft-deleted parent.
+  *
+  * @param id - ID of the parent to restore.
+  * @param response - HTTP response object.
+  */
+  @Patch(':id/restore')
+  async restore(
+    @Param('id') id: number,
+    @Res() response,
+  ) {
+    const restoredUser = await this.parentsService.restore(id);
+    const data = {
+      status: true,
+      statusCode: HttpStatus.OK,
+      message: 'Success Restore Parent',
+      data: {}
+    };
+    data.data = restoredUser;
     responseJson(data, data.statusCode, response);
   }
 }

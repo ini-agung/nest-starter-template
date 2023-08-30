@@ -213,7 +213,7 @@ export class ParentsService {
       }
       return null; // User not found
     } catch (error) {
-      this.logger.error(`Error find student :   ${error.message}`);
+      this.logger.error(`Error find parent :   ${error.message}`);
       const data = {
         status: false,
         statusCode: HttpStatus.CONFLICT,
