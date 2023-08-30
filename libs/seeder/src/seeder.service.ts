@@ -13,7 +13,7 @@ import { Teacher } from 'src/teachers/entities/teacher.entity';
 import { Student } from 'src/students/entities/student.entity';
 import { Enrolment } from 'src/enrolment/entities/enrolment.entity';
 import { Permission, RolePermission } from 'src/permissions/entities/permission.entity';
-
+import * as faker from 'faker';
 @Injectable()
 export class SeederService {
     constructor(private readonly connection: Connection) { }
@@ -1607,6 +1607,10 @@ export class SeederService {
             }
         });
 
+        console.log("=== METADATA-ENROLMENTS ===")
+        for (let i; i < 5; i++) {
+
+        }
         console.log("=== Finish ===");
     }
 }

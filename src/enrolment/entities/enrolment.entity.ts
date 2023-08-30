@@ -1,7 +1,7 @@
 import { Class } from "src/classrooms/entities/classroom.entity";
 import { Schedule } from "src/schedules/entities/schedule.entity";
 import { Student } from "src/students/entities/student.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'enrolments' })
 export class Enrolment {
@@ -10,7 +10,6 @@ export class Enrolment {
 
     @Column({ type: 'varchar', length: 50, unique: true })
     enrol_code: string
-
 
     @ManyToOne(() => Student, student => student.enrolments)
     @JoinColumn({ name: 'student_id' })

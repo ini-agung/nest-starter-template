@@ -1,5 +1,5 @@
 import { Class } from "src/classrooms/entities/classroom.entity";
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'schedules' })
 export class Schedule {

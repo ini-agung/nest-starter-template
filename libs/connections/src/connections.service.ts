@@ -11,6 +11,7 @@ import { Degree } from 'src/teachers/entities/degree.entity';
 import { Teacher } from 'src/teachers/entities/teacher.entity';
 import { Role } from 'src/users/entities/role.entity';
 import { User } from 'src/users/entities/user.entity';
+import { MetadataSchedule } from 'src/schedules/entities/metadata-schedule.entity';
 export async function DBRead(table: string, properties: string[], parameter: string, orderBy: string) {
 }
 
@@ -24,7 +25,7 @@ export class ConnectionsService implements TypeOrmOptionsFactory {
             username: 'root',
             password: 'toor',
             database: 'db_spada',
-            entities: [User, Student, Parent, Teacher, Role, Degree, Religion, Gender, Class, Classroom, Subject, Schedule, Enrolment],
+            entities: [User, Student, Parent, Teacher, Role, Degree, Religion, Gender, Class, Classroom, Subject, Schedule, MetadataSchedule, Enrolment],
             autoLoadEntities: true,
             synchronize: true,
         };
