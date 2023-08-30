@@ -13,7 +13,6 @@ export class StudentsService {
     private studentRepository: Repository<Student>,) { }
   private readonly logger = new Logger(StudentsService.name);
 
-  private page = process.env.PAGINATION_LIMIT;
   /**
    * Create a new student.
    *
@@ -50,7 +49,6 @@ export class StudentsService {
     limit: number,
   ): Promise<Pagination<any>> {
     try {
-      console.log(this.page)
       const students = await this.studentRepository
         .createQueryBuilder('student')
         .select([

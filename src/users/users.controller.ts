@@ -3,12 +3,15 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { responseJson } from '@app/response';
+import { decryptData, encryptData } from '@app/helper';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
-  private _page = parseInt(process.env.PAGINATION_PAGE)
-  private _limit = parseInt(process.env.PAGINATION_LIMIT)
+  private _page = parseInt(process.env.PAGINATION_PAGE);
+  private _limit = parseInt(process.env.PAGINATION_LIMIT);
+  private _version = (process.env.VERSION.toLowerCase() == 'v2') ? true : false;
+
   /**
      * Create a new user.
      *
@@ -108,6 +111,7 @@ export class UsersController {
       message: 'Success Delete Users',
       data: {}
     };
+
     const users = await this.usersService.remove(+id);
     data.data = users;
     responseJson(data, data.statusCode, response);

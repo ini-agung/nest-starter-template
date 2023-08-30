@@ -3,10 +3,10 @@ import * as crypto from 'crypto';
 import * as Sentry from '@sentry/node';
 import { createCipheriv, createDecipheriv } from 'crypto';
 
-const algorithm: string = 'aes-256-cbc';
-const key: string = 'MySecretEncryptionKey123!'; // Replace with your own encryption key
+const algorithm: string = process.env.ALGORITHM || 'aes-256-cbc';
+const key: string = process.env.KEY || 'MySecretEncryptionKey123!'; // Replace with your own encryption key
 const encryptionKey = generateEncryptionKey(key);
-
+const iv = crypto.randomBytes(16);
 export interface Pagination<T> {
     data: T[];
     total: number;
@@ -17,19 +17,17 @@ export interface Pagination<T> {
 }
 
 export function encryptData(data: string): string {
-    const iv = crypto.randomBytes(16);
     const cipher = createCipheriv(algorithm, encryptionKey, iv);
     let encryptedData = cipher.update(JSON.stringify(data), 'utf8', 'hex');
     encryptedData += cipher.final('hex');
-    return `${iv.toString('hex')}:${encryptedData}`;
+    return encryptedData;
 }
 
 export function decryptData(encryptedData: string): string {
-    const [ivHex, encryptedDataHex] = encryptedData.split(':');
-    const decipher = createDecipheriv(algorithm, encryptionKey, Buffer.from(ivHex, 'hex'));
+    const encryptedDataHex = encryptedData;
+    const decipher = createDecipheriv(algorithm, encryptionKey, iv);
     let decryptedData = decipher.update(encryptedDataHex, 'hex', 'utf8');
     decryptedData += decipher.final('utf8');
-    console.log(decryptedData);
     return JSON.parse(decryptedData);
 }
 
@@ -54,6 +52,7 @@ export function captureSentryException(error: Error): void {
 export function logLever() {
     return process.env.NODE_ENV === 'production' ? 'warn' : 'log';
 }
+
 
 @Injectable()
 export class HelperService { }
