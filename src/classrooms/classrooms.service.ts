@@ -37,7 +37,15 @@ export class ClassroomsService {
     }
   }
 
-
+  /**
+   * Retrieve classrooms based on filters with optional pagination.
+   *
+   * @param id - Filter by classroom's id.
+   * @param classroom - Filter by classroom's name.
+   * @param page - Page number for pagination.
+   * @param limit - Number of items per page.
+   * @returns Paginated list of filtered classrooms.
+   */
   async findLike(
     id: number,
     classroom: string,
@@ -85,6 +93,14 @@ export class ClassroomsService {
     }
   }
 
+  /**
+   * Update an existing classroom.
+   *
+   * @param id - ID of the classroom to update.
+   * @param updateClassroomDto - Updated classroom data.
+   * @returns The updated classroom.
+   * @throws ConflictException if the classroom doesn't exist or there's an error during update.
+   */
   async update(id: number, updateClassroomDto: UpdateClassroomDto) {
     try {
       const classroom = await this.classroomRepository.findOneBy({ id });
@@ -112,6 +128,13 @@ export class ClassroomsService {
     }
   }
 
+  /**
+   * Soft-delete a classroom.
+   *
+   * @param id - ID of the classroom to delete.
+   * @returns The soft-deleted classroom.
+   * @throws ConflictException if the classroom doesn't exist or there's an error during deletion.
+   */
   async remove(id: number) {
     try {
       const classroom = await this.classroomRepository.findOneBy({ id });
@@ -139,6 +162,13 @@ export class ClassroomsService {
     }
   }
 
+  /**
+   * Restore a previously soft-deleted classroom.
+   *
+   * @param id - ID of the classroom to restore.
+   * @returns The restored classroom or null if not found.
+   * @throws ConflictException if there's an error during restoration.
+   */
   async restore(id: number): Promise<Classroom> {
     try {
       const classroomToRestore = await this.classroomRepository

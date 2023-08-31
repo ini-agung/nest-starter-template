@@ -37,7 +37,15 @@ export class ClassService {
     }
   }
 
-
+  /**
+   * Retrieve classes based on filters with optional pagination.
+   *
+   * @param id - Filter by classes's id.
+   * @param classes - Filter by classes's name.
+   * @param page - Page number for pagination.
+   * @param limit - Number of items per page.
+   * @returns Paginated list of filtered classes.
+   */
   async findLike(
     id: number,
     classes: string,
@@ -85,6 +93,14 @@ export class ClassService {
     }
   }
 
+  /**
+   * Update an existing class.
+   *
+   * @param id - ID of the class to update.
+   * @param updateClassDto - Updated class data.
+   * @returns The updated class.
+   * @throws ConflictException if the class doesn't exist or there's an error during update.
+   */
   async update(id: number, updateClassDto: UpdateClassDto) {
     try {
       const classes = await this.classRepository.findOneBy({ id });
@@ -112,6 +128,13 @@ export class ClassService {
     }
   }
 
+  /**
+   * Soft-delete a class.
+   *
+   * @param id - ID of the class to delete.
+   * @returns The soft-deleted class.
+   * @throws ConflictException if the class doesn't exist or there's an error during deletion.
+   */
   async remove(id: number) {
     try {
       const classes = await this.classRepository.findOneBy({ id });
@@ -139,6 +162,13 @@ export class ClassService {
     }
   }
 
+  /**
+   * Restore a previously soft-deleted class.
+   *
+   * @param id - ID of the class to restore.
+   * @returns The restored class or null if not found.
+   * @throws ConflictException if there's an error during restoration.
+   */
   async restore(id: number): Promise<Class> {
     try {
       const classToRestore = await this.classRepository

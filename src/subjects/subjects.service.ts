@@ -90,6 +90,14 @@ export class SubjectsService {
     }
   }
 
+  /**
+   * Update an existing subject.
+   *
+   * @param id - ID of the subject to update.
+   * @param updateSubjectDto - Updated subject data.
+   * @returns The updated subject.
+   * @throws ConflictException if the subject doesn't exist or there's an error during update.
+   */
   async update(id: number, updateSubjectDto: UpdateSubjectDto) {
     try {
       const subject = await this.subjectService.findOneBy({ id });
@@ -117,6 +125,13 @@ export class SubjectsService {
     }
   }
 
+  /**
+   * Soft-delete a subject.
+   *
+   * @param id - ID of the subject to delete.
+   * @returns The soft-deleted subject.
+   * @throws ConflictException if the subject doesn't exist or there's an error during deletion.
+   */
   async remove(id: number) {
     try {
       const classroom = await this.subjectService.findOneBy({ id });
@@ -144,6 +159,13 @@ export class SubjectsService {
     }
   }
 
+  /**
+   * Restore a previously soft-deleted subject.
+   *
+   * @param id - ID of the subject to restore.
+   * @returns The restored subject or null if not found.
+   * @throws ConflictException if there's an error during restoration.
+   */
   async restore(id: number): Promise<Subject> {
     try {
       const classroomToRestore = await this.subjectService
