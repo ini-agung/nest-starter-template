@@ -7,13 +7,14 @@ import { Degree } from 'src/teachers/entities/degree.entity';
 import { Role } from 'src/users/entities/role.entity';
 import { Parent } from 'src/parents/entities/parent.entity';
 import { Connection } from 'typeorm';
-import { Class, Classroom, } from 'src/classrooms/entities/classroom.entity';
+import { Classroom, } from 'src/classrooms/entities/classroom.entity';
 import { Subject } from 'src/subjects/entities/subject.entity';
 import { Schedule } from 'src/schedules/entities/schedule.entity';
 import { Teacher } from 'src/teachers/entities/teacher.entity';
 import { Student } from 'src/students/entities/student.entity';
 import { Enrolment } from 'src/enrolment/entities/enrolment.entity';
 import { Permission, RolePermission } from 'src/permissions/entities/permission.entity';
+import { Class } from 'src/class/entities/class.entity';
 import * as faker from 'faker';
 @Injectable()
 export class SeederService {

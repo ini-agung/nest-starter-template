@@ -4,7 +4,7 @@ import { UpdateEnrolmentDto } from './dto/update-enrolment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Enrolment } from './entities/enrolment.entity';
 import { Repository } from 'typeorm';
-import { Class } from 'src/classrooms/entities/classroom.entity';
+import { Class } from 'src/class/entities/class.entity';
 import { Student } from 'src/students/entities/student.entity';
 import { Schedule } from 'src/schedules/entities/schedule.entity';
 import { Pagination, captureSentryException } from '@app/helper';

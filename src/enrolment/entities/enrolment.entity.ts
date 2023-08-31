@@ -1,4 +1,4 @@
-import { Class } from "src/classrooms/entities/classroom.entity";
+import { Class } from "src/class/entities/class.entity";
 import { Schedule } from "src/schedules/entities/schedule.entity";
 import { Student } from "src/students/entities/student.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";

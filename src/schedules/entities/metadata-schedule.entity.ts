@@ -1,4 +1,4 @@
-import { Class } from "src/classrooms/entities/classroom.entity";
+import { Class } from "src/class/entities/class.entity";
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Schedule } from "./schedule.entity";
 

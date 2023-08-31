@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
-import { Class, Classroom } from 'src/classrooms/entities/classroom.entity';
+import { Classroom } from 'src/classrooms/entities/classroom.entity';
+import { Class } from 'src/class/entities/class.entity';
 import { Subject } from 'src/subjects/entities/subject.entity';
 import { Enrolment } from 'src/enrolment/entities/enrolment.entity';
 import { Schedule } from 'src/schedules/entities/schedule.entity';
