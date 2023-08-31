@@ -131,11 +131,16 @@ export class UsersController {
     const restoredUser = await this.usersService.restore(id);
     const data = {
       status: true,
-      statusCode: HttpStatus.NO_CONTENT,
+      statusCode: HttpStatus.OK,
       message: 'Success Restore User',
       data: {}
     };
-    data.data = restoredUser;
+    if (restoredUser == null) {
+      data.statusCode = HttpStatus.BAD_REQUEST;
+      data.message = `User with id ${id} not found`;
+    } else {
+      data.data = restoredUser;
+    }
     responseJson(data, data.statusCode, response);
   }
 }

@@ -9,9 +9,10 @@ import { Student } from 'src/students/entities/student.entity';
 import { Parent } from 'src/parents/entities/parent.entity';
 import { Teacher } from 'src/teachers/entities/teacher.entity';
 import { RolePermission, UserPermission } from 'src/permissions/entities/permission.entity';
+import { MetadataDto } from './dto/metadata.dto';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Student, Parent, Teacher, RolePermission, UserPermission])],
+  imports: [TypeOrmModule.forFeature([User, Student, Parent, Teacher, RolePermission, UserPermission, MetadataDto])],
   controllers: [AuthController],
   providers: [AuthService, UsersService, JwtLibsService]
 })

@@ -116,14 +116,19 @@ export class ClassController {
     @Param('id') id: number,
     @Res() response,
   ) {
-    const restoredUser = await this.classService.restore(id);
+    const restoredClass = await this.classService.restore(id);
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
       message: 'Success Restore classes',
       data: {}
     };
-    data.data = restoredUser;
+    if (restoredClass == null) {
+      data.statusCode = HttpStatus.BAD_REQUEST;
+      data.message = `Class with id ${id} not found`;
+    } else {
+      data.data = restoredClass;
+    }
     responseJson(data, data.statusCode, response);
   }
 }

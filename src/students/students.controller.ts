@@ -143,14 +143,19 @@ export class StudentsController {
     @Param('id') id: number,
     @Res() response,
   ) {
-    const restoredUser = await this.studentsService.restore(id);
+    const restoredStudent = await this.studentsService.restore(id);
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
       message: 'Success Restore Student',
       data: {}
     };
-    data.data = restoredUser;
+    if (restoredStudent == null) {
+      data.statusCode = HttpStatus.BAD_REQUEST;
+      data.message = `Student with id ${id} not found`;
+    } else {
+      data.data = restoredStudent;
+    }
     responseJson(data, data.statusCode, response);
   }
 }

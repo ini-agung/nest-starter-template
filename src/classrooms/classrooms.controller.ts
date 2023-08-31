@@ -123,7 +123,12 @@ export class ClassroomsController {
       message: 'Success Restore Classroom',
       data: {}
     };
-    data.data = restoredUser;
+    if (restoredUser == null) {
+      data.statusCode = HttpStatus.BAD_REQUEST;
+      data.message = `Classroom with id ${id} not found`;
+    } else {
+      data.data = restoredUser;
+    }
     responseJson(data, data.statusCode, response);
   }
 }

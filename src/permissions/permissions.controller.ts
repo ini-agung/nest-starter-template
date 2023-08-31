@@ -104,14 +104,19 @@ export class PermissionsController {
    */
   @Patch(':id/restore')
   async restore(@Param('id') id: number, @Res() response) {
-    const restoredUser = await this.permissionsService.restore(id);
+    const restoredPermission = await this.permissionsService.restore(id);
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
       message: 'Success Restore Permission',
       data: {}
     };
-    data.data = restoredUser;
+    if (restoredPermission == null) {
+      data.statusCode = HttpStatus.BAD_REQUEST;
+      data.message = `Permission with id ${id} not found`;
+    } else {
+      data.data = restoredPermission;
+    }
     responseJson(data, data.statusCode, response);
   }
 }

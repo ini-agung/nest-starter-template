@@ -124,7 +124,12 @@ export class EnrolmentController {
       message: 'Success Restore Enrolment',
       data: {}
     };
-    data.data = restoredEnrolment;
+    if (restoredEnrolment == null) {
+      data.statusCode = HttpStatus.BAD_REQUEST;
+      data.message = `Enrolment with id ${id} not found`;
+    } else {
+      data.data = restoredEnrolment;
+    }
     responseJson(data, data.statusCode, response);
   }
 }

@@ -1,45 +1,40 @@
-import { Injectable, Res } from '@nestjs/common';
-import { Connection } from 'typeorm';
+import { ConflictException, HttpStatus, Injectable, Res } from '@nestjs/common';
+import { Connection, Repository } from 'typeorm';
 import { SigninDto } from './dto/signin.dto';
 import { SignupDto } from './dto/signup.dto';
 import { UsersService } from 'src/users/users.service';
+import { MetadataDto } from './dto/metadata.dto';
+import { hashPassword } from '@app/jwt-libs';
+import { InjectRepository } from '@nestjs/typeorm';
+import { captureSentryException } from '@app/helper';
 
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly connection: Connection, private readonly userService: UsersService) { }
+  constructor(private readonly connection: Connection, private readonly userService: UsersService,
+    @InjectRepository(MetadataDto)
+    private metadataRepository: Repository<MetadataDto>,) { }
+
   /**
-     * Validates a user's identity and password for authentication.
-     * @param signinDto - The DTO containing user's identity and password.
-     * @returns A user object if authentication is successful, otherwise null.
-     */
-  async validateUser(signinDto: SigninDto): Promise<any> {
-    const data = {
-      status: false,
-      statusCode: 400,
-      message: 'user not found',
-      data: {}
-    };
-
-    const query = ``;
-
-    const user = await this.connection.query(query, [signinDto.identity, signinDto.identity, signinDto.password]);
-    return user;
-
-  }
-  /**
-     * Registers a new user by checking if the provided username or email is available.
-     * @param signupDto - The DTO containing user's registration information.
-     * @returns An array of users matching the provided username or email (if available), otherwise an empty array.
-     */
-  async signUp(signupDto: SignupDto) {
-    const query = `
-      SELECT *
-      FROM users
-      WHERE (username = ? OR email = ? )
-      AND deletedAt IS NULL;
-    `;
-    const checkIdentity = await this.connection.query(query, [signupDto.username, signupDto.email]);
-    return checkIdentity;
+ * Create a new metadata.
+ *
+ * @param metadataDto - Data to create a new metadata.
+ * @returns Created metadata data.
+ */
+  async metadata(metadataDto: MetadataDto) {
+    try {
+      const metadata = this.metadataRepository.create(metadataDto);
+      return await this.metadataRepository.save(metadata);
+    } catch (error) {
+      const data = {
+        status: false,
+        statusCode: HttpStatus.CONFLICT,
+        message: error.sqlMessage,
+        data: {}
+      };
+      data.data = error.message;
+      captureSentryException(error);
+      throw new ConflictException(data, { cause: new Error() });
+    }
   }
 }

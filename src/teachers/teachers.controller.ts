@@ -107,14 +107,19 @@ export class TeachersController {
    */
   @Patch(':id/restore')
   async restore(@Param('id') id: number, @Res() response) {
-    const restoredUser = await this.teachersService.restore(id);
+    const restoredTeacher = await this.teachersService.restore(id);
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
       message: 'Success Restore Teacher',
       data: {}
     };
-    data.data = restoredUser;
+    if (restoredTeacher == null) {
+      data.statusCode = HttpStatus.BAD_REQUEST;
+      data.message = `Teacher with id ${id} not found`;
+    } else {
+      data.data = restoredTeacher;
+    }
     responseJson(data, data.statusCode, response);
   }
 }

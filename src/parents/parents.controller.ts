@@ -127,14 +127,19 @@ export class ParentsController {
     @Param('id') id: number,
     @Res() response,
   ) {
-    const restoredUser = await this.parentsService.restore(id);
+    const restoredParent = await this.parentsService.restore(id);
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
       message: 'Success Restore Parent',
       data: {}
     };
-    data.data = restoredUser;
+    if (restoredParent == null) {
+      data.statusCode = HttpStatus.BAD_REQUEST;
+      data.message = `Parent with id ${id} not found`;
+    } else {
+      data.data = restoredParent;
+    }
     responseJson(data, data.statusCode, response);
   }
 }

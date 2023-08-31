@@ -132,7 +132,12 @@ export class SchedulesController {
       message: 'Success Restore Schedule',
       data: {}
     };
-    data.data = restoredSchedule;
+    if (restoredSchedule == null) {
+      data.statusCode = HttpStatus.BAD_REQUEST;
+      data.message = `Schedule with id ${id} not found`;
+    } else {
+      data.data = restoredSchedule;
+    }
     responseJson(data, data.statusCode, response);
   }
 }

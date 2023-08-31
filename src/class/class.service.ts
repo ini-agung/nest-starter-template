@@ -1,4 +1,4 @@
-import { ConflictException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { ConflictException, BadRequestException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -145,7 +145,7 @@ export class ClassService {
           message: `class with id ${id} is doesnt exists`,
           data: {}
         };
-        throw new ConflictException(data, { cause: new Error() });
+        throw new BadRequestException(data, { cause: new Error() });
       }
       classes.deletedAt = new Date();
       return this.classRepository.save(classes);
@@ -175,13 +175,14 @@ export class ClassService {
         .createQueryBuilder('class')
         .withDeleted() // Include soft-deleted entities
         .where('class.id = :id', { id })
+        .andWhere('class.deletedAt IS NOT NULL')
         .getOne();
-
+      console.log(classToRestore)
       if (classToRestore) {
         classToRestore.deletedAt = null; // Set deletedAt back to null
         return this.classRepository.save(classToRestore);
       }
-      return null; // User not found
+      return null;
     } catch (error) {
       this.logger.error(`Error find class :   ${error.message}`);
       const data = {

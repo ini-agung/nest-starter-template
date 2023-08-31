@@ -116,14 +116,19 @@ export class SubjectsController {
     @Param('id') id: number,
     @Res() response,
   ) {
-    const restoredUser = await this.subjectService.restore(id);
+    const restoredSubject = await this.subjectService.restore(id);
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
       message: 'Success Restore Subject',
       data: {}
     };
-    data.data = restoredUser;
+    if (restoredSubject == null) {
+      data.statusCode = HttpStatus.BAD_REQUEST;
+      data.message = `Subject with id ${id} not found`;
+    } else {
+      data.data = restoredSubject;
+    }
     responseJson(data, data.statusCode, response);
   }
 }

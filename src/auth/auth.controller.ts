@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, HttpException, HttpStatus, Res, ValidationPipe, HttpCode, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, HttpException, HttpStatus, Res, ValidationPipe, HttpCode, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SigninDto } from './dto/signin.dto';
 import { SignupDto } from './dto/signup.dto';
@@ -7,6 +7,7 @@ import { UsersService } from 'src/users/users.service';
 import { JwtLibsService, comparePasswords } from '@app/jwt-libs';
 import { Public } from '@app/jwt-libs/public.decorator';
 import { setCurrentUser } from '@app/helper';
+import { MetadataDto } from './dto/metadata.dto';
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService,
@@ -19,9 +20,15 @@ export class AuthController {
      */
     @Public()
     @Post('signin')
-    async signin(@Body(new ValidationPipe()) signinDto: SigninDto, @Res() response) {
+    async signin(@Body(new ValidationPipe()) signinDto: SigninDto, @Res() response, @Req() request: Request,) {
+        // console.log(request.route)
         const user = await this.userService.findOne(signinDto.identity);
         if (user) {
+            const userAgent = request.headers['user-agent'];
+            // Get the x-forwarded-for header
+            const forwardedHeader = request.url;
+            console.log(forwardedHeader)
+
             const compare = await comparePasswords(signinDto.password, user.password);
             if (compare) {
                 const payload = {
@@ -77,5 +84,10 @@ export class AuthController {
         };
         data.data = user;
         responseJson(data, data.statusCode, response);
+    }
+
+    @Post('metadata')
+    async metadata(metadataDto: MetadataDto) {
+        const user = await this.authService.metadata(metadataDto);
     }
 }
