@@ -84,8 +84,8 @@ export class ClassController {
       message: 'Success Update classes',
       data: {}
     };
-    const parent = await this.classService.update(+id, updateClassDto);
-    data.data = parent;
+    const classes = await this.classService.update(+id, updateClassDto);
+    data.data = classes;
     responseJson(data, data.statusCode, response);
   }
 

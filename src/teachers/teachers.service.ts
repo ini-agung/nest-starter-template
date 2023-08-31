@@ -56,7 +56,7 @@ export class TeachersService {
     limit: number,
   ): Promise<Pagination<any>> {
     try {
-      const teachers = await this.teachersRepository
+      const queryBuilder = await this.teachersRepository
         .createQueryBuilder('teacher')
         .select([
           'teacher.id',
@@ -74,17 +74,17 @@ export class TeachersService {
         .leftJoinAndSelect('teacher.gender', 'genders')
         .where('teacher.deletedAt IS NULL')
       if (nik) {
-        teachers.andWhere('(teacher.nik LIKE :nik)', { nik: `%${nik}%` })
+        queryBuilder.andWhere('(teacher.nik LIKE :nik)', { nik: `%${nik}%` })
       }
       if (name) {
-        teachers.andWhere('((teacher.full_name LIKE :name) OR (teacher.nick_name LIKE :name))', { name: `%${name}%` })
+        queryBuilder.andWhere('((teacher.full_name LIKE :name) OR (teacher.nick_name LIKE :name))', { name: `%${name}%` })
       }
-      // this.logger.log(teachers);
-      const schedulesCounts = await teachers.orderBy('teacher.nik', 'ASC').getMany();
-      const total = schedulesCounts.length;
+      // this.logger.log(queryBuilder);
+      const teacherCounts = await queryBuilder.orderBy('teacher.nik', 'ASC').getMany();
+      const total = teacherCounts.length;
       const startIdx = (page - 1) * limit;
       const endIdx = startIdx + limit;
-      const data = schedulesCounts.slice(startIdx, endIdx);
+      const data = teacherCounts.slice(startIdx, endIdx);
       return {
         data,
         total,

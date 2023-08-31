@@ -55,15 +55,9 @@ export class ClassroomsController {
     };
     page = (page == undefined) ? this._page : page;
     limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
-    let classrooms: object;
-    if (id || classroom) {
-      classrooms = await this.classroomsService.findLike(id, classroom, page, limit);
-    } else {
-      classrooms = await this.classroomsService.findAll(page, limit);
-    }
+    const classrooms = await this.classroomsService.findLike(id, classroom, page, limit);
     data.data = classrooms;
     responseJson(data, data.statusCode, response);
-    return await this.classroomsService.findAll();
   }
 
   /**
