@@ -78,7 +78,7 @@ export class ParentsService {
       this.logger.log(studentsCounts);
       const total = studentsCounts.length;
       const startIdx = (page - 1) * limit;
-      const endIdx = startIdx + limit;
+      const endIdx = parseInt(startIdx.toString()) + parseInt(limit.toString());
       const data = studentsCounts.slice(startIdx, endIdx);
       return {
         data,

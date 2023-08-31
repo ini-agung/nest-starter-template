@@ -56,13 +56,13 @@ export class ClassroomsService {
         queryBuilder.andWhere('(classroom.classroom LIKE :nik)', { classroom: `%${classroom}%` })
       }
       if (id) {
-        queryBuilder.andWhere('(classroom.id = :id)', { id: `%${id}%` })
+        queryBuilder.andWhere('(classroom.id = :id)', { id: { id } })
       }
       // this.logger.log(queryBuilder);
       const classroomCounts = await queryBuilder.orderBy('classroom.id', 'ASC').getMany();
       const total = classroomCounts.length;
       const startIdx = (page - 1) * limit;
-      const endIdx = startIdx + limit;
+      const endIdx = parseInt(startIdx.toString()) + parseInt(limit.toString());
       const data = classroomCounts.slice(startIdx, endIdx);
       return {
         data,

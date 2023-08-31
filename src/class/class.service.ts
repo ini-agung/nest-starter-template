@@ -37,17 +37,12 @@ export class ClassService {
     }
   }
 
-  /**
-   * Retrieve all classs with pagination.
-   *
-   * @param page - Page number for pagination (default: 1).
-   * @param limit - Number of items per page (default: 10).
-   * @returns A paginated list of classs.
-   * @throws ConflictException if there's an error while retrieving classs.
-   */
-  async findAll(
-    page: number = 1,
-    limit: number = 10
+
+  async findLike(
+    id: number,
+    classes: string,
+    page: number,
+    limit: number,
   ): Promise<Pagination<any>> {
     try {
       const queryBuilder = await this.classRepository
@@ -56,11 +51,19 @@ export class ClassService {
           'class.id', 'class.class'
         ])
         .orderBy('class.class', 'ASC')
-        .getMany();
-      const total = queryBuilder.length;
+        .where('class.deletedAt IS NULL')
+      if (classes) {
+        queryBuilder.andWhere('(class.class LIKE :classes)', { classes: `%${classes}%` })
+      }
+      if (id) {
+        queryBuilder.andWhere('(class.id = :id)', { id: id })
+      }
+      // this.logger.log(queryBuilder);
+      const classroomCounts = await queryBuilder.orderBy('class.id', 'ASC').getMany();
+      const total = classroomCounts.length;
       const startIdx = (page - 1) * limit;
-      const endIdx = startIdx + limit;
-      const data = queryBuilder.slice(startIdx, endIdx);
+      const endIdx = parseInt(startIdx.toString()) + parseInt(limit.toString());
+      const data = classroomCounts.slice(startIdx, endIdx);
       return {
         data,
         total,
@@ -80,20 +83,6 @@ export class ClassService {
       data.data = error.message;
       throw new ConflictException(data, { cause: new Error() });
     }
-  }
-
-  async findLike(
-    id: number,
-    classes: string,
-    page: number,
-    limit: number,
-  ) {
-    try {
-
-    } catch (error) {
-
-    }
-    return [];
   }
 
   async update(id: number, updateClassDto: UpdateClassDto) {

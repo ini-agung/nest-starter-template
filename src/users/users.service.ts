@@ -109,9 +109,8 @@ export class UsersService {
       }
       const total = users.length;
       const startIdx = (page - 1) * limit;
-      const endIdx = startIdx + limit;
+      const endIdx = parseInt(startIdx.toString()) + parseInt(limit.toString());
       const data = users.slice(startIdx, endIdx);
-      this.logger.log(`findAll : `, data);
       return {
         data,
         total,
@@ -196,7 +195,6 @@ export class UsersService {
             .getOne();
           Object.assign(user, { metadata });
         }
-        // console.log(user);
         return user;
       } else {
         const data = {

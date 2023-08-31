@@ -79,7 +79,7 @@ export class StudentsService {
       const studentsCounts = await queryBuilder.getRawMany();
       const total = studentsCounts.length;
       const startIdx = (page - 1) * limit;
-      const endIdx = startIdx + limit;
+      const endIdx = parseInt(startIdx.toString()) + parseInt(limit.toString());
       const data = studentsCounts.slice(startIdx, endIdx);
       return {
         data,

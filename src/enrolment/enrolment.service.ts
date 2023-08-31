@@ -107,7 +107,7 @@ export class EnrolmentService {
       const enrolmentCounts = await queryBuilder.getRawMany();
       const total = enrolmentCounts.length;
       const startIdx = (page - 1) * limit;
-      const endIdx = startIdx + limit;
+      const endIdx = parseInt(startIdx.toString()) + parseInt(limit.toString());
       const data = enrolmentCounts.slice(startIdx, endIdx);
       return {
         data,

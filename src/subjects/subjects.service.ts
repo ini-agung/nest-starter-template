@@ -67,7 +67,7 @@ export class SubjectsService {
       this.logger.log(subjects);
       const total = subjects.length;
       const startIdx = (page - 1) * limit;
-      const endIdx = startIdx + limit;
+      const endIdx = parseInt(startIdx.toString()) + parseInt(limit.toString());
       const data = subjects.slice(startIdx, endIdx);
       return {
         data,

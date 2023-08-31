@@ -83,7 +83,7 @@ export class TeachersService {
       const teacherCounts = await queryBuilder.orderBy('teacher.nik', 'ASC').getMany();
       const total = teacherCounts.length;
       const startIdx = (page - 1) * limit;
-      const endIdx = startIdx + limit;
+      const endIdx = parseInt(startIdx.toString()) + parseInt(limit.toString());
       const data = teacherCounts.slice(startIdx, endIdx);
       return {
         data,

@@ -55,15 +55,9 @@ export class ClassController {
     };
     page = (page == undefined) ? this._page : page;
     limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
-    let classess: object;
-    if (id || classes) {
-      classess = await this.classService.findLike(id, classes, page, limit);
-    } else {
-      classess = await this.classService.findAll(page, limit);
-    }
+    const classess = await this.classService.findLike(id, classes, page, limit);
     data.data = classess;
     responseJson(data, data.statusCode, response);
-    return await this.classService.findAll();
   }
 
   /**

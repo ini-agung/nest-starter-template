@@ -84,7 +84,7 @@ export class SchedulesService {
     const schedulesCounts = await queryBuilder.getRawMany();
     const total = schedulesCounts.length;
     const startIdx = (page - 1) * limit;
-    const endIdx = startIdx + limit;
+    const endIdx = parseInt(startIdx.toString()) + parseInt(limit.toString());
     const data = schedulesCounts.slice(startIdx, endIdx);
     return {
       data,
