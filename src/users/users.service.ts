@@ -85,6 +85,22 @@ export class UsersService {
       }
       const users = await queryBuilder.orderBy('user.id', 'ASC').getMany();
       for (const user of users) {
+        let permissions = []
+        const up = await this.upRepository
+          .createQueryBuilder('up')
+          .select(['up.id', 'permission.id', 'permission.code'])
+          .leftJoin('up.permission', 'permission')
+          .where('up.user_id = :userId', { userId: user.id })
+          .getRawMany();
+        const rp = await this.rpRepository
+          .createQueryBuilder('rp')
+          .select(['rp.id', 'permission.id', 'permission.code'])
+          .leftJoin('rp.permission', 'permission')
+          .where('rp.role_id = :role_id', { role_id: user.role.id })
+          .getRawMany();
+        permissions = [...up, ...rp]
+        Object.assign(user, { permissions });
+
         if (user.id == 1) {
           const metadata = await this.studentRepository
             .createQueryBuilder('student')
@@ -320,5 +336,56 @@ export class UsersService {
     }
   }
 
+  /**
+   * Retrieve users based on filters with optional pagination.
+   *
+   * @param username - Filter by username.
+   * @param email - Filter by email.
+   * @param page - Page number for pagination (default: 1).
+   * @param limit - Number of items per page (default: 10).
+   * @returns Paginated list of filtered user.
+   */
+  async findUserPermission(
+    page: number,
+    limit: number,
+    user: string,
+    permission: string
+  ) {
+    try {
+      const queryBuilder = await this.upRepository
+        .createQueryBuilder('up')
+        .select(['up.id', 'up.user_id', 'permission.code', 'permission.description'])
+        .leftJoin('up.permission', 'permission')
+        .where('up.deletedAt is NULL')
+      if (user) {
+        queryBuilder.andWhere('up.user_id = :user', { user });
+      }
+      if (permission) {
+        queryBuilder.andWhere('permission.code = :permission', { permission });
+      }
+      const userPermission = await queryBuilder.getMany();
+      const total = userPermission.length;
+      const startIdx = (page - 1) * limit;
+      const endIdx = parseInt(startIdx.toString()) + parseInt(limit.toString());
+      const data = userPermission.slice(startIdx, endIdx);
+      return {
+        data,
+        total,
+        currentPage: page,
+        perPage: limit,
+        prevPage: page > 1 ? `/users/permission?page=${(parseInt(page.toString()) - 1)}` : undefined,
+        nextPage: endIdx < total ? `/users/permission?page=${(parseInt(page.toString()) + 1)}` : undefined,
+      };
+    } catch (error) {
+      const data = {
+        status: false,
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: error.sqlMessage,
+        data: {}
+      };
+      captureSentryException(error);
+      throw new BadRequestException(data, { cause: new Error() });
+    }
+  }
 }
 

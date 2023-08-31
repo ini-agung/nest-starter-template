@@ -30,7 +30,32 @@ export class UsersController {
     data.data = newUser;
     responseJson(data, data.statusCode, response);
   }
+  /**
+      * Get a list of all user-permission.
+      *
+      * @returns List of user-permission.
+      */
 
+  @Get('/permission')
+  async permission(
+    @Query('page') page: number = this._page,
+    @Query('limit') limit: number = this._limit,
+    @Query('user') user: string,
+    @Query('permission') permission: string,
+    @Res() response) {
+    const data = {
+      status: true,
+      statusCode: HttpStatus.OK,
+      message: 'Success Get Users Permission',
+      data: {}
+    };
+    page = (page == undefined) ? this._page : page;
+    limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
+    let users: object;
+    users = await this.usersService.findUserPermission(page, limit, user, permission);
+    data.data = users;
+    responseJson(data, data.statusCode, response);
+  }
   /**
      * Get a list of all users.
      *
@@ -143,4 +168,6 @@ export class UsersController {
     }
     responseJson(data, data.statusCode, response);
   }
+
+
 }

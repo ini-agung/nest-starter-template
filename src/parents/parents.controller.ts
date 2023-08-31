@@ -52,7 +52,6 @@ export class ParentsController {
     };
     page = (page == undefined) ? this._page : page;
     limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
-    console.log("limit", limit)
     const parents = await this.parentsService.findLike(phone, name, page, limit);
     data.data = parents;
     responseJson(data, data.statusCode, response);
