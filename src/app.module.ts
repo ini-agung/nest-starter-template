@@ -19,6 +19,7 @@ import { SuccessRequestInterceptor } from './success-request.interceptor';
 import { ConfigModule } from '@nestjs/config';
 import { SubjectsModule } from './subjects/subjects.module';
 import { ClassModule } from './class/class.module';
+import { RolesModule } from './roles/roles.module';
 @Module({
   imports: [
     ConnectionsModule, UsersModule,
@@ -33,6 +34,7 @@ import { ClassModule } from './class/class.module';
     }),
     SubjectsModule,
     ClassModule,
+    RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService,

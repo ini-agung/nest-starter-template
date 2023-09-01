@@ -1,4 +1,4 @@
-import { Role } from "src/users/entities/role.entity";
+import { Role } from "src/roles/entities/role.entity";
 import { User } from "src/users/entities/user.entity";
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 

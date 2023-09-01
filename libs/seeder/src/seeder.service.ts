@@ -4,7 +4,7 @@ import { User } from 'src/users/entities/user.entity';
 import { Gender } from 'src/users/entities/gender.entity';
 import { Religion } from 'src/users/entities/religion.entity';
 import { Degree } from 'src/teachers/entities/degree.entity';
-import { Role } from 'src/users/entities/role.entity';
+import { Role } from 'src/roles/entities/role.entity';
 import { Parent } from 'src/parents/entities/parent.entity';
 import { Connection } from 'typeorm';
 import { Classroom, } from 'src/classrooms/entities/classroom.entity';

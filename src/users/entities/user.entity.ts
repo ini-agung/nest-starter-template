@@ -1,6 +1,6 @@
 import { Length } from '@nestjs/class-validator';
 import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, OneToOne, JoinColumn, Relation, ManyToOne, Index, ManyToMany, JoinTable } from 'typeorm';
-import { Role } from './role.entity';
+import { Role } from 'src/roles/entities/role.entity';
 import { Permission } from 'src/permissions/entities/permission.entity';
 
 @Entity({ name: 'users' })

@@ -11,7 +11,7 @@ import { Religion } from 'src/users/entities/religion.entity';
 import { Student } from 'src/students/entities/student.entity';
 import { Degree } from 'src/teachers/entities/degree.entity';
 import { Teacher } from 'src/teachers/entities/teacher.entity';
-import { Role } from 'src/users/entities/role.entity';
+import { Role } from 'src/roles/entities/role.entity';
 import { User } from 'src/users/entities/user.entity';
 import { MetadataSchedule } from 'src/schedules/entities/metadata-schedule.entity';
 import { AuthMetadata } from 'src/auth/entity/auth-metadata.entity';
