@@ -90,4 +90,10 @@ export class AuthController {
     async metadata(metadataDto: MetadataDto) {
         const user = await this.authService.metadata(metadataDto);
     }
+
+    @Get('metadata')
+    async metadata_get(metadataDto: MetadataDto) {
+        return this.metadata_get;
+    }
+
 }
