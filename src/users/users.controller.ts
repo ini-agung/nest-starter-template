@@ -4,10 +4,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { responseJson } from '@app/response';
 import { decryptData, encryptData } from '@app/helper';
+import { ParentsService } from 'src/parents/parents.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly parentService: ParentsService
+  ) { }
   private _page = parseInt(process.env.PAGINATION_PAGE);
   private _limit = parseInt(process.env.PAGINATION_LIMIT);
   private _version = (process.env.VERSION.toLowerCase() == 'v2') ? true : false;
@@ -56,6 +60,17 @@ export class UsersController {
     data.data = users;
     responseJson(data, data.statusCode, response);
   }
+
+  @Get('test')
+  async test(@Query('page') page: number = this._page,
+    @Query('limit') limit: number = this._limit,
+    @Query('username') username: string,
+    @Query('email') email: string,) {
+    const user = await this.usersService.findAll(username, email, page, limit);
+    const parent = await this.parentService.findLike(username, email, page, limit,);
+    return [user, parent]
+  }
+
   /**
      * Get a list of all users.
      *
@@ -77,8 +92,7 @@ export class UsersController {
     };
     page = (page == undefined) ? this._page : page;
     limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
-    let users: object;
-    users = await this.usersService.findAll(page, limit, username, email);
+    const users = await this.usersService.findAll(username, email, page, limit);
     data.data = users;
     responseJson(data, data.statusCode, response);
   }
@@ -168,6 +182,8 @@ export class UsersController {
     }
     responseJson(data, data.statusCode, response);
   }
+
+
 
 
 }

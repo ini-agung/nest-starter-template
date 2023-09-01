@@ -66,10 +66,10 @@ export class UsersService {
    * @returns Paginated list of filtered user.
    */
   async findAll(
+    username: string,
+    email: string,
     page: number,
     limit: number,
-    username: string,
-    email: string
   ): Promise<Pagination<any>> {
     try {
       const queryBuilder = await this.userRepository
