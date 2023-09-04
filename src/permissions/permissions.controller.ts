@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res, Query, Req } from '@nestjs/common';
 import { PermissionsService } from './permissions.service';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
 import { responseJson } from '@app/response';
+import { Response } from 'express';
 
 @Controller('permissions')
 export class PermissionsController {
@@ -14,10 +15,15 @@ export class PermissionsController {
    * Create a new permission.
    *
    * @param createPermissionDto - Data to create a new permission.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Post()
-  async create(@Body() createPermissionDto: CreatePermissionDto, @Res() response) {
+  async create(
+    @Body() createPermissionDto: CreatePermissionDto,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.ACCEPTED,
@@ -35,6 +41,7 @@ export class PermissionsController {
    * @param page - Page number for pagination (default: 1).
    * @param limit - Number of items per page (default: 10).
    * @param code - Filter by permission's code.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Get()
@@ -42,7 +49,9 @@ export class PermissionsController {
     @Query('page') page: number,
     @Query('limit') limit: number,
     @Query('code') code: string,
-    @Res() response) {
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -62,10 +71,16 @@ export class PermissionsController {
   *
   * @param id - ID of the permission to update.
   * @param updatepermissionDto - Updated permission data.
+  * @param request - HTTP request object.
   * @param response - HTTP response object.
   */
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updatepermissionDto: UpdatePermissionDto, @Res() response) {
+  async update(
+    @Param('id') id: string,
+    @Body() updatepermissionDto: UpdatePermissionDto,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.ACCEPTED,
@@ -81,10 +96,15 @@ export class PermissionsController {
    * Soft-delete a permission.
    *
    * @param id - ID of the permission to delete.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Delete(':id')
-  async remove(@Param('id') id: string, @Res() response) {
+  async remove(
+    @Param('id') id: string,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -100,10 +120,15 @@ export class PermissionsController {
    * Restore a previously soft-deleted permission.
    *
    * @param id - ID of the permission to restore.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Patch(':id/restore')
-  async restore(@Param('id') id: number, @Res() response) {
+  async restore(
+    @Param('id') id: number,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const restoredPermission = await this.permissionsService.restore(id);
     const data = {
       status: true,

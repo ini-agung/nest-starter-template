@@ -3,7 +3,8 @@ import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { responseJson } from '@app/response';
-
+import { decryptData, encryptData } from '@app/helper';
+import { Response } from 'express';
 @Controller('roles')
 export class RolesController {
   constructor(private readonly rolesService: RolesService) { }
@@ -14,10 +15,14 @@ export class RolesController {
      * Create a new role.
      *
      * @param createroleDto - Data to create a new role.
+     * @param request - HTTP request object.
      * @param response - HTTP response object.
      */
   @Post()
-  async create(@Body() createRoleDto: CreateRoleDto, @Res() response) {
+  async create(
+    @Body() createRoleDto: CreateRoleDto,
+    @Req() request: Request,
+    @Res() response) {
     const role = await this.rolesService.create(createRoleDto);
     const data = {
       status: true,
@@ -35,6 +40,7 @@ export class RolesController {
    * @param page - Page number for pagination (default: 1).
    * @param limit - Number of items per page (default: 10).
    * @param role - Filter by role's role.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Get()
@@ -42,15 +48,16 @@ export class RolesController {
     @Query('page') page: number = this._page,
     @Query('limit') limit: number = this._limit,
     @Query('role') role: string,
-    @Res() response,
-    @Req() request: Request) {
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
       message: 'Success Get Roles',
       data: {}
     };
-    console.log("request.url;", request.url)
+
     page = (page == undefined) ? this._page : page;
     limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
     const roles = await this.rolesService.findLike(role, page, limit);
@@ -62,10 +69,13 @@ export class RolesController {
    * Retrieve a single role by ID.
    *
    * @param id - ID of the role to retrieve.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Get(':id')
-  async findOne(@Param('id') id: string, @Res() response) {
+  async findOne(@Param('id') id: string,
+    @Req() request: Request,
+    @Res() response: Response,) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -82,10 +92,16 @@ export class RolesController {
      *
      * @param id - ID of the role to update.
      * @param updateRoleDto - Updated role data.
+     * @param request - HTTP request object.
      * @param response - HTTP response object.
      */
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto, @Res() response) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateRoleDto: UpdateRoleDto,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -101,10 +117,14 @@ export class RolesController {
    * Delete a role (soft delete).
    *
    * @param id - ID of the role to delete.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Delete(':id')
-  async remove(@Param('id') id: string, @Res() response) {
+  async remove(
+    @Param('id') id: string,
+    @Req() request: Request,
+    @Res() response: Response,) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -120,11 +140,13 @@ export class RolesController {
   * Restore a previously soft-deleted role.
   *
   * @param id - ID of the role to restore.
+  * @param request - HTTP request object.
   * @param response - HTTP response object.
   */
   @Patch(':id/restore')
   async restore(
     @Param('id') id: number,
+    @Req() request: Request,
     @Res() response,
   ) {
     const restoredrole = await this.rolesService.restore(id);

@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Query, Req } from '@nestjs/common';
 import { SchedulesService } from './schedules.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
 import { responseJson } from '@app/response';
+import { Response } from 'express';
 
 /**
  * Controller responsible for managing schedules.
@@ -16,12 +17,14 @@ export class SchedulesController {
    * Create a new schedule.
    *
    * @param createScheduleDto - Data to create a new schedule.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Post()
   async create(
     @Body() createScheduleDto: CreateScheduleDto,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const data = {
       status: true,
@@ -43,6 +46,7 @@ export class SchedulesController {
    * @param clas - Filter by class.
    * @param page - Page number for pagination (default: 1).
    * @param limit - Number of items per page (default: 10).
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Get()
@@ -53,7 +57,8 @@ export class SchedulesController {
     @Query('class') clas: string,
     @Query('page') page: number = this._page,
     @Query('limit') limit: number = this._limit,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const data = {
       status: true,
@@ -73,13 +78,15 @@ export class SchedulesController {
    *
    * @param id - ID of the schedule to update.
    * @param updateScheduleDto - Updated schedule data.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Patch(':id')
   async update(
     @Param('id') id: string,
     @Body() updateScheduleDto: UpdateScheduleDto,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const data = {
       status: true,
@@ -96,12 +103,14 @@ export class SchedulesController {
    * Delete a schedule.
    *
    * @param id - ID of the schedule to delete.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Delete(':id')
   async remove(
     @Param('id') id: string,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const data = {
       status: true,
@@ -118,12 +127,14 @@ export class SchedulesController {
    * Restore a deleted schedule.
    *
    * @param id - ID of the schedule to restore.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Patch(':id/restore')
   async restore(
     @Param('id') id: number,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const restoredSchedule = await this.schedulesService.restore(id);
     const data = {

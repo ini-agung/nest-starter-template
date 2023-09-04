@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Query, Req } from '@nestjs/common';
 import { ClassroomsService } from './classrooms.service';
 import { CreateClassroomDto } from './dto/create-classroom.dto';
 import { UpdateClassroomDto } from './dto/update-classroom.dto';
 import { responseJson } from '@app/response';
+import { Response } from 'express';
 
 @Controller('classrooms')
 export class ClassroomsController {
@@ -16,11 +17,15 @@ export class ClassroomsController {
    * Create a new classroom.
    *
    * @param createClassroomDto - Data to create a new classroom.
+   * @param request - HTTP request object.
+   * @param response - HTTP response object.
    * @returns Created classroom data.
    */
   @Post()
-  async create(@Body() createClassroomDto: CreateClassroomDto,
-    @Res() response,
+  async create(
+    @Body() createClassroomDto: CreateClassroomDto,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     this.classroomsService.create(createClassroomDto);
     const classroom = await this.classroomsService.create(createClassroomDto);
@@ -35,9 +40,14 @@ export class ClassroomsController {
   }
 
   /**
-   * Get a list of all classrooms.
+   * Retrieve all lassrooms with optional filtering and pagination.
    *
-   * @returns List of classrooms.
+   * @param page - Page number for pagination (default: 1).
+   * @param limit - Number of items per page (default: 10).
+   * @param id - Filter by lassroom's id.
+   * @param classroom - Filter by lassroom's classroom.
+   * @param request - HTTP request object.
+   * @param response - HTTP response object.
    */
   @Get()
   async findAll(
@@ -45,7 +55,8 @@ export class ClassroomsController {
     @Query('limit') limit: number = this._limit,
     @Query('id') id: number,
     @Query('classroom') classroom: string,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const data = {
       status: true,
@@ -65,12 +76,15 @@ export class ClassroomsController {
      *
      * @param id - ID of the classroom to update.
      * @param updateClassroomDto - Data to update the classroom.
+     * @param request - HTTP request object.
+     * @param response - HTTP response object.
      * @returns Updated classroom data.
      */
   @Patch(':id')
   async update(@Param('id') id: string,
     @Body() updateClassroomDto: UpdateClassroomDto,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const data = {
       status: true,
@@ -87,12 +101,15 @@ export class ClassroomsController {
      * Delete a classroom.
      *
      * @param id - ID of the classroom to delete.
+     * @param request - HTTP request object.
+     * @param response - HTTP response object.
      * @returns Deleted classroom data.
      */
   @Delete(':id')
   async remove(
     @Param('id') id: number,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const data = {
       status: true,
@@ -109,12 +126,14 @@ export class ClassroomsController {
     * Restore a previously soft-deleted classroom.
     *
     * @param id - ID of the classroom to restore.
-    * @param response - HTTP response object.
+    * @param request - HTTP request object.
+    * @param response - HTTP response object. 
     */
   @Patch(':id/restore')
   async restore(
     @Param('id') id: number,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const restoredUser = await this.classroomsService.restore(id);
     const data = {

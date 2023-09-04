@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res, Query, Req } from '@nestjs/common';
 import { EnrolmentService } from './enrolment.service';
 import { CreateEnrolmentDto } from './dto/create-enrolment.dto';
 import { UpdateEnrolmentDto } from './dto/update-enrolment.dto';
 import { responseJson } from '@app/response';
+import { Response } from 'express';
 
 @Controller('enrolment')
 export class EnrolmentController {
@@ -13,11 +14,14 @@ export class EnrolmentController {
        * Create a new enrolment.
        *
        * @param createEnrolmentDto - Data to create a new enrolment.
+       * @param request - HTTP request object.
        * @param response - HTTP response object.
        */
   @Post()
-  async create(@Body() createEnrolmentDto: CreateEnrolmentDto,
-    @Res() response,
+  async create(
+    @Body() createEnrolmentDto: CreateEnrolmentDto,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const enrolment = await this.enrolmentService.create(createEnrolmentDto);
     const data = {
@@ -37,6 +41,7 @@ export class EnrolmentController {
      * @param limit - Number of items per page (default: 10).
      * @param enrol_code - Enrole code
      * @param schedule - Schedule id
+     * @param request - HTTP request object.
      * @param response - HTTP response object.
      */
   @Get()
@@ -45,7 +50,8 @@ export class EnrolmentController {
     @Query('limit') limit: number = this._limit,
     @Query('enrol_code') enrol_code: string,
     @Query('schedule') schedule: number,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const data = {
       status: true,
@@ -71,7 +77,8 @@ export class EnrolmentController {
   async update(
     @Param('id') id: string,
     @Body() updateEnrolmentDto: UpdateEnrolmentDto,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const data = {
       status: true,
@@ -88,12 +95,14 @@ export class EnrolmentController {
   * Delete a enrolment (soft delete).
   *
   * @param id - ID of the enrolment to delete.
+  * @param request - HTTP request object.
   * @param response - HTTP response object.
   */
   @Delete(':id')
   async remove(
     @Param('id') id: string,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const data = {
       status: true,
@@ -110,12 +119,14 @@ export class EnrolmentController {
    * Restore a previously soft-deleted enrolment.
    *
    * @param id - ID of the enrolment to restore.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Patch(':id/restore')
   async restore(
     @Param('id') id: number,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const restoredEnrolment = await this.enrolmentService.restore(id);
     const data = {

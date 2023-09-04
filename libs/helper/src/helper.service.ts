@@ -4,9 +4,11 @@ import * as Sentry from '@sentry/node';
 import { createCipheriv, createDecipheriv } from 'crypto';
 
 const algorithm: string = process.env.ALGORITHM || 'aes-256-cbc';
-const key: string = process.env.KEY || 'MySecretEncryptionKey123!'; // Replace with your own encryption key
-const encryptionKey = generateEncryptionKey(key);
-const iv = crypto.randomBytes(16);
+const responseKey: string = process.env.RESPONSE_KEY || 'MySecretEncryptionKey123!'; // Replace with your own encryption key
+const encryptionKey = generateEncryptionKey(responseKey);
+const responseIv = crypto.randomBytes(16);
+
+
 export interface Pagination<T> {
     data: T[];
     total: number;
@@ -17,7 +19,7 @@ export interface Pagination<T> {
 }
 
 export function encryptData(data: string): string {
-    const cipher = createCipheriv(algorithm, encryptionKey, iv);
+    const cipher = createCipheriv(algorithm, encryptionKey, responseIv);
     let encryptedData = cipher.update(JSON.stringify(data), 'utf8', 'hex');
     encryptedData += cipher.final('hex');
     return encryptedData;
@@ -25,11 +27,12 @@ export function encryptData(data: string): string {
 
 export function decryptData(encryptedData: string): string {
     const encryptedDataHex = encryptedData;
-    const decipher = createDecipheriv(algorithm, encryptionKey, iv);
+    const decipher = createDecipheriv(algorithm, encryptionKey, responseIv);
     let decryptedData = decipher.update(encryptedDataHex, 'hex', 'utf8');
     decryptedData += decipher.final('utf8');
     return JSON.parse(decryptedData);
 }
+
 
 function generateEncryptionKey(key: string): Buffer {
     const salt = crypto.randomBytes(16);

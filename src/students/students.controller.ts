@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Query, Req } from '@nestjs/common';
 import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { responseJson } from '@app/response';
-
+import { Response } from 'express';
 @Controller('students')
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) { }
@@ -13,12 +13,14 @@ export class StudentsController {
      * Create a new student.
      *
      * @param createStudentDto - Data to create a new student.
+     * @param request - HTTP request object.
      * @param response - HTTP response object.
      */
   @Post()
   async create(
     @Body() createStudentDto: CreateStudentDto,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const student = await this.studentsService.create(createStudentDto);
     const data = {
@@ -39,6 +41,7 @@ export class StudentsController {
    * @param nis - Filter by student's National Identity Number (NIS).
    * @param name - Filter by student's name.
    * @param nick_name - Filter by student's nickname.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Get()
@@ -48,7 +51,8 @@ export class StudentsController {
     @Query('nis') nis: number,
     @Query('name') name: string,
     @Query('nick_name') nick_name: string,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const data = {
       status: true,
@@ -68,12 +72,14 @@ export class StudentsController {
    * Retrieve a single student by ID.
    *
    * @param id - ID of the student to retrieve.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Get(':id')
   async findOne(
     @Param('id') id: string,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const data = {
       status: true,
@@ -91,13 +97,15 @@ export class StudentsController {
      *
      * @param id - ID of the student to update.
      * @param updateStudentDto - Updated student data.
+     * @param request - HTTP request object.
      * @param response - HTTP response object.
      */
   @Patch(':id')
   async update(
     @Param('id') id: number,
     @Body() updateStudentDto: UpdateStudentDto,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const data = {
       status: true,
@@ -114,12 +122,14 @@ export class StudentsController {
    * Delete a student (soft delete).
    *
    * @param id - ID of the student to delete.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Delete(':id')
   async remove(
     @Param('id') id: number,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const data = {
       status: true,
@@ -136,12 +146,14 @@ export class StudentsController {
    * Restore a previously soft-deleted student.
    *
    * @param id - ID of the student to restore.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Patch(':id/restore')
   async restore(
     @Param('id') id: number,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const restoredStudent = await this.studentsService.restore(id);
     const data = {

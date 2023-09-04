@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res, Query, Req } from '@nestjs/common';
 import { ClassService } from './class.service';
 import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
 import { responseJson } from '@app/response';
+import { Response } from 'express';
 
 @Controller('class')
 export class ClassController {
@@ -16,11 +17,16 @@ export class ClassController {
    * Create a new classes.
    *
    * @param createClassDto - Data to create a new classes.
+   * 
+   * @param request - HTTP request object.
+   * @param response - HTTP response object.
    * @returns Created classes data.
    */
   @Post()
-  async create(@Body() createClassDto: CreateClassDto,
-    @Res() response,
+  async create(
+    @Body() createClassDto: CreateClassDto,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     this.classService.create(createClassDto);
     const classes = await this.classService.create(createClassDto);
@@ -37,6 +43,8 @@ export class ClassController {
   /**
    * Get a list of all classess.
    *
+   * @param request - HTTP request object.
+   * @param response - HTTP response object.
    * @returns List of classess.
    */
   @Get()
@@ -65,12 +73,15 @@ export class ClassController {
      *
      * @param id - ID of the classes to update.
      * @param updateClassDto - Data to update the classes.
+     * @param request - HTTP request object.
+     * @param response - HTTP response object.
      * @returns Updated classes data.
      */
   @Patch(':id')
   async update(@Param('id') id: string,
     @Body() updateClassDto: UpdateClassDto,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const data = {
       status: true,
@@ -87,12 +98,15 @@ export class ClassController {
      * Delete a classes.
      *
      * @param id - ID of the classes to delete.
+     * @param request - HTTP request object.
+     * @param response - HTTP response object.
      * @returns Deleted classes data.
      */
   @Delete(':id')
   async remove(
     @Param('id') id: number,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const data = {
       status: true,
@@ -109,12 +123,14 @@ export class ClassController {
     * Restore a previously soft-deleted classes.
     *
     * @param id - ID of the classes to restore.
+    * @param request - HTTP request object.
     * @param response - HTTP response object.
     */
   @Patch(':id/restore')
   async restore(
     @Param('id') id: number,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const restoredClass = await this.classService.restore(id);
     const data = {

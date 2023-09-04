@@ -1,11 +1,10 @@
-import { Res, Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Query } from '@nestjs/common';
+import { Res, Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Query, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { responseJson } from '@app/response';
-import { decryptData, encryptData } from '@app/helper';
 import { ParentsService } from 'src/parents/parents.service';
-
+import { Response } from 'express';
 @Controller('users')
 export class UsersController {
   constructor(
@@ -20,10 +19,15 @@ export class UsersController {
      * Create a new user.
      *
      * @param createUserDto - Data to create a new user.
-     * @returns Created user data.
+     * @param request - HTTP request object.
+     * @param response - HTTP response object.
      */
   @Post()
-  async create(@Body() createUserDto: CreateUserDto, @Res() response) {
+  async create(
+    @Body() createUserDto: CreateUserDto,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const newUser = await this.usersService.create(createUserDto);
     const data = {
       status: true,
@@ -34,11 +38,17 @@ export class UsersController {
     data.data = newUser;
     responseJson(data, data.statusCode, response);
   }
+
   /**
-      * Get a list of all user-permission.
-      *
-      * @returns List of user-permission.
-      */
+   * Retrieve all permissions with optional filtering and pagination.
+   *
+   * @param page - Page number for pagination (default: 1).
+   * @param limit - Number of items per page (default: 10).
+   * @param user - Filter by permission's user.
+   * @param permission - Filter by permission's permission.
+   * @param request - HTTP request object.
+   * @param response - HTTP response object.
+   */
 
   @Get('/permission')
   async permission(
@@ -46,7 +56,9 @@ export class UsersController {
     @Query('limit') limit: number = this._limit,
     @Query('user') user: string,
     @Query('permission') permission: string,
-    @Res() response) {
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -62,28 +74,36 @@ export class UsersController {
   }
 
   @Get('test')
-  async test(@Query('page') page: number = this._page,
+  async test(
+    @Query('page') page: number = this._page,
     @Query('limit') limit: number = this._limit,
     @Query('username') username: string,
-    @Query('email') email: string,) {
+    @Query('email') email: string,
+  ) {
     const user = await this.usersService.findAll(username, email, page, limit);
     const parent = await this.parentService.findLike(username, email, page, limit,);
     return [user, parent]
   }
 
   /**
-     * Get a list of all users.
-     *
-     * @returns List of users.
-     */
+   * Retrieve all users with optional filtering and pagination.
+   *
+   * @param page - Page number for pagination (default: 1).
+   * @param limit - Number of items per page (default: 10).
+   * @param username - Filter by user's username.
+   * @param email - Filter by user's email.
+   * @param request - HTTP request object.
+   * @param response - HTTP response object.
+   */
   @Get()
   async findAll(
     @Query('page') page: number = this._page,
     @Query('limit') limit: number = this._limit,
     @Query('username') username: string,
     @Query('email') email: string,
-
-    @Res() response) {
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -101,10 +121,16 @@ export class UsersController {
     * Get details of a specific user by identity (username or email).
     *
     * @param identity - Username or email of the user.
+    * @param request - HTTP request object.
+    * @param response - HTTP response object.
     * @returns User details.
     */
   @Get(':identity')
-  async findOne(@Param('identity') identity: string, @Res() response) {
+  async findOne(
+    @Param('identity') identity: string,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -121,10 +147,17 @@ export class UsersController {
    *
    * @param id - ID of the user to update.
    * @param updateUserDto - Data to update the user.
+   * @param request - HTTP request object.
+   * @param response - HTTP response object.
    * @returns Updated user data.
    */
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Res() response) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.ACCEPTED,
@@ -140,10 +173,16 @@ export class UsersController {
      * Delete a user.
      *
      * @param id - ID of the user to delete.
+     * @param request - HTTP request object.
+     * @param response - HTTP response object.
      * @returns Deleted user data.
      */
   @Delete(':id')
-  async remove(@Param('id') id: string, @Res() response) {
+  async remove(
+    @Param('id') id: string,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -160,6 +199,8 @@ export class UsersController {
   * Restore a previously soft-deleted user.
   *
   * @param id - ID of the user to restore.
+  *  @param request - HTTP request object.
+  * @param response - HTTP response object.
   * @param response - HTTP response object.
   */
   @Patch(':id/restore')

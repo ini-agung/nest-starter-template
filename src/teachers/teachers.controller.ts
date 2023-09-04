@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res, Query, Req } from '@nestjs/common';
 import { TeachersService } from './teachers.service';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { responseJson } from '@app/response';
 import { currentUser } from '@app/helper';
+import { Response } from 'express';
 
 @Controller('teachers')
 export class TeachersController {
@@ -15,10 +16,15 @@ export class TeachersController {
    * Create a new teacher.
    *
    * @param createTeacherDto - Data to create a new teacher.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Post()
-  async create(@Body() createTeacherDto: CreateTeacherDto, @Res() response) {
+  async create(
+    @Body() createTeacherDto: CreateTeacherDto,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.ACCEPTED,
@@ -37,6 +43,7 @@ export class TeachersController {
    * @param limit - Number of items per page (default: 10).
    * @param nik - Filter by teacher's National Identification Number (NIK).
    * @param name - Filter by teacher's full name or nickname.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Get()
@@ -45,7 +52,9 @@ export class TeachersController {
     @Query('limit') limit: number,
     @Query('nik') nik: number,
     @Query('name') name: string,
-    @Res() response) {
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -65,10 +74,16 @@ export class TeachersController {
   *
   * @param id - ID of the teacher to update.
   * @param updateTeacherDto - Updated teacher data.
+  * @param request - HTTP request object.
   * @param response - HTTP response object.
   */
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateTeacherDto: UpdateTeacherDto, @Res() response) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateTeacherDto: UpdateTeacherDto,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.ACCEPTED,
@@ -84,10 +99,15 @@ export class TeachersController {
    * Soft-delete a teacher.
    *
    * @param id - ID of the teacher to delete.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Delete(':id')
-  async remove(@Param('id') id: string, @Res() response) {
+  async remove(
+    @Param('id') id: string,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -103,10 +123,15 @@ export class TeachersController {
    * Restore a previously soft-deleted teacher.
    *
    * @param id - ID of the teacher to restore.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Patch(':id/restore')
-  async restore(@Param('id') id: number, @Res() response) {
+  async restore(
+    @Param('id') id: number,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const restoredTeacher = await this.teachersService.restore(id);
     const data = {
       status: true,

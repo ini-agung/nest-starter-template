@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res, Query, Req } from '@nestjs/common';
 import { ParentsService } from './parents.service';
 import { CreateParentsDto } from './dto/create-parents.dto';
 import { UpdateParentsDto } from './dto/update-parents.dto';
 import { responseJson } from '@app/response';
+import { Response } from 'express';
+
 @Controller('parents')
 export class ParentsController {
 
@@ -13,10 +15,15 @@ export class ParentsController {
      * Create a new parent.
      *
      * @param createParentDto - Data to create a new parent.
+     * @param request - HTTP request object.
      * @param response - HTTP response object.
      */
   @Post()
-  async create(@Body() createParentDto: CreateParentsDto, @Res() response) {
+  async create(
+    @Body() createParentDto: CreateParentsDto,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const parent = await this.parentsService.create(createParentDto);
     const data = {
       status: true,
@@ -35,6 +42,7 @@ export class ParentsController {
    * @param limit - Number of items per page (default: 10).
    * @param name - Filter by parent's name.
    * @param phone - Filter by parent's phone.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Get()
@@ -43,7 +51,9 @@ export class ParentsController {
     @Query('limit') limit: number = this._limit,
     @Query('name') name: string,
     @Query('phone') phone: string,
-    @Res() response) {
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -61,10 +71,15 @@ export class ParentsController {
    * Retrieve a single parent by ID.
    *
    * @param id - ID of the parent to retrieve.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Get(':id')
-  async findOne(@Param('id') id: string, @Res() response) {
+  async findOne(
+    @Param('id') id: string,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -81,10 +96,16 @@ export class ParentsController {
      *
      * @param id - ID of the parent to update.
      * @param updateParentDto - Updated parent data.
+     * @param request - HTTP request object.
      * @param response - HTTP response object.
      */
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateParentDto: UpdateParentsDto, @Res() response) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateParentDto: UpdateParentsDto,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -100,10 +121,15 @@ export class ParentsController {
    * Delete a parent (soft delete).
    *
    * @param id - ID of the parent to delete.
+   * @param request - HTTP request object.
    * @param response - HTTP response object.
    */
   @Delete(':id')
-  async remove(@Param('id') id: string, @Res() response) {
+  async remove(
+    @Param('id') id: string,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -124,7 +150,8 @@ export class ParentsController {
   @Patch(':id/restore')
   async restore(
     @Param('id') id: number,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const restoredParent = await this.parentsService.restore(id);
     const data = {
