@@ -8,7 +8,7 @@ export class MetadataSchedule {
     id: number;
 
     @OneToOne(() => Schedule, schedule => schedule.id)
-    @JoinColumn({ name: 'enrolment_id' }) // Specify the foreign key column
+    @JoinColumn({ name: 'schedule_id' }) // Specify the foreign key column
     schedule: Schedule;
 
     @Column()

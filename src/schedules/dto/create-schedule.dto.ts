@@ -2,7 +2,7 @@ import { IsNotEmpty, IsNumber, IsString, Matches } from "@nestjs/class-validator
 
 export class CreateScheduleDto {
     @IsNotEmpty()
-    @IsNumber()
+    @IsString()
     schedule_code: string;
 
     @IsNotEmpty()
@@ -26,5 +26,8 @@ export class CreateScheduleDto {
     @IsNotEmpty()
     @IsNumber()
     class_id: number;
+}
+
+export class CreateMetadataScheduleDto {
 
 }

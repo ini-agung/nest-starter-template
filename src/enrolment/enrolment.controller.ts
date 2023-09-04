@@ -41,6 +41,7 @@ export class EnrolmentController {
      * @param limit - Number of items per page (default: 10).
      * @param enrol_code - Enrole code
      * @param schedule - Schedule id
+     * @param student_id - Student id
      * @param request - HTTP request object.
      * @param response - HTTP response object.
      */
@@ -49,7 +50,8 @@ export class EnrolmentController {
     @Query('page') page: number = this._page,
     @Query('limit') limit: number = this._limit,
     @Query('enrol_code') enrol_code: string,
-    @Query('schedule') schedule: number,
+    @Query('schedule') schedule_id: number,
+    @Query('student') student_id: number,
     @Req() request: Request,
     @Res() response: Response,
   ) {
@@ -61,7 +63,7 @@ export class EnrolmentController {
     };
     page = (page == undefined) ? this._page : page;
     limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
-    const enrolements = await this.enrolmentService.findLike(enrol_code, schedule, page, limit);
+    const enrolements = await this.enrolmentService.findLike(enrol_code, schedule_id, student_id, page, limit);
     data.data = enrolements;
     responseJson(data, data.statusCode, response);
   }

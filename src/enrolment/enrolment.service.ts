@@ -85,37 +85,71 @@ export class EnrolmentService {
   */
   async findLike(
     enrol_code: string,
-    schedule: number,
+    schedule_id: number,
+    student_id: number,
     page: number,
     limit: number,
-  ): Promise<Pagination<any>> {
+  ) {
+    //: Promise<Pagination<any>>
     try {
       const queryBuilder = await this.enrolmentRepository
-        .createQueryBuilder('enrolment')
-        .select('enrolment.schedule_id', 'schedule_id')
-        .addSelect('enrolment.enrol_code', 'enrol_code')
-        .addSelect('enrolment.schedule_id', 'schedule_id')
-        .leftJoinAndSelect('enrolment.student', 'student')
-        .where('enrolment.enrolment_status = 1')
-      if (schedule) {
-        queryBuilder.andWhere('enrolment.schedule_id = :schedule', { schedule });
+        .createQueryBuilder('e')
+        .select([
+          'e.id', 'e.enrol_code',
+          's.nis', 's.full_name',
+          'g.gender',
+          'ss.id', 'ss.schedule_code', 'ss.day_of_week', 'ss.time_start', 'ss.time_finish',
+          'c.class'
+        ])
+        .leftJoin('e.student', 's')
+        .leftJoin('s.gender', 'g')
+        .leftJoin('e.schedule', 'ss')
+        .leftJoin('ss.class_id', 'c')
+        .orderBy('e.id')
+      if (student_id) {
+        queryBuilder.andWhere('e.student_id = :student_id', { student_id: student_id })
       }
-      if (enrol_code) {
-        console.log(enrol_code)
-        queryBuilder.andWhere('enrolment.enrol_code = :enrol_code', { enrol_code });
+      if (schedule_id) {
+        queryBuilder.andWhere('e.schedule_id = :schedule_id', { schedule_id: schedule_id })
       }
-      const enrolmentCounts = await queryBuilder.getRawMany();
+
+      const enrolmentCounts = await queryBuilder.getMany();
       const total = enrolmentCounts.length;
       const startIdx = (page - 1) * limit;
       const endIdx = parseInt(startIdx.toString()) + parseInt(limit.toString());
       const data = enrolmentCounts.slice(startIdx, endIdx);
+      let prevPage;
+      if (page <= 1) {
+        prevPage = undefined;
+      } else {
+        prevPage = `/enrolment?page=${(parseInt(page.toString()) - 1)}`;
+        if (limit > 0) {
+          prevPage += `&limit=${limit}`;
+        }
+        if (student_id > 0) {
+          prevPage += `&student=${student_id}`;
+        }
+      }
+
+      let nextPage;
+      if (endIdx >= total) {
+        nextPage = undefined;
+      } else {
+        nextPage = `/enrolment?page=${(parseInt(page.toString()) + 1)}`;
+        if (limit > 0) {
+          nextPage += `&limit=${limit}`;
+        }
+        if (student_id > 0) {
+          nextPage += `&student=${student_id}`;
+        }
+      }
       return {
         data,
         total,
         currentPage: page,
         perPage: limit,
-        prevPage: page > 1 ? `/enrolments?page=${(parseInt(page.toString()) - 1)}` : undefined,
-        nextPage: endIdx < total ? `/enrolments?page=${(parseInt(page.toString()) + 1)}` : undefined,
+        prevPage: prevPage,
+        nextPage: nextPage,
       };
     } catch (error) {
       this.logger.error(`Error find parent :  ${error.message}`);

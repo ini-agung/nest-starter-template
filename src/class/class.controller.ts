@@ -53,7 +53,8 @@ export class ClassController {
     @Query('limit') limit: number = this._limit,
     @Query('id') id: number,
     @Query('classes') classes: string,
-    @Res() response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const data = {
       status: true,

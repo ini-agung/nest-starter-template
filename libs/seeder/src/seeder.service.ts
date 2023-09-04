@@ -1428,6 +1428,32 @@ export class SeederService {
             { schedule_code: 'E016', day_of_week: 'Saturday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 88, },
             { schedule_code: 'E017', day_of_week: 'Saturday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 89, },
             { schedule_code: 'E018', day_of_week: 'Saturday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 90, },
+
+            { schedule_code: 'F001', day_of_week: 'Monday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 91, },
+            { schedule_code: 'F002', day_of_week: 'Monday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 92, },
+            { schedule_code: 'F003', day_of_week: 'Monday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 93, },
+            // Tuesday
+            { schedule_code: 'F004', day_of_week: 'Tuesday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 94, },
+            { schedule_code: 'F005', day_of_week: 'Tuesday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 95, },
+            { schedule_code: 'F006', day_of_week: 'Tuesday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 96, },
+            // Wednesday
+            { schedule_code: 'F007', day_of_week: 'Wednesday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 97, },
+            { schedule_code: 'F008', day_of_week: 'Wednesday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 98, },
+            { schedule_code: 'F009', day_of_week: 'Wednesday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 99, },
+            // Thursday
+            { schedule_code: 'F010', day_of_week: 'Thursday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 100, },
+            { schedule_code: 'F011', day_of_week: 'Thursday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 101, },
+            { schedule_code: 'F012', day_of_week: 'Thursday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 102, },
+            // Friday
+            { schedule_code: 'F013', day_of_week: 'Friday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 103, },
+            { schedule_code: 'F014', day_of_week: 'Friday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 104, },
+            { schedule_code: 'F015', day_of_week: 'Friday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 105, },
+            // Saturday
+            { schedule_code: 'F016', day_of_week: 'Saturday', time_start: '07:30:00', time_finish: '09:30:00', class_id: 106, },
+            { schedule_code: 'F017', day_of_week: 'Saturday', time_start: '10:00:00', time_finish: '11:00:00', class_id: 107, },
+            { schedule_code: 'F018', day_of_week: 'Saturday', time_start: '13:00:00', time_finish: '13:45:00', class_id: 108, },
+
+
         ];
         await this.connection.transaction(async (manager) => {
             // Check duplicates for SCHEDULE table

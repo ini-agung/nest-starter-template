@@ -56,10 +56,26 @@ export class ClassService {
       const queryBuilder = await this.classRepository
         .createQueryBuilder('class')
         .select([
-          'class.id', 'class.class'
+          'class.id', 'class.class', 'class.max_students',
+          'cr.classroom',
+          't.nik', 't.full_name',
+          'degree.degree',
+          'user.email', 'user.username',
+          'subject.subject',
+          'schedule.id', 'schedule.schedule_code', 'schedule.time_start', 'schedule.time_finish',
         ])
+        .leftJoin('class.classroom', 'cr')
+        .leftJoin('class.teacher', 't')
+        .leftJoin('class.subject', 'subject')
+        .leftJoin('t.degree', 'degree')
+        .leftJoin('t.user', 'user')
+        .leftJoin('class.schedules', 'schedule', 'schedule.class_id = class.id')
         .orderBy('class.class', 'ASC')
         .where('class.deletedAt IS NULL')
+        .andWhere('cr.deletedAt IS NULL')
+        .andWhere('subject.deletedAt IS NULL')
+        .andWhere('user.deletedAt IS NULL')
+        .andWhere('schedule.deletedAt IS NULL')
       if (classes) {
         queryBuilder.andWhere('(class.class LIKE :classes)', { classes: `%${classes}%` })
       }

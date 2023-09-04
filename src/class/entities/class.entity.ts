@@ -1,7 +1,8 @@
 import { Subject } from "src/subjects/entities/subject.entity";
 import { Classroom } from "src/classrooms/entities/classroom.entity";
 import { Teacher } from "src/teachers/entities/teacher.entity";
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Schedule } from "src/schedules/entities/schedule.entity";
 
 @Entity({ name: 'class' })
 export class Class {
@@ -34,6 +35,9 @@ export class Class {
 
     @Column({ type: 'int' })
     max_students: number;
+
+    @OneToMany(() => Schedule, (schedule) => schedule.class_id) // Define the One-to-Many relationship
+    schedules: Schedule[]; // This property will hold the related schedules
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;

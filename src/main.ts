@@ -10,12 +10,21 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   Sentry.init({
     dsn: "https://d0daea2ea0e9e62bd4dd83d4ace71c17@o4505781594750976.ingest.sentry.io/4505781595996160",
-
-    // Performance Monitoring
     tracesSampleRate: 1.0, // Capture 100% of the transactions, reduce in production!
   });
   app.useLogger(new Logger(logLever()));
   await app.listen(3000);
+  /*
+  try {
+    const seederService = app.get(SeederService);
+    await seederService.seed();
+    await app.close();
+  } catch (error) {
+    console.error('Error occurred while seeding:', error);
+    await app.close();
+  }
+  //*/
+
   /*
     const transaction = Sentry.startTransaction({
       op: "test",
@@ -32,15 +41,6 @@ async function bootstrap() {
       }
     }, 99);
     //*/
-  /*
-  try {
-    const seederService = app.get(SeederService);
-    await seederService.seed();
-    await app.close();
-  } catch (error) {
-    console.error('Error occurred while seeding:', error);
-    await app.close();
-  }
-  //*/
+
 }
 bootstrap();
