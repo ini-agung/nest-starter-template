@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res, Query, Req } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
@@ -42,13 +42,15 @@ export class RolesController {
     @Query('page') page: number = this._page,
     @Query('limit') limit: number = this._limit,
     @Query('role') role: string,
-    @Res() response) {
+    @Res() response,
+    @Req() request: Request) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
       message: 'Success Get Roles',
       data: {}
     };
+    console.log("request.url;", request.url)
     page = (page == undefined) ? this._page : page;
     limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
     const roles = await this.rolesService.findLike(role, page, limit);

@@ -13,6 +13,7 @@ export class AuthController {
     constructor(private readonly authService: AuthService,
         private readonly userService: UsersService,
         private readonly jwtLibService: JwtLibsService) { }
+
     /**
      * Handles user sign-in.
      * @param signinDto - The DTO containing user's identity and password.

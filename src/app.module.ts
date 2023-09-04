@@ -15,7 +15,6 @@ import { SchedulesModule } from './schedules/schedules.module';
 import { EnrolmentModule } from './enrolment/enrolment.module';
 import { ParentsModule } from './parents/parents.module';
 import { PermissionsModule } from './permissions/permissions.module';
-import { SuccessRequestInterceptor } from './success-request.interceptor';
 import { ConfigModule } from '@nestjs/config';
 import { SubjectsModule } from './subjects/subjects.module';
 import { ClassModule } from './class/class.module';
@@ -41,10 +40,6 @@ import { RolesModule } from './roles/roles.module';
     {
       provide: APP_GUARD,
       useClass: JwtLibsGuard,
-    },
-    {
-      provide: APP_INTERCEPTOR, // Import APP_INTERCEPTOR from '@nestjs/core'
-      useClass: SuccessRequestInterceptor,
     }
   ],
 })

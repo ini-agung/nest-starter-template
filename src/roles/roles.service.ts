@@ -62,7 +62,7 @@ export class RolesService {
         queryBuilder.andWhere('role.role LIKE :role', { role: `%${role}%` });
       }
       const studentsCounts = await queryBuilder.getMany();
-      this.logger.log(studentsCounts);
+      // this.logger.log(studentsCounts);
       const total = studentsCounts.length;
       const startIdx = (page - 1) * limit;
       const endIdx = parseInt(startIdx.toString()) + parseInt(limit.toString());
