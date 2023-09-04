@@ -354,20 +354,47 @@ export class UsersService {
     try {
       const queryBuilder = await this.upRepository
         .createQueryBuilder('up')
-        .select(['up.id', 'up.user_id', 'permission.code', 'permission.description'])
+        .select(['up.id', 'up.user_id', 'permission.code', 'permission.description', 'user.email', 'user.username'])
         .leftJoin('up.permission', 'permission')
-        .where('up.deletedAt is NULL')
+        .leftJoin('up.user', 'user')
+        .where('up.deletedAt is NULL');
+
       if (user) {
         queryBuilder.andWhere('up.user_id = :user', { user });
       }
+
       if (permission) {
         queryBuilder.andWhere('permission.code = :permission', { permission });
       }
-      const userPermission = await queryBuilder.getMany();
-      const total = userPermission.length;
+
+      const userPermissions = await queryBuilder.getMany();
+      const groupedPermissions = userPermissions.reduce((result, item) => {
+        const userPermission = result.find((p) => p.user_id === item.user_id);
+        if (userPermission) {
+          console.log(item.user);
+          userPermission.permission.push({
+            code: item.permission.code,
+            description: item.permission.description,
+          });
+        } else {
+          result.push({
+            username: item.user.username,
+            email: item.user.email,
+            user_id: item.user_id,
+            permission: [
+              {
+                code: item.permission.code,
+                description: item.permission.description,
+              },
+            ],
+          });
+        }
+        return result;
+      }, []);
+      const total = groupedPermissions.length;
       const startIdx = (page - 1) * limit;
       const endIdx = parseInt(startIdx.toString()) + parseInt(limit.toString());
-      const data = userPermission.slice(startIdx, endIdx);
+      const data = groupedPermissions.slice(startIdx, endIdx);
       return {
         data,
         total,
@@ -375,7 +402,7 @@ export class UsersService {
         perPage: limit,
         prevPage: page > 1 ? `/users/permission?page=${(parseInt(page.toString()) - 1)}` : undefined,
         nextPage: endIdx < total ? `/users/permission?page=${(parseInt(page.toString()) + 1)}` : undefined,
-      };
+      }
     } catch (error) {
       const data = {
         status: false,

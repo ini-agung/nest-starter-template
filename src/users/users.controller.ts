@@ -62,13 +62,12 @@ export class UsersController {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
-      message: 'Success Get Users Permission',
+      message: 'Success Get Users Permissions',
       data: {}
     };
     page = (page == undefined) ? this._page : page;
     limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
-    let users: object;
-    users = await this.usersService.findUserPermission(page, limit, user, permission);
+    const users = await this.usersService.findUserPermission(page, limit, user, permission);
     data.data = users;
     responseJson(data, data.statusCode, response);
   }
@@ -223,8 +222,5 @@ export class UsersController {
     }
     responseJson(data, data.statusCode, response);
   }
-
-
-
 
 }
