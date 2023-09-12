@@ -5,6 +5,10 @@ import * as dotenv from 'dotenv'; // Import dotenv
 import * as Sentry from '@sentry/node';
 import { Logger } from '@nestjs/common';
 import { logLever } from '@app/helper';
+import helmet from 'helmet';
+import * as csurf from 'csurf';
+
+
 dotenv.config(); // Load environment variables from .env file
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,6 +17,10 @@ async function bootstrap() {
     tracesSampleRate: 1.0, // Capture 100% of the transactions, reduce in production!
   });
   app.useLogger(new Logger(logLever()));
+  app.use(helmet({
+    xXssProtection: true,
+  }));
+  app.use(csurf());
   await app.listen(3000);
   /*
   try {
