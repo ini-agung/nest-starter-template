@@ -3,7 +3,7 @@ import { PermissionsService } from './permissions.service';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
 import { responseJson } from '@app/response';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 
 @Controller('permissions')
 export class PermissionsController {

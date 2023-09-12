@@ -8,6 +8,7 @@ import { JwtLibsService, comparePasswords } from '@app/jwt-libs';
 import { Public } from '@app/jwt-libs/public.decorator';
 import { setCurrentUser } from '@app/helper';
 import { MetadataDto } from './dto/metadata.dto';
+import { Request } from 'express';
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService,
@@ -23,6 +24,7 @@ export class AuthController {
     @Post('signin')
     async signin(@Body(new ValidationPipe()) signinDto: SigninDto, @Res() response, @Req() request: Request,) {
         // console.log(request.route)
+        console.log(request.ip);
         const user = await this.userService.findOne(signinDto.identity);
         if (user) {
             const userAgent = request.headers['user-agent'];

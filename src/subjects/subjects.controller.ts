@@ -3,7 +3,9 @@ import { SubjectsService } from './subjects.service';
 import { CreateSubjectDto } from './dto/create-subject.dto';
 import { UpdateSubjectDto } from './dto/update-subject.dto';
 import { responseJson } from '@app/response';
-import { Response } from 'express';
+import { Response, Request } from 'express';
+
+
 @Controller('subjects')
 export class SubjectsController {
   constructor(private readonly subjectService: SubjectsService) { }

@@ -4,7 +4,7 @@ import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { responseJson } from '@app/response';
 import { decryptData, encryptData } from '@app/helper';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 @Controller('roles')
 export class RolesController {
   constructor(private readonly rolesService: RolesService) { }

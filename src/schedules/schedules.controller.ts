@@ -3,7 +3,7 @@ import { SchedulesService } from './schedules.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
 import { responseJson } from '@app/response';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 
 /**
  * Controller responsible for managing schedules.

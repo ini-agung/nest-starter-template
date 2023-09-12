@@ -4,7 +4,8 @@ import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { responseJson } from '@app/response';
 import { currentUser } from '@app/helper';
-import { Response } from 'express';
+import { Response, Request } from 'express';
+
 
 @Controller('teachers')
 export class TeachersController {

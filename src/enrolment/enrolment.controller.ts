@@ -3,7 +3,7 @@ import { EnrolmentService } from './enrolment.service';
 import { CreateEnrolmentDto } from './dto/create-enrolment.dto';
 import { UpdateEnrolmentDto } from './dto/update-enrolment.dto';
 import { responseJson } from '@app/response';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 
 @Controller('enrolment')
 export class EnrolmentController {

@@ -3,7 +3,7 @@ import { ClassroomsService } from './classrooms.service';
 import { CreateClassroomDto } from './dto/create-classroom.dto';
 import { UpdateClassroomDto } from './dto/update-classroom.dto';
 import { responseJson } from '@app/response';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 
 @Controller('classrooms')
 export class ClassroomsController {

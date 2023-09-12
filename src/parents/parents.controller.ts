@@ -3,7 +3,7 @@ import { ParentsService } from './parents.service';
 import { CreateParentsDto } from './dto/create-parents.dto';
 import { UpdateParentsDto } from './dto/update-parents.dto';
 import { responseJson } from '@app/response';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 
 @Controller('parents')
 export class ParentsController {

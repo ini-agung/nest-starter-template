@@ -4,7 +4,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { responseJson } from '@app/response';
 import { ParentsService } from 'src/parents/parents.service';
-import { Response } from 'express';
+import { Response, Request } from 'express';
+
+
 @Controller('users')
 export class UsersController {
   constructor(
