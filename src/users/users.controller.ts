@@ -84,7 +84,6 @@ export class UsersController {
      */
   @Post('permission')
   async updatePermission(
-    @Body('id') id: number,
     @Body('user_id') user_id: number,
     @Body('permission_id') permission_id: number,
     @Req() request: Request,
@@ -96,16 +95,15 @@ export class UsersController {
       message: 'Success Update Users Permissions',
       data: {}
     };
-    if (id == undefined || user_id == undefined || permission_id == undefined) {
+    if (user_id == undefined || permission_id == undefined) {
       data.statusCode = HttpStatus.BAD_REQUEST;
-      data.message = `Field must have value but got => id is ${id}, user_id is ${user_id}, permission_id is ${permission_id}`;
+      data.message = `Field must have value but got =>  user_id is ${user_id}, permission_id is ${permission_id}`;
     } else {
       // check is any user_id with permission_id, if any then return message 'The user already has this permission'
-      const updateOrFail = this.usersService.checkAndUpdateUP(id, user_id, permission_id);
+      const updateOrFail = this.usersService.checkAndUpdateUP(user_id, permission_id);
       if (updateOrFail) {
         //Success
         data.data = {
-          id: id,
           user_id: user_id,
           permission_id: permission_id,
         };

@@ -416,31 +416,24 @@ export class UsersService {
 
   /**
    * Find is any combination between user_id and permission_id.
-   *@param id - id user permission
    * @param user_id - Find by user_id.
    * @param permission_id - Find by permission_id.
    * @returns Paginated list of filtered user.
    */
-  async checkAndUpdateUP(id: number, user_id: number, permission_id: number): Promise<boolean> {
+  async checkAndUpdateUP(user_id: number, permission_id: number): Promise<boolean> {
     const queryBuilder = await this.upRepository
       .createQueryBuilder('up')
       .select(['up.id'])
       .where('up.deletedAt is NULL')
       .andWhere('up.user_id =:user_id', { user_id })
       .andWhere('up.permission_id =:permission_id', { permission_id })
-      .getCount()
-    console.log(queryBuilder)
-    if (queryBuilder > 0) {
-      const updateUP = await this.upRepository
-        .createQueryBuilder('up')
-        .update(UserPermission)
-        .set({ user_id: user_id, permission_id: permission_id })
-        .where("id = :id", { id: id })
-        .execute()
-      console.log(updateUP)
+      .getCount();
+    console.log("queryBuilder", queryBuilder);
+    if (queryBuilder == 0) {
+      console.log("insert")
       return true;
     }
+    console.log("sudah ada, return false")
     return false;
   }
 }
-
