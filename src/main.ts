@@ -20,7 +20,7 @@ async function bootstrap() {
   app.use(helmet({
     xXssProtection: true,
   }));
-  app.use(csurf());
+  // app.use(csurf());
   await app.listen(3000);
   /*
   try {

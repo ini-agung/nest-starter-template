@@ -366,12 +366,11 @@ export class UsersService {
       if (permission) {
         queryBuilder.andWhere('permission.code = :permission', { permission });
       }
-
       const userPermissions = await queryBuilder.getMany();
       const groupedPermissions = userPermissions.reduce((result, item) => {
         const userPermission = result.find((p) => p.user_id === item.user_id);
         if (userPermission) {
-          console.log(item.user);
+          this.logger.log(item.user);
           userPermission.permission.push({
             code: item.permission.code,
             description: item.permission.description,
@@ -413,6 +412,35 @@ export class UsersService {
       captureSentryException(error);
       throw new BadRequestException(data, { cause: new Error() });
     }
+  }
+
+  /**
+   * Find is any combination between user_id and permission_id.
+   *@param id - id user permission
+   * @param user_id - Find by user_id.
+   * @param permission_id - Find by permission_id.
+   * @returns Paginated list of filtered user.
+   */
+  async checkAndUpdateUP(id: number, user_id: number, permission_id: number): Promise<boolean> {
+    const queryBuilder = await this.upRepository
+      .createQueryBuilder('up')
+      .select(['up.id'])
+      .where('up.deletedAt is NULL')
+      .andWhere('up.user_id =:user_id', { user_id })
+      .andWhere('up.permission_id =:permission_id', { permission_id })
+      .getCount()
+    console.log(queryBuilder)
+    if (queryBuilder > 0) {
+      const updateUP = await this.upRepository
+        .createQueryBuilder('up')
+        .update(UserPermission)
+        .set({ user_id: user_id, permission_id: permission_id })
+        .where("id = :id", { id: id })
+        .execute()
+      console.log(updateUP)
+      return true;
+    }
+    return false;
   }
 }
 

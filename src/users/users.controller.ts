@@ -65,10 +65,56 @@ export class UsersController {
       message: 'Success Get Users Permissions',
       data: {}
     };
+
     page = (page == undefined) ? this._page : page;
     limit = (limit == undefined) ? this._limit : (limit > this._limit) ? this._limit : limit;
     const users = await this.usersService.findUserPermission(page, limit, user, permission);
     data.data = users;
+    responseJson(data, data.statusCode, response);
+  }
+
+  /**
+     * Update spesifik user permission by id.
+     *
+     * @param id - Id number for spesific user_permission.
+     * @param user_id - new value of user_id.
+     * @param permission_id - new value of user_id.
+     * @param request - HTTP request object.
+     * @param response - HTTP response object.
+     */
+  @Post('permission')
+  async updatePermission(
+    @Body('id') id: number,
+    @Body('user_id') user_id: number,
+    @Body('permission_id') permission_id: number,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
+    const data = {
+      status: true,
+      statusCode: HttpStatus.OK,
+      message: 'Success Update Users Permissions',
+      data: {}
+    };
+    if (id == undefined || user_id == undefined || permission_id == undefined) {
+      data.statusCode = HttpStatus.BAD_REQUEST;
+      data.message = `Field must have value but got => id is ${id}, user_id is ${user_id}, permission_id is ${permission_id}`;
+    } else {
+      // check is any user_id with permission_id, if any then return message 'The user already has this permission'
+      const updateOrFail = this.usersService.checkAndUpdateUP(id, user_id, permission_id);
+      if (updateOrFail) {
+        //Success
+        data.data = {
+          id: id,
+          user_id: user_id,
+          permission_id: permission_id,
+        };
+      } else {
+        // Failed
+        data.statusCode = HttpStatus.CONFLICT;
+        data.message = 'The user already has this permission';
+      }
+    }
     responseJson(data, data.statusCode, response);
   }
 
