@@ -13,7 +13,7 @@ import { Schedule } from 'src/schedules/entities/schedule.entity';
 import { Teacher } from 'src/teachers/entities/teacher.entity';
 import { Student } from 'src/students/entities/student.entity';
 import { Enrolment } from 'src/enrolment/entities/enrolment.entity';
-import { Permission, RolePermission } from 'src/permissions/entities/permission.entity';
+import { Permission, RolePermission, UserPermission } from 'src/permissions/entities/permission.entity';
 import { Class } from 'src/class/entities/class.entity';
 import * as faker from 'faker';
 @Injectable()
@@ -1593,7 +1593,7 @@ export class SeederService {
             };
         });
 
-        console.log("=== ROLE PERMISSION ===")
+        console.log("=== Role Permission ===")
         const userPermission = [13, 14, 15, 21, 22, 23, 61, 62, 63];
         const teacherPermission = [5, 6, 7, 8, 9, 10, 11, 12, 41, 42, 43, 44,];
         await this.connection.transaction(async (manager) => {
@@ -1635,10 +1635,26 @@ export class SeederService {
             }
         });
 
-        console.log("=== METADATA-ENROLMENTS ===")
-        for (let i; i < 5; i++) {
+        console.log("=== Metadata-Enrolments ===")
+        for (let i = 1; i < 5; i++) {
 
         }
+        await this.connection.transaction(async (manager) => {
+            for (let i = 1; i < 5; i++) {
+                for (let j = 1; j < 5; j++) {
+                    const existingPermission = await manager.findOne(UserPermission, { where: { user_id: i, permission_id: j } });
+                    if (!existingPermission) {
+                        const up = new UserPermission();
+                        up.user_id = i;
+                        up.permission_id = j;
+                        await manager.save(up);
+                    } else {
+                        console.log(`Skipping...`);
+                    }
+                }
+            }
+        })
+        console.log("=== User Permission === ")
         console.log("=== Finish ===");
     }
 }
