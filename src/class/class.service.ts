@@ -192,6 +192,7 @@ export class ClassService {
         .createQueryBuilder('class')
         .withDeleted() // Include soft-deleted entities
         .where('class.id = :id', { id })
+        .cache(true)
         .andWhere('class.deletedAt IS NOT NULL')
         .getOne();
       console.log(classToRestore)
