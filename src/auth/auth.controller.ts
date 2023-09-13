@@ -59,11 +59,10 @@ export class AuthController {
                     { access_token: access_token.access_token, refresh_token: refresh_token, expIn: decode.exp });
                 const metadataDto = {
                     user_id: user.id,
-                    login_timestamp: Date.now(),
-                    logout_timestamp: null,
+                    login_timestamp: new Date(),
                     ip_address: request.ip,
                     user_agent: request.headers['user-agent'],
-                    device_information: "asdasdasd"
+                    device_information: "asdasdasd",
                 }
                 const authMetadata = await this.authService.metadata(metadataDto);
                 responseJson(data, data.statusCode, response);

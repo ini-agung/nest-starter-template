@@ -11,7 +11,8 @@ import { captureSentryException } from '@app/helper';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly connection: Connection, private readonly userService: UsersService,
+  constructor(
+    private readonly userService: UsersService,
     @InjectRepository(MetadataDto)
     private metadataRepository: Repository<MetadataDto>,) { }
 
@@ -22,19 +23,20 @@ export class AuthService {
  * @returns Created metadata data.
  */
   async metadata(metadataDto: MetadataDto) {
-    try {
-      const metadata = this.metadataRepository.create(metadataDto);
-      return await this.metadataRepository.save(metadata);
-    } catch (error) {
-      const data = {
-        status: false,
-        statusCode: HttpStatus.CONFLICT,
-        message: error.sqlMessage,
-        data: {}
-      };
-      data.data = error.message;
-      captureSentryException(error);
-      throw new ConflictException(data, { cause: new Error() });
-    }
+    console.log(metadataDto)
+    // try {
+    //   const metadata = this.metadataRepository.create(metadataDto);
+    //   return await this.metadataRepository.save(metadata);
+    // } catch (error) {
+    //   const data = {
+    //     status: false,
+    //     statusCode: HttpStatus.CONFLICT,
+    //     message: error.sqlMessage,
+    //     data: {}
+    //   };
+    //   data.data = error.message;
+    //   captureSentryException(error);
+    //   throw new ConflictException(data, { cause: new Error() });
+    // }
   }
 }

@@ -10,9 +10,6 @@ export class MetadataDto {
   @IsDate()
   login_timestamp: Date;
 
-  @IsDate()
-  logout_timestamp: Date;
-
   @IsNotEmpty()
   @IsString()
   ip_address: string;
@@ -21,6 +18,7 @@ export class MetadataDto {
   @IsString()
   user_agent: string;
 
+  @IsNotEmpty()
   @IsString()
   device_information: string;
 }
