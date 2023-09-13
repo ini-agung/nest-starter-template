@@ -36,7 +36,6 @@ export function responseJson(data: any, statusCode: HttpStatus, response: Respon
     throw new HttpException('Invalid API version', HttpStatus.BAD_REQUEST);
   }
 }
-
 function checkVersion() {
   return version;
 }
