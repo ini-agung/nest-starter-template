@@ -68,6 +68,7 @@ export class SchedulesService {
       .addSelect('class.teacher_id', 'teacher_id')
       .leftJoin('schedules.class_id', 'class')
       .where('schedules.deletedAt IS NULL')
+      .cache(true)
     if (day) {
       queryBuilder.andWhere('schedules.day_of_week = :day', { day });
     }
@@ -178,6 +179,7 @@ export class SchedulesService {
         .createQueryBuilder('schedule')
         .withDeleted() // Include soft-deleted entities
         .where('schedule.id = :id', { id })
+        .cache(true)
         .getOne();
       if (scheduleToRestore) {
         scheduleToRestore.deletedAt = null; // Set deletedAt back to null

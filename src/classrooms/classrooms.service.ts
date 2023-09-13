@@ -60,6 +60,7 @@ export class ClassroomsService {
         ])
         .orderBy('classroom.classroom', 'ASC')
         .where('classroom.deletedAt IS NULL')
+        .cache(true)
       if (classroom) {
         queryBuilder.andWhere('(classroom.classroom LIKE :nik)', { classroom: `%${classroom}%` })
       }
@@ -175,6 +176,7 @@ export class ClassroomsService {
         .createQueryBuilder('classroom')
         .withDeleted() // Include soft-deleted entities
         .where('classroom.id = :id', { id })
+        .cache(true)
         .getOne();
 
       if (classroomToRestore) {

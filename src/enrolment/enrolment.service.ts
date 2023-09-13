@@ -55,6 +55,7 @@ export class EnrolmentService {
       .select(['enrolment.id', 'enrolment.enrol_code', 'enrolment.enrolment_date', 'enrolment.student_id'])
       .leftJoinAndSelect('enrolment.student', 'student')
       .where('enrolment.schedule_id = :scheduleId', { scheduleId })
+      .cache(true)
       .getRawMany();
     return enrolments;
   }
@@ -70,6 +71,7 @@ export class EnrolmentService {
       .createQueryBuilder('schedule')
       .select(['schedule.schedule_code'])
       .where('schedule.id = :schedule_id', { schedule_id })
+      .cache(true)
       .getRawOne();
     return schedule;
   }
@@ -105,7 +107,8 @@ export class EnrolmentService {
         .leftJoin('s.gender', 'g')
         .leftJoin('e.schedule', 'ss')
         .leftJoin('ss.class_id', 'c')
-        .orderBy('e.id')
+        .where('e.enrolment_status = 1')
+        .cache(true)
       if (student_id) {
         queryBuilder.andWhere('e.student_id = :student_id', { student_id: student_id })
       }
@@ -113,7 +116,7 @@ export class EnrolmentService {
         queryBuilder.andWhere('e.schedule_id = :schedule_id', { schedule_id: schedule_id })
       }
 
-      const enrolmentCounts = await queryBuilder.getMany();
+      const enrolmentCounts = await queryBuilder.orderBy('e.id').getMany();
       const total = enrolmentCounts.length;
       const startIdx = (page - 1) * limit;
       const endIdx = parseInt(startIdx.toString()) + parseInt(limit.toString());

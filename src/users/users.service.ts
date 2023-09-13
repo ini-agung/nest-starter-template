@@ -77,6 +77,7 @@ export class UsersService {
         .select(['user.id', 'user.email', 'user.username', 'user.createdAt'])
         .leftJoinAndSelect('user.role', 'role')
         .where('user.deletedAt is NULL')
+        .cache(true)
       if (username) {
         queryBuilder.andWhere('user.username LIKE :username', { username: `%${username}%` });
       }
@@ -91,12 +92,14 @@ export class UsersService {
           .select(['up.id', 'permission.id', 'permission.code'])
           .leftJoin('up.permission', 'permission')
           .where('up.user_id = :userId', { userId: user.id })
+          .cache(true)
           .getRawMany();
         const rp = await this.rpRepository
           .createQueryBuilder('rp')
           .select(['rp.id', 'permission.id', 'permission.code'])
           .leftJoin('rp.permission', 'permission')
           .where('rp.role_id = :role_id', { role_id: user.role.id })
+          .cache(true)
           .getRawMany();
         permissions = [...up, ...rp]
         Object.assign(user, { permissions });
@@ -105,6 +108,7 @@ export class UsersService {
           const metadata = await this.studentRepository
             .createQueryBuilder('student')
             .where('student.user_id = :id', { id: user.id })
+            .cache(true)
             .getOne();
           Object.assign(user, { metadata });
         }
@@ -112,6 +116,7 @@ export class UsersService {
           const metadata = await this.teacherRepository
             .createQueryBuilder('teacher')
             .where('teacher.user_id = :id', { id: user.id })
+            .cache(true)
             .getOne();
           Object.assign(user, { metadata });
         }
@@ -119,6 +124,7 @@ export class UsersService {
           const metadata = await this.parentRepository
             .createQueryBuilder('parent')
             .where('parent.user_id = :id', { id: user.id })
+            .cache(true)
             .getOne();
           Object.assign(user, { metadata });
         }
@@ -161,7 +167,8 @@ export class UsersService {
         .where('user.username=:identity', { identity })
         .orWhere('user.email=:identity', { identity })
         .andWhere('user.deletedAt is NULL')
-        .getOne()
+        .cache(true)
+        .getOne();
 
       if (user) {
         let permissions: any = [];
@@ -315,6 +322,7 @@ export class UsersService {
         .createQueryBuilder('user')
         .withDeleted() // Include soft-deleted entities
         .where('user.id = :id', { id })
+        .cache(true)
         .getOne();
 
       if (userToRestore) {
@@ -357,8 +365,8 @@ export class UsersService {
         .select(['up.id', 'up.user_id', 'permission.code', 'permission.description', 'user.email', 'user.username'])
         .leftJoin('up.permission', 'permission')
         .leftJoin('up.user', 'user')
-        .where('up.deletedAt is NULL');
-
+        .where('up.deletedAt is NULL')
+        .cache(true)
       if (user) {
         queryBuilder.andWhere('up.user_id = :user', { user });
       }
@@ -427,6 +435,7 @@ export class UsersService {
       .where('up.deletedAt is NULL')
       .andWhere('up.user_id =:user_id', { user_id })
       .andWhere('up.permission_id =:permission_id', { permission_id })
+      .cache(true)
       .getCount();
     console.log("queryBuilder", queryBuilder);
     if (queryBuilder == 0) {

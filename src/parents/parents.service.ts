@@ -68,6 +68,7 @@ export class ParentsService {
           'students.parent_id = parent_id AND students.parent_id = parent.id'  // Join students using parent_id and match parent_id with parent.id
         )
         .where('parent.deletedAt IS NULL')
+        .cache(true)
       if (phone) {
         queryBuilder.andWhere('((parent.phone_mother LIKE :phone) OR (parent.phone_father LIKE :phone))', { phone: `%${phone}%` });
       }
@@ -206,6 +207,7 @@ export class ParentsService {
         .createQueryBuilder('parent')
         .withDeleted() // Include soft-deleted entities
         .where('parent.id = :id', { id })
+        .cache(true)
         .getOne();
       if (parentToRestore) {
         parentToRestore.deletedAt = null; // Set deletedAt back to null

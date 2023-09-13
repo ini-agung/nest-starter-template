@@ -60,6 +60,7 @@ export class SubjectsService {
         ])
         .orderBy('subject.subject', 'ASC')
         .where('subject.deletedAt IS NULL')
+        .cache(true)
       if (subject) {
         queryBuilder.andWhere('((subject.subject LIKE :subject) OR (subject.description LIKE :subject))', { subject: `%${subject}%` })
       }
@@ -172,6 +173,7 @@ export class SubjectsService {
         .createQueryBuilder('classroom')
         .withDeleted() // Include soft-deleted entities
         .where('classroom.id = :id', { id })
+        .cache(true)
         .getOne();
 
       if (classroomToRestore) {

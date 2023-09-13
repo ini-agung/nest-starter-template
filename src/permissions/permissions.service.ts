@@ -62,6 +62,7 @@ export class PermissionsService {
           'permission.description',
         ])
         .where('permission.deletedAt IS NULL')
+        .cache(true)
 
       if (code) {
         queryBuilder.andWhere('((permission.code LIKE :code) OR (permission.description LIKE :code))', { code: `%${code}%` })
@@ -176,6 +177,7 @@ export class PermissionsService {
         .createQueryBuilder('user')
         .withDeleted() // Include soft-deleted entities
         .where('user.id = :id', { id })
+        .cache(true)
         .getOne();
 
       if (userToRestore) {

@@ -31,6 +31,7 @@ export class ConnectionsService implements TypeOrmOptionsFactory {
             entities: [User, Student, Parent, Teacher, Role, Degree, Religion, Gender, Class, Classroom, Subject, Schedule, MetadataSchedule, Enrolment, AuthMetadata],
             autoLoadEntities: true,
             synchronize: true,
+            cache: true,
         };
         return dbConfig;
     }

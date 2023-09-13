@@ -58,6 +58,7 @@ export class RolesService {
           'role.id', 'role.role'
         ])
         .where('role.deletedAt IS NULL')
+        .cache(true)
       if (role) {
         queryBuilder.andWhere('role.role LIKE :role', { role: `%${role}%` });
       }
@@ -193,6 +194,7 @@ export class RolesService {
         .createQueryBuilder('role')
         .withDeleted() // Include soft-deleted entities
         .where('role.id = :id', { id })
+        .cache(true)
         .getOne();
       if (roleToRestore) {
         roleToRestore.deletedAt = null; // Set deletedAt back to null

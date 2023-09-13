@@ -73,6 +73,7 @@ export class TeachersService {
         .leftJoinAndSelect('teacher.religion', 'religions')
         .leftJoinAndSelect('teacher.gender', 'genders')
         .where('teacher.deletedAt IS NULL')
+        .cache(true)
       if (nik) {
         queryBuilder.andWhere('(teacher.nik LIKE :nik)', { nik: `%${nik}%` })
       }
@@ -189,6 +190,7 @@ export class TeachersService {
         .createQueryBuilder('user')
         .withDeleted() // Include soft-deleted entities
         .where('user.id = :id', { id })
+        .cache(true)
         .getOne();
 
       if (userToRestore) {

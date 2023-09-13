@@ -69,6 +69,7 @@ export class StudentsService {
         .leftJoinAndSelect('parent.rf', 'religion as b') // Join parent_religion for father
         .leftJoinAndSelect('parent.rm', 'religion as c') // Join parent_religion for mother
         .where('student.deletedAt IS NULL')
+        .cache(true)
         .orderBy('student.nis', 'ASC')
       if (nis) {
         queryBuilder.andWhere('student.nis LIKE :nis', { nis: `%${nis}%` });
@@ -252,6 +253,7 @@ export class StudentsService {
         .createQueryBuilder('student')
         .withDeleted() // Include soft-deleted entities
         .where('student.id = :id', { id })
+        .cache(true)
         .getOne();
 
       if (studentToRestore) {

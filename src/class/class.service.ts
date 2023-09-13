@@ -72,6 +72,7 @@ export class ClassService {
         .leftJoin('class.schedules', 'schedule', 'schedule.class_id = class.id')
         .orderBy('class.class', 'ASC')
         .where('class.deletedAt IS NULL')
+        .cache(true)
         .andWhere('cr.deletedAt IS NULL')
         .andWhere('subject.deletedAt IS NULL')
         .andWhere('user.deletedAt IS NULL')
