@@ -9,8 +9,9 @@ import { Response, Request } from 'express';
 export class RolesController {
   constructor(private readonly rolesService: RolesService) { }
 
-  private _page = parseInt(process.env.PAGINATION_PAGE)
-  private _limit = parseInt(process.env.PAGINATION_LIMIT)
+  private _page = parseInt(process.env.PAGINATION_PAGE);
+  private _limit = parseInt(process.env.PAGINATION_LIMIT);
+
   /**
      * Create a new role.
      *
@@ -22,7 +23,7 @@ export class RolesController {
   async create(
     @Body() createRoleDto: CreateRoleDto,
     @Req() request: Request,
-    @Res() response) {
+    @Res() response: Response) {
     const role = await this.rolesService.create(createRoleDto);
     const data = {
       status: true,
@@ -75,7 +76,8 @@ export class RolesController {
   @Get(':id')
   async findOne(@Param('id') id: string,
     @Req() request: Request,
-    @Res() response: Response,) {
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
@@ -124,7 +126,8 @@ export class RolesController {
   async remove(
     @Param('id') id: string,
     @Req() request: Request,
-    @Res() response: Response,) {
+    @Res() response: Response,
+  ) {
     const data = {
       status: true,
       statusCode: HttpStatus.OK,
